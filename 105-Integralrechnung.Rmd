@@ -1,5 +1,7 @@
 # Integralrechnung
 
+Dies ist eine Änderung
+
 Integrale kommen in der W-Theorie und Statistik an vielen Stellen vor, z.B. WDF 
 Definition und Berechnen von Wahrscheinlichkeiten aus WDF, Beziehung von WDF und
 KVF, Erwartungswerte inklusive Varianz und Kovarianz u.v.a.m.  Ziel hier ist es,
