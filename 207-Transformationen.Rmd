@@ -1,0 +1,1147 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Transformationen
+
+## Transformationen von Zufallsvariablen
+
+Realisierungen von Zufallsvariablen
+
+* Der einzelne Wert, den eine Zufallsvariable bei der Durchführung eines 
+Zufallsexperiments annimmt, heißt eine * Realisierung der Zufallsvariable*. 
+Mithilfe eines Computers lassen sich Zufallsexperimente simulieren und Realisierungen 
+von Zufallsvariablen erhalten.
+* Realisierungen von normalverteilten Zufallsvariablen erhält man in R mit 
+rnorm()}, wobei die
+Syntax für Realisierungen von $n$ unabhängig und identisch verteilten 
+Zufallsvariablen $X_i \sim N(\mu,\sigma^2), i = 1,...,n$ durch 
+rnorm}($n$, $\mu$, $\sqrt{\sigma^2}$) gegeben ist.
+
+```{r, echo = T}
+x = rnorm(1,0,1)									# X1 \sim N(0,1)
+x = rnorm(1,10,1)									# X1 \sim N(10,1)
+x = rnorm(3,5,sqrt(2)) 						# Xi \sim N(5,2), i = 1,2,3 (u.i.v.)
+x = rnorm(1e1,5,sqrt(2)) 					# Xi \sim N(5,2), i = 1,...,10 (u.i.v.)
+x = rnorm(1e4,5,sqrt(2)) 					# Xi \sim N(5,2), i = 1,...,10.000 (u.i.v.)
+```
+
+* Die empirische Verteilung unabhängig und identisch simulierter 
+Zufallsvariablenrealisationen  entspricht der Verteilung der Zufallsvariable. 
+Die empirische Verteilung stellt man mit Histogrammen (Häufigkeitsverteilungen) 
+oder histogramm-basierten Dichteschätzern dar.
+
+ABBILDUNG
+
+* Inhalt dieser Vorlesungseinheit sind einige Gesetzmäßigkeiten zur Transformation
+von normalverteilten Zufallsvariablen. Mit *Transformation* ist hier die Anwendung 
+einer Funktion auf Zufallsvariablen sowie die arithmetische Verknüpfung mehrerer
+Zufallsvariablen gemeint. Die zentrale Fragestellung dabei ist folgende: 
+``Wenn die Zufallsvariable $X$ normalverteilt ist, wie ist dann eine Zufallsvariable
+$Y$, die sich durch Transformation von $X$ ergibt, verteilt?''
+
+* Für die in dieser Vorlesungseinheit behandelten Fälle gilt, dass man explizit 
+Wahrscheinlichkeitsdichtefunktionen für die Verteilung der transformierten 
+Zufallsvariable angeben kann. Diese gehören zu den klassischen Resultaten der 
+frequentistischen Statistik und sind für das Verständnis von Konfidenzintervallen, 
+Hypothesentests, und Varianzanalysen essentiell.
+
+* Intuitiv kann man sich die Transformation einer Zufallsvariable anhand der
+Transformation ihrer u.i.v. Realisierungen klar machen. Betrachtet man z.B. 
+$X \sim N(0,1)$ und ihre Transformation $Y := X^2$ und sind $x_1 = 0.10, x_2 = -0.20, 
+x_3 = 0.80$ drei u.i.v. Realisierungen von $X$, so entspricht dies den u.i.v. 
+Realisierungen $y_1 = x_1^2 = 0.01, y_2 = x_2^2 = 0.04, y_3 = x_3^2 = 0.64$ von
+$Y$. In diesem Beispiel fällt auf, dass $Y$ keine negativen Werte annimmt, die
+Verteilung von $Y$ ordnet negativen Werten daher Wahrscheinlichkeitsdichten von $0$ zu.
+
+
+
+* Simulation der Transformation normalverteilter Zufallsvariablen in R
+
+
+```{r, echo = T, eval = F}
+# Simulationsspezifikation
+n 			= 1e4												# Anzahl von u.i.v Realisierungen (ZVen)
+mu 			= 1													# Erwartungswertparameter von X
+sigsqr	= 2													# Varianzparameter von X
+
+# Quadration einer Zufallsvariable
+X 			= rnorm(n, mu, sigsqr)			# Realisierungen xi, i = 1,....,n von X
+hist(X)															# Histogramm der Realisierungen von X
+Y 			= X^2 											# Realisierungen yi = xi^2 von Y
+hist(Y)													    # Histogramm der Realisierungen von Y
+
+# Addition zweier normalverteilter Zufallsvariablen
+X_1 		= rnorm(n, mu, sigsqr)			# Realisierungen x1i, i = 1,....,n von X1
+X_2 		= rnorm(n, mu, sigsqr)  		# Realisierungen x2i, i = 1,....,n von X2
+Y 			= X_1 + X_2									# Realisierungen yi = x1i + x2i von Y
+hist(Y) 														# Histogramm der Realisierungen von Y
+```
+
+
+* Im Abschnitt Transformationstheoreme  stellen wir zunächst einige 
+generelle Werkzeuge zum Berechnen der WDFen von transformierten Zufallsvariablen 
+bereit. Diese Werkzeuge sind von der allgemeinen Form ``Wenn $X$ eine 
+Zufallsvariable mit WDF $p_X$ und $Y := f(X)$ die durch $f$ transformierte 
+Zufallsvariable ist, dann gilt für die WDF von $Y$ die folgende Formel: 
+$p_Y := \{\mbox{Formel}\}$''.
+
+* Im Abschnitt Standardtransformatione } diskutieren wir sechs 
+Standardtransformationen normalverteilter Zufallsvariablen, die in der 
+klassischen frequentistischen Statistik und damit im weiteren Verlauf des 
+Kurses zentrale Rollen spielen. Diese Aussagen sind von der allgemeinen Form 
+``Wenn $X_i, i = 1,...,n$ unabhängig und identisch normalverteilte Zufallsvariablen 
+sind und $Y := f(X_1 ,...,X_n)$ eine Transformation dieser 
+Zufallsvariablen ist, dann ist die WDF von $Y$ durch die Formel 
+$p_Y := \{\mbox{Formel}\}$ gegeben und man nennt die Verteilung von
+$Y$  \{Verteilungsname\}''.
+
+* Die Aussagen im Abschnitt Standardtransformationen  sind für die 
+klassische frequentistische Statistik zentral, weil
+  1. der zentrale Grenzwertsatz die Annahme additiv unabhängig 
+  normalverteilter Störvariablen, und damit normalverteilter Daten, rechtfertigt,
+  2.wie wir in der nächsten Vorlesungseinheit sehen werden, es sich bei Schätzern 
+  und Statistiken um Transformationen von Zufallsvariablen handelt, und
+  3. Konfidenzintervalle und Hypothesentests durch die Verteilungen ihrer 
+  jeweiligen Statistiken charakterisiert und gerechtfertigt sind.
+
+## Transformationstheoreme
+
+Überblick
+
+* Das univariate WDF Transformationstheorem bei bijektiven Abbildungen  
+liefert eine Formel zur Berechnung der WDF $p_Y$ von $Y := f(X)$, wenn $X$ eine 
+Zufallsvariable mit WDF $p_X$ ist und $f$ eine bijektive Funktion ist.
+* Das univariate WDF Transformationstheorem bei linear affinen Abbildungen  
+gibt eine Formel zur Berechnung der WDF $p_Y$ von $Y := f(X)$ an, wenn $X$ 
+eine Zufallsvariable mit WDF $p_X$ ist und $f$ eine linear-affine Funktion ist.
+* Das univariate WDF Transformationstheorem bei stückweisen bijektiven 
+Abbildungen  gibt eine Formel zur Berechnung der WDF $p_Y$ von $Y := f(X)$ an, 
+wenn $X$ eine Zufallsvariable mit WDF $p_X$ ist und $f$ zumindest in Teilen bijektiv ist.
+* Das multivariate WDF Transformationstheorem bei bijektiven Abbildungen  
+liefert eine Formel zur Berechnung der WDF $p_Y$ von $Y := f(X)$, wenn $X$ ein 
+Zufallsvektor mit WDF $p_X$ ist und $f$ eine bijektive multivariate vektorwertige 
+Funktion ist.
+* Das Faltungstheorem  liefert eine Formel zur Berechnung der WDF $p_Y$ 
+von $Y := X_1 + X_2$, wenn  $X_1$ und $X_2$ zwei Zufallsvariablen mit 
+WDFen $p_{X_1}$ und $p_{X_2}$ sind.
+* Das Quotiententheorem  liefert eine Formel zur Berechnung der WDF $p_Y$ 
+von $Y := X_1/X_2$, wenn  $X_1$ und $X_2$ zwei Zufallsvariablen mit
+WDF $p_{X_1}$ und $p_{X_2}$, respektive, sind.
+
+
+
+```{theorem, name = "Univariate WDF Transformation bei bijektiven Abbildungen"}
+
+$X$ sei eine Zufallsvariable mit WDF $p_X$ für die $\mathbb{P}(]a,b[) = 1$ gilt, 
+wobei $a$ und/oder $b$ entweder endlich oder unendlich seien. Weiterhin sei
+\begin{equation}
+Y := f(X)
+\end{equation}
+wobei die univariate reellwertige Funktion $f : ]a,b[ \to \mathbb{R}$ 
+differenzierbar und bijektiv auf $]a,b[$ sei. $f(]a,b[)$ sei das Bild von
+$]a,b[$ unter $f$. Schließlich sei $f^{-1}(y)$ der Wert der Umkehrunktion 
+von $f(x)$ für $y \in f(]a,b[)$ und $f'(x)$ sei die Ableitung von $f$ an der 
+Stelle $x$.
+Dann ist die WDF von $Y$ gegeben durch
+\begin{equation}
+p_Y : \mathbb{R} \to \mathbb{R}_{\ge 0}, y \mapsto p_Y(y) :=
+\begin{cases}
+\frac{1}{\vert  f^{'}\left(f^{-1}(y)\right) \vert}p_X\left(f^{-1}(y)\right)
+& \mbox{ für } y \in f(]a,b[) \\
+0
+& \mbox{ für } y \in \mathbb{R} \setminus f(]a,b[).
+\end{cases}
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Linear-affine Abbildungen sind ein wichtiger Anwendungsfalls.
+* Die $Z$-Transformation ist ein wichtiger Anwendungsfall.
+
+
+```{proof}
+
+Wir halten zunächst fest, dass weil $f$ eine differenzierbare bijektive Funktion 
+auf $]a,b[$ ist, $f$ entweder strikt wachsend oder strikt fallend ist. Nehmen wir
+zunächst an, dass $f$ auf $]a,b[$ strikt wachsend ist. Dann ist auch 
+$f^{-1}$ für alle $y \in f(]a,b[)$  wachsend, und es gilt
+\begin{equation}
+P_Y(y)
+= \mathbb{P}(Y \le y)
+= \mathbb{P}\left(f(X) \le y\right)
+= \mathbb{P}\left(f^{-1}(f(X)) \le f^{-1}(y)\right)
+= \mathbb{P}\left(X \le f^{-1}(y)\right)
+= P_X\left(f^{-1}(y)\right).
+\end{equation}
+$P_Y$ ist also differenzierbar an allen Stellen $y$, an denen sowohl 
+$f^{-1}$ als auch $P_X$ differenzierbar sind. Mit der Kettenregel und dem Satz 
+von der Umkehrabbildung $(f^{-1}(x))' = 1/f'(f^{-1}(x))$, folgt dann, dass
+die WDF $p_Y$ sich ergibt wie folgt:
+\begin{equation}
+p_Y(y)
+= \frac{d}{dy}P_Y(y)
+= \frac{d}{dy}P_X\left(f^{-1}(y)\right)
+= p_X\left(f^{-1}(y)\right)\frac{d}{dy}f^{-1}(y)
+= \frac{1}{f'\left(f^{-1}(y)\right)} p_X\left(f^{-1}(y)\right),
+\end{equation}
+Weil $f^{-1}$ strikt wachsend ist, ist $d/dy (f^{-1}(y))$ positiv und das 
+Theorem trifft zu. Analog gilt, dass wenn $f$ auf $]a,b[$ strikt fallend ist, 
+dann ist auch  $f^{-1}$ für alle $y \in f(]a,b[)$ fallend und es gilt
+\begin{equation}
+P_Y(y)
+= \mathbb{P}(f(X) \le y)
+= \mathbb{P}\left(f^{-1}(f(X)) \ge f^{-1}(y)\right)
+= \mathbb{P}\left(X \ge f^{-1}(y)\right)
+= 1 - P_X\left(f^{-1}(y) \right),
+\end{equation}
+Mit der Kettenregel und dem Satz von der Umkehrabbildung folgt dann
+\begin{equation}
+p_Y(y)
+= \frac{d}{dy}(1 - P_Y(y))
+= -\frac{d}{dy}P_X\left(f^{-1}(y)\right)
+= -p_X\left(f^{-1}(y)\right)\frac{d}{dy}f^{-1}(y)
+= -\frac{1}{f'\left(f^{-1}(y)\right)} p_X\left(f^{-1}(y)\right).
+\end{equation}
+Weil $f^{-1}$ strikt fallend ist, ist $d/dy (f^{-1}(y))$ negativ, so dass
+$-d/dy (f^{-1}(y))$ gleich $|d/dy (f^{-1}(y))|$ ist und das Theorem trifft zu.
+
+```
+
+
+```{theorem, name = "Univariate WDF Transformation bei linear-affinen Abbildungen"}
+$X$ sei eine Zufallsvariable mit WDF $p_X$ und es sei
+\begin{equation}
+Y = f(X) \mbox{ mit } f(X) := aX + b \mbox{ für } a\neq 0.
+\end{equation}
+Dann ist die WDF von $Y$ gegeben durch
+\begin{equation}
+p_Y : \mathbb{R} \to \mathbb{R}_{\ge 0}, y \mapsto p_Y(y) :=
+\frac{1}{|a|}p_X\left(\frac{y-b}{a}\right).
+\end{equation}
+```
+
+Bemerkung
+
+*Das Theorem folgt direkt WDF Transformationstheorem bei bijektiven Abbildungen.
+*Die $Z$-Transformation ist ein wichtiger Anwendungsfall.
+
+
+
+```{proof}
+
+Wir halten zunächst fest, dass
+\begin{equation}
+f^{-1} : \mathbb{R} \to \mathbb{R}, y  \mapsto f^{-1}(y) = \frac{y - b}{a}
+\end{equation}
+ist, weil dann $f \circ f^{-1} = \mbox{id}_{\mathbb{R}}$  gilt, wie man anhand von
+\begin{equation}
+f(f^{-1}(x)) = a \left(\frac{x - b}{a}\right) + b = x - b + b = x 
+\mbox{ für alle } x \in \mathbb{R}
+\end{equation}
+einsieht. Wir halten weiterhin fest, dass
+\begin{equation}
+f' : \mathbb{R} \to \mathbb{R}, x \mapsto f'(x) = \frac{d}{dx}(ax  + b) = a.
+\end{equation}
+Also folgt mit dem Theorem zur WDF Transformation bei bijektiven Abbildungen, dass
+\begin{align}
+\begin{split}
+p_Y : \mathbb{R} \to \mathbb{R}_{\ge 0}, y \mapsto p_Y(y)
+& = \frac{1}{\vert f^{'}\left(f^{-1}(y)\right)\vert}p_X\left(f^{-1}(y)\right) \\
+& = \frac{1}{|a|}p_X\left(\frac{y - b}{a}\right).
+\end{split}
+\end{align}
+
+```
+
+
+```{theorem, name = "Univariate WDF Transformation bei stückweise bijektiven Abbildungen"}
+
+$X$ sei eine Zufallsvariable mit Ergebnisraum $\mathcal{X}$ und WDF $p_X$. Weiterhin sei
+\begin{equation}
+Y = f(X),
+\end{equation}
+wobei $f$ so beschaffen sei, dass der Ergebnisraum von $X$ in eine endliche 
+Anzahl von Mengen $\mathcal{X}_1,...,\mathcal{X}_k$ mit einer entsprechenden 
+Anzahl von Mengen $\mathcal{Y}_1 := f(\mathcal{X}_1), ..., \mathcal{Y}_k :=  f(\mathcal{X}_k)$ 
+im Ergebnisraum $\mathcal{Y}$ von $Y$ partitioniert werden kann (wobei nicht
+notwendigerweise $\mathcal{Y}_i \cap \mathcal{Y}_j = \emptyset, 1 \le i,j \le k$
+gelten muss), so dass die Abbildung $f$ für alle $\mathcal{X}_1,...,\mathcal{X}_k$ 
+bijektiv ist (d.h. $f$ ist eine *stückweise* bijektive Abbildung). 
+Für $i = 1,...,k$ bezeichne $f_i^{-1}$ die Umkehrfunktion von $f$ auf 
+$\mathcal{Y}_i$. Schließlich nehmen wir an, dass die Ableitungen $f_i^{\prime}$ 
+für alle $i=1,...,k$ existieren und stetig sind. Dann ist eine WDF von $Y$ durch
+\begin{equation}
+p_Y : \mathcal{Y} \to \mathbb{R}_{\ge 0}, y \mapsto p_Y(y) :=
+\sum_{i=1}^k 1_{\mathcal{Y}_i} (y) \frac{1}{\vert  f^{'}_i(f^{-1}_i(y)) \vert}p_X\left(f^{-1}_i(y)\right).
+\end{equation}
+gegeben.
+
+```
+
+Bemerkungen
+
+*Wir verzichten auf einen Beweis.
+*Die $\chi^2$-Transformation ist ein wichtiger Anwendungsfall.
+
+
+
+```{theorem, name = "Multivariate WDF Transformation bei bijektiven Abbildungen"}
+
+$X$ sei ein $n$-dimensionaler Zufallsvektor mit Ergebnisraum $\mathbb{R}^n$ 
+  und WDF $p_X$. Weiterhin sei
+\begin{equation}
+Y := f(X),
+\end{equation}
+wobei die multivariate vektorwertige Funktion $f : \mathbb{R}^n \to \mathbb{R}^n$ 
+  differenzierbar und bijektiv auf $]a,b[$ sei. Schließlich seien
+\begin{equation}
+J^f(x)
+= \left(\frac{\partial}{\partial x_j}f_i(x)\right)_{1\le i \le n, 1 \le j \le n}
+\in \mathbb{R}^{n \times n}
+\end{equation}
+die Jacobi-Matrix von $f$ an der Stelle $x \in \mathbb{R}^n$, $|J^f(x)|$ 
+  die Determinante von $J^f(x)$, und es sei $|J^f(x)| \neq 0$ für alle
+$x \in \mathbb{R}^n$. Dann ist eine WDF von $Y$ durch
+\begin{equation}\label{eq:mpdf_transform}
+p_Y : \mathbb{R}^n \to \mathbb{R}_{\ge 0}, y \mapsto p_Y(y) :=
+\begin{cases}
+\frac{1}{|J^f\left(f^{-1}(y)\right)|}p_X\left(f^{-1}(y)\right)
+& \mbox{ for } y\in f(\mathbb{R}^n) \\
+0
+& \mbox{ for } y \in \mathbb{R}^n \setminus f(\mathbb{R}^n)
+\end{cases}
+\end{equation}
+gegeben.
+
+```
+
+Bemerkungen
+
+*Wir verzichten auf einen Beweis.
+*Es handelt sich um eine direkte Generalisierung des univariaten Falls.
+*Die $T$-und $F$-Transformationen sind wichtige Anwendungsfälle.
+
+
+
+```{theorem, name = "Summe unabhängiger Zufallsvariable, Faltung"}
+
+$X_1$ und $X_2$ seien zwei kontinuierliche unabhängige Zufallsvariablen mit 
+WDF $p_{X_1}$ und $p_{X_2}$, respektive. $Y := X_1 + X_2$ sei die Summe von 
+$X_1$ und $X_2$. Dann ergibt sich eine WDF der Verteilung von $Y$ als
+\begin{equation}
+p_{Y}(y)
+= \int_{-\infty}^\infty p_{X_1}(y - x_2)p_{X_2}(x_2)\,dx_2
+= \int_{-\infty}^\infty p_{X_1}(x_1)p_{X_2}(y - x_1)\,dx_1
+\end{equation}
+Die Formel für die WDF $p_{Y}$ heißt *Faltung} oder *Konvolution} von $p_{X_1}$ und $p_{X_2}$.
+
+```
+Bemerkung
+
+* Die Summen- und Mittelwerttransformation sind wichtige Anwendungsfälle.
+
+
+```{proof}
+
+Wir nutzen das multivariate WDF Transformationstheorem für bijektive Abbildungen. 
+Dazu definieren wir zunächst
+\begin{equation}
+f : \mathbb{R}^2 \to \mathbb{R}^2, x \mapsto f(x) :=
+\begin{pmatrix}
+x_1 + x_2 \\
+x_2
+\end{pmatrix}
+:=
+\begin{pmatrix}
+z_1 \\ z_2
+\end{pmatrix}
+\end{equation}
+Die inverse Funktion von $f$ ist dann gegeben durch
+\begin{equation}
+f : \mathbb{R}^2 \to \mathbb{R}^2, z \mapsto f(z) :=
+\begin{pmatrix}
+z_1 - x_2 \\
+z_2
+\end{pmatrix}
+\end{equation}
+weil dann $f \circ f^{-1} = \mbox{id}_{\mathbb{R}^2}$ gilt, wie man anhand von
+\begin{equation}
+f^{-1}\left(f(x)\right)
+=
+f^{-1}
+\begin{pmatrix}
+x_1 + x_2 \\
+x_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+x_1 + x_2 - x_2\\
+x_2
+\end{pmatrix}
+=
+\begin{pmatrix}
+x_1 \\
+x_2
+\end{pmatrix}
+\end{equation}
+einsieht. Die Jacobimatrix von $f$ ergibt sich zu
+\begin{equation}
+J^{f}(x) =
+\begin{pmatrix}
+\frac{\partial}{\partial x_1} f_1(x) &  \frac{\partial}{\partial x_2} f_1(x) \\
+\frac{\partial}{\partial x_1} f_2(x) &  \frac{\partial}{\partial x_2} f_2(x) \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+	\frac{\partial}{\partial x_1} (x_1 + x_2)
+&  	\frac{\partial}{\partial x_2} (x_1 + x_2)
+\\
+	\frac{\partial}{\partial x_1} x_2
+&   \frac{\partial}{\partial x_2} x_2 \\
+\end{pmatrix}
+=
+\begin{pmatrix}
+1 &  1 \\
+0 &  1 \\
+\end{pmatrix}
+\end{equation}
+und die Jacobideterminante damit zu $|J^f(x)| = 1$. Wir halten weiterhin fest, 
+dass die Unabhängigkeit von $X_1$ und $X_2$ impliziert, dass
+\begin{equation}
+p_{X_1,X_2}(x_1,x_2) = p_{X_1}(x_1)p(X_2)(x_2)
+\end{equation}
+impliziert. Einsetzen und Integration hinsichtlich $x_2$ ergibt dann ergibt 
+dann für $z \in f(\mathbb{R}^2)$
+\begin{align}
+\begin{split}
+p_Z(z)
+& = \frac{1}{|J^f\left(f^{-1}(z)\right)|}p_X\left(f^{-1}(z)\right)  \\
+& = \frac{1}{1}p_{X_1,X_2}\left(z_1 - x_2, x_2\right)  \\
+& = p_{X_1}(z_1 - x_2)p_{X_2}(x_2)
+\end{split}
+\end{align}
+Integration über $x_2$ ergibt dann eine WDF für die marginale Verteilung von $Z_1$
+\begin{align}
+\begin{split}
+p_{Z_1}(z_1)
+& = \int_{-\infty}^{\infty} p_{X_1}(z_1 - x_2)p_{X_2}(x_2)\,dx_2
+\end{split}
+\end{align}
+Mit $Z_1 = X_1 + X_2 = Y$ ergibt sich dann die erste Form des Faltungstheorems zu
+\begin{align}
+p_{Y}(y)
+& = \int_{-\infty}^{\infty} p_{X_1}(y - x_2)p_{X_2}(x_2)\,dx_2.
+\end{align}
+
+```
+
+## Transformationen der Normalverteilung
+
+Überblick
+
+* Das Summentransformationstheorem besagt, dass die Summe unabhängig 
+normalverteilter Zufallsvariablen wiederum normalverteilt ist und gibt die 
+Parameter dieser Verteilung an.
+* Das Mittewertstransformationstheorem besagt, dass das Stichprobenmittel 
+unabhängig normalverteilter Zufallsvariablen wiederum normalverteilt ist und 
+gibt die Parameter dieser Verteilung an.
+* Das $Z$-Transformationstheorem besagt, dass Subtraktion des 
+Erwartungswertparameters und gleichzeitige Division mit der Wurzel des 
+Varianzsparameters die Verteilung einer normalverteilten Zufallsvariable in 
+eine Standardnormalverteilung transformiere.
+* Das $\chi^2$-Transformationstheorem besagt, dass die Summe quadrierter u.i.v. 
+standardnormalverteilter Zufallsvariablen eine $\chi^2$-verteilte Zufallsvariable ist.
+* Das $T$-Transformationstheorem besagt, dass die Zufallsvariable, die sich durch
+Division einer standardnormalverteilten Zufallsvariable durch die Quadratwurzel 
+einer $\chi^2$-verteilten Zufallsvariable geteilt durch ein $n$, ergibt, eine 
+$t$-verteilte Zufallsvariable ist.
+* Das $F$-Transformationstheorem  besagt, dass die Zufallsvariable, die sich 
+durch Division zweier $\chi^2$ verteilter Zufallsvariablen, jeweils geteilt durch 
+ihre jeweiligen Freiheitsgradparameter, ergibt eine $F$-verteilte Zufallsvariable ist.
+
+
+### Summentransformation {-}
+
+```{theorem, name = "Summe unabhängig normalverteilter Zufallsvariablen"}
+
+Für $i = 1,...,n$ seien $X_i \sim N(\mu_i,\sigma^2_i)$ unabhängige 
+normalverteilte Zufallsvariablen. Dann gilt für die Summe $Y := \sum_{i=1}^n X_i$,
+dass
+\begin{equation}
+Y  \sim N\left(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma^2_i\right)
+\end{equation}
+Für unabhängige und identisch normalverteilte Zufallsvariablen $X_i \sim N(\mu,\sigma^2)$ gilt folglich
+\begin{equation}
+Y \sim N(n\mu, n \sigma^2).
+\end{equation}
+
+```
+Bemerkung
+
+* Die Mittelwerttransformation ist ein wichtiger Anwendungsfall.
+* Die Generalisierung der zentralen Grenzwertsätze sind wichtige Anwendungsfälle.
+
+ABBILDUNG
+
+```{proof}
+
+
+Wir skizzieren mithilfe der Faltungsformel, dass für $X_1 \sim N(\mu_1,\sigma^2_1)$, 
+$X_2 \sim N(\mu_2,\sigma^2_2)$, und $Y := X_1 + X_2$ gilt, dass 
+$Y \sim N(\mu_1 + \mu_2,\sigma_1^2 + \sigma_2^2)$. Für $n > 2$ folgt das Theorem 
+dann durch Iteration. Mit der Definition der WDF der Normalverteilung erhalten
+wir zunächst
+\begin{align}
+\begin{split}
+p_{Y}(y)
+& = \int_{-\infty}^\infty p_{X_1}(x_1)p_{X_2}(y - x_1)\,dx_1
+\\
+& = \int_{-\infty}^\infty
+    \frac{1}{\sqrt{2 \pi} \sigma_1} \exp\left(-\frac{1}{2}\left(\frac{x_1 - \mu_1}{\sigma_1}\right)^2\right)
+	\frac{1}{\sqrt{2 \pi} \sigma_2} \exp\left(-\frac{1}{2}\left(\frac{y - x_1 - \mu_2}{\sigma_2}\right)^2\right)
+	\,dx_1
+\\
+& = \int_{-\infty}^\infty
+    \frac{1}{2 \pi \sigma_1\sigma_2}\exp
+    \left(
+    -\frac{1}{2}\left(\frac{x_1 - \mu_1}{\sigma_1}\right)^2
+    -\frac{1}{2}\left(\frac{y - x_1 - \mu_2}{\sigma_2}\right)^2
+    \right)
+	\,dx_1 .
+\\
+\end{split}
+\end{align}
+Mit einigem algebraischen Aufwand erhält man die Identität
+\begin{multline}
+-\frac{1}{2}\left(\frac{x_1 - \mu_1}{\sigma_1}\right)^2
+-\frac{1}{2}\left(\frac{y - x_1 - \mu_2}{\sigma_2}\right)^2
+\\ =
+-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+-\frac{((\sigma_1^2 + \sigma_2^2)x_1 -\sigma_1^2y + \mu_2 \sigma_1^2 - \mu_1 \sigma_2^2)^2}
+      {2\sigma_1^2\sigma_2^2(\sigma_1^2 + \sigma_2^2)},
+\end{multline}
+so dass weiterhin gilt, dass
+\begin{align}
+\begin{split}
+p_{Y}(y)
+& = \int_{-\infty}^\infty
+	\frac{1}{2 \pi \sigma_1\sigma_2}
+	\exp\left(
+ 	-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+	-\frac{((\sigma_1^2 + \sigma_2^2)x_1 -\sigma_1^2y + \mu_2 \sigma_1^2 - \mu_1 \sigma_2^2)^2}
+      {2\sigma_1^2\sigma_2^2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+	\,dx_1
+\\
+& = \int_{-\infty}^\infty
+	\frac{1}{2 \pi \sigma_1\sigma_2}
+	\exp\left(
+ 	-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+	\exp\left(
+	-\frac{((\sigma_1^2 + \sigma_2^2)x_1 -\sigma_1^2y + \mu_2 \sigma_1^2 - \mu_1 \sigma_2^2)^2}
+      {2\sigma_1^2\sigma_2^2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+	\,dx_1
+\\
+& = \frac{1}{2 \pi \sigma_1\sigma_2}
+	\exp\left(
+ 	-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+	\int_{-\infty}^\infty
+	\exp\left(
+	-\frac{((\sigma_1^2 + \sigma_2^2)x_1 -\sigma_1^2y + \mu_2 \sigma_1^2 - \mu_1 \sigma_2^2)^2}
+      {2\sigma_1^2\sigma_2^2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+	\,dx_1.
+\end{split}
+\end{align}
+Für das verbleibende Integral zeigt man mithilfe der Integration durch Substitution, dass
+\begin{equation}
+\int_{-\infty}^\infty
+	\exp\left(
+	-\frac{((\sigma_1^2 + \sigma_2^2)x_1 -\sigma_1^2y + \mu_2 \sigma_1^2 - \mu_1 \sigma_2^2)^2}
+      {2\sigma_1^2\sigma_2^2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+	\,dx_1
+= \frac{\sqrt{2\pi}\sigma_1\sigma_2}{\sqrt{\sigma_1^2 + \sigma_2^2}}.
+\end{equation}
+Es ergibt sich also
+\begin{align}
+\begin{split}
+p_{Y}(y)
+& = \frac{1}{2 \pi \sigma_1\sigma_2}
+	\frac{\sqrt{2\pi}\sigma_1\sigma_2}{\sqrt{\sigma_1^2 + \sigma_2^2}}
+	\exp\left(
+ 	-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+\\
+& = \frac{(2\pi)^{-1}(2\pi)^2}{\sqrt{\sigma_1^2 + \sigma_2^2}}
+	\exp\left(
+ 	-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+    \right)
+\\
+& = \frac{1}{\sqrt{2\pi}\sqrt{\sigma_1^2 + \sigma_2^2}}
+	\exp\left(
+ 	-\frac{(y - \mu_1 - \mu_2)^2}
+      {2(\sigma_1^2 + \sigma_2^2)}
+    \right).
+\end{split}
+\end{align}
+Schließlich folgt, dass
+\begin{align}
+\begin{split}
+p_Y(y)
+& = \frac{1}{\sqrt{2\pi(\sigma_1^2 + \sigma_2^2)}}
+  \exp\left(-\frac{1}{2(\sigma_1^2 + \sigma_2^2)}\left(y - (\mu_1 + \mu_2)\right)^2\right) \\
+& = N(y; \mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)
+\end{split}
+\end{align}
+Ein einfacheres Vorgehen ergibt sich vermutlich nach Fouriertransformation der 
+WDF im Sinne der sogenannten charakteristischen Funktion einer Zufallsvariable. 
+In diesem Fall würde die Faltung der WDFen der Multiplikation der 
+charakteristischen Funktionen entsprechen.
+```
+
+### Mittelwerttransformation {-}
+
+```{theorem, name = "Stichprobenmittel von u.i.v. normalverteilten Zufallsvariablen"}
+
+Für $i = 1,...,n$ seien $X_i \sim N(\mu,\sigma^2)$ unabhängig und identisch 
+normalverteilte Zufallsvariablen. Dann gilt für das Stichprobenmittel 
+$\bar{X}_n := \frac{1}{n}\sum_{i=1}^n X_i$ , dass
+\begin{equation}
+\bar{X}_n \sim N\left(\mu, \frac{\sigma^2}{n}\right).
+\end{equation}
+
+```
+
+Bemerkung
+* Die Analyse von Erwartungswertschätzern ist ein wichtiger Anwendungsfall.
+* Die Generalisierung der zentralen Grenzwertsätze sind wichtige Anwendungsfälle.
+
+ABBILDUNG
+
+```{proof}
+Wir halten zunächst fest, dass mit dem Theorem zur Summe von unabhängig 
+normalverteilten Zufallsvariablen gilt, dass $\bar{X}_n = \frac{1}{n}Y$ mit
+$Y := \sum_{i=1}^n X_i \sim N(n\mu,n\sigma^2)$. Einsetzen in das univariate WDF
+Transformationstheorem für lineare Funktionen ergibt dann
+\begin{align}
+\begin{split}
+p_{\bar{X}_n}(\bar{x}_n)
+& = \frac{1}{|1/n|}N\left(n\bar{x}_n; n\mu , n\sigma^2 \right) \\
+& = \frac{n}{\sqrt{2\pi n\sigma^2}}\exp\left(-\frac{1}{2n\sigma^2}
+\left(n\bar{x}_n - n\mu\right)^2 \right) \\
+& = \frac{n}{\sqrt{2\pi n\sigma^2}}\exp\left(-\frac{1}{2n\sigma^2}
+\left(n\bar{x}_n - n\mu\right)^2 \right) \\
+& = nn^{-\frac{1}{2}}\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\left(
+			-\frac{(n\bar{x}_n)^2}{2n\sigma^2}
+		  	+ \frac{2(n\bar{x}_n)(n\mu)}{2n\sigma^2}
+		  	- \frac{(n\mu)^2}{2n\sigma^2}
+		 \right) \\
+& = \sqrt{n}\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\left(
+			-\frac{n\bar{x}_n^2}{2\sigma^2}
+		  	+ \frac{2n\bar{x}_n\mu}{2\sigma^2}
+		  	- \frac{n\mu^2}{2\sigma^2}
+		 \right) \\
+& = \frac{1}{1/\sqrt{n}}\frac{1}{\sqrt{2\pi\sigma^2}}
+\exp\left(
+			-\frac{\bar{x}_n^2}{2(\sigma^2/n)}
+		  	+ \frac{2\bar{x}_n\mu}{2(\sigma^2/n)}
+		  	- \frac{\mu^2}{2(\sigma^2/n)}
+		 \right) \\
+& = \frac{1}{\sqrt{2\pi(\sigma^2/n)}}
+\exp\left(-\frac{1}{2(\sigma^2/n)}
+			(\bar{x}_n - \mu)^2
+		 \right) \\
+& = N\left(\bar{x}_n;\mu,\sigma^2/n \right)
+\end{split}
+\end{align}
+also, dass $\bar{X}_n \sim N\left(\mu,\sigma^2/n\right)$.
+
+```
+
+### $Z$-Transformation {-}
+
+```{definition, name = "$Z$-Zufallsvariable"}
+
+$Z$ sei eine Zufallsvariable mit Ergebnisraum  $\mathbb{R}$ und WDF
+\begin{equation}
+p : \mathbb{R} \to \mathbb{R}_{>0}, z \mapsto p(z) 
+:= \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}z^2\right).
+\end{equation}
+Dann sagen wir, dass $Z$ einer *$Z$-Verteilung (oder Standardnormalverteilung)* 
+unterliegt und nennen $Z$ eine *$Z$-Zufallsvariable*. Wir kürzen dies mit 
+$Z \sim N(0,1)$ ab. Die WDF einer $Z$-Zufallsvariable bezeichnen wir mit
+\begin{equation}
+N(z;0,1) := \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}z^2\right).
+\end{equation}
+```
+
+Bemerkung
+* Eine $Z$-Zufallsvariable ist eine normalverteilte Zufallsvariable mit
+$\mu := 0$ und $\sigma^2 := 1$.
+* Die $Z$-Verteilung hat keine Parameter.
+
+
+Wahrscheinlichkeitsdichtefunktion der $Z$-Verteilung
+ABBILDUNG
+
+```{theorem, name = "$Z$-Transformation"}
+
+Es sei $X \sim N(\mu,\sigma^2)$ eine normalverteilte Zufallsvariable. Dann ist 
+die Zufallsvariable
+\begin{equation}
+Z := \frac{X - \mu}{\sigma}
+\end{equation}
+eine $Z$-verteilte Zufallsvariable, es gilt also $Z \sim N(0,1)$.
+```
+
+Bemerkungen
+* $Z$ wird hier als $(X- \mu)/\sigma$ definiert. Dass ein solches $Z$ aber 
+eine $Z$-Zufallsvariable ist, muss bewiesen werden und ergibt sich nicht 
+einfach durch die Wahl des Bezeichners für $(X - \mu)/\sigma$, welcher hier 
+zufällig auch $Z$ lautet. In analoger Form gilt diese Bemerkung auch für alle 
+weiteren betrachteten Transformationen.
+* Die T-Statistik und T-Tests sind wichtige Anwendungsfälle.
+
+
+ABBILDUNG
+
+
+```{proof}
+Wir nutzen das univariate WDF Transformationstheorem für linear-affine Funktionen. 
+Dazu halten wir zunächst fest, dass die $Z$-Transformation einer Funktion der Form
+\begin{equation}
+\zeta : \mathbb{R} \to \mathbb{R}, x \mapsto \zeta(x) := \frac{x - \mu}{\sigma} =: z
+\end{equation}
+entspricht. Wir stellen weiterhin fest, dass die Umkehrfunktion von $\zeta$ durch
+\begin{equation}
+\zeta^{-1} : \mathbb{R} \to \mathbb{R}, z \mapsto \zeta^{-1}(z) := \sigma z + \mu
+\end{equation}
+gegeben ist, da für alle $z \in \mathbb{R}$ mit $z = \frac{x - mu}{\sigma}$ gilt, dass
+\begin{equation}
+\zeta^{-1}(z)
+= \zeta^{-1}\left(\frac{x - \mu}{\sigma}\right)
+= \frac{\sigma(x - \mu)}{\sigma} + \mu
+= x - \mu + \mu
+= x.
+\end{equation}
+Schließlich stellen wir fest, dass für die Ableitung $\zeta'$ von $\zeta$ gilt, dass
+\begin{equation}
+\zeta'(x)
+= \frac{d}{dx}\left(\frac{x - \mu}{\sigma} \right)
+= \frac{d}{dx}\left(\frac{x}{\sigma} -\frac{\mu}{\sigma} \right)
+= \frac{1}{\sigma}.
+\end{equation}
+Einsetzen in das univariate WDF Transformationstheorem für lineare Funktionen 
+ergibt dann
+\begin{align}
+\begin{split}
+p_Z(z)
+& = \frac{1}{|1/\sigma|}N\left(\sigma z + \mu; \mu , \sigma^2 \right) \\
+& = \frac{1}{1/\sqrt{\sigma^2}}\frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}\left(\sigma z + \mu - \mu\right)^2 \right) \\
+& = \frac{\sqrt{\sigma^2}}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}\sigma^2 z^2\right)\\
+& = \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2} z^2\right)\\
+& = N(z;0,1)
+\end{split}
+\end{align}
+also, dass $Z \sim N(0,1)$. $Z$ ist also eine $Z$-Zufallsvariable.
+
+```
+
+### $\chi^2$-Transformation {-}
+
+```{definition, name = "Chi-Quadrat-Zufallsvariable"}
+
+$U$ sei eine Zufallsvariable mit Ergebnisraum $\mathbb{R}_{>0}$ und WDF
+\begin{equation}
+p : \mathbb{R}_{>0} \to \mathbb{R}_{>0},
+u \mapsto p(u)
+:= \frac{1}{\Gamma\left(\frac{n}{2}\right)2^{\frac{n}{2}}}
+u^{\frac{n}{2}-1}\exp\left(-\frac{1}{2}u\right),
+\end{equation}
+wobei $\Gamma$ die Gammafunktion bezeichne. Dann sagen wir, dass $U$ einer
+$\chi^2$-Verteilung mit $n$ Freiheitsgraden unterliegt und nennen $U$ eine
+$\chi^2$-Zufallsvariable mit $n$ Freiheitsgraden. Wir kürzen dies mit
+$U \sim \chi^2(n)$ ab. Die WDF einer $\chi^2$-Zufallsvariable bezeichnen wir mit
+\begin{equation}
+\chi^2(u;n) :=
+\frac{1}{\Gamma\left(\frac{n}{2}\right)2^{\frac{n}{2}}}
+u^{\frac{n}{2}-1}\exp\left(-\frac{1}{2}u\right).
+\end{equation}
+
+```
+
+Bemerkung
+* Die WDF der $\chi^2$-Verteilung entspricht der WDF 
+$G\left(u;\frac{n}{2},2\right)$ einer Gammaverteilung.
+
+Wahrscheinlichkeitsdichtefunktionen der $\chi^2$-Verteilung
+ABBILDUNG
+
+* Steigendes $n$ verbreitert $\chi^2(u;n)$ und verschiebt Masse zur größeren Werten.
+
+
+```{theorem, name = "Chi-Quadrat-Transformation"}
+
+$Z_1,...,Z_n \sim N(0,1)$ seien unabhängig und identisch verteilte 
+$Z$-Zufallsvariablen. Dann ist die Zufallsvariable
+\begin{equation}
+U := \sum_{i=1}^n Z_i^2
+\end{equation}
+eine $\chi^2$-verteilte Zufallsvariable mit $n$ Freiheitsgraden, es gilt also 
+$U \sim \chi^2(n)$. Insbesondere gilt für $Z \sim N(0,1)$ und $U := Z^2$, 
+dass $U \sim \chi^2(1)$.
+
+```
+
+
+Bemerkungen
+
+* Die T-Statistik und T-Tests sind wichtige Anwendungsfälle.
+* Die F-Statistik und Varianzanalysen sind wichtige Anwendungsfälle.
+
+$\chi^2$-Transformation ABBILDUNG
+
+```{proof}
+Wir zeigen das Theorem nur für den Fall $n := 1$ mithilfe des WDF
+Transformationstheorems für stückweise bijektive Abbildungen. Danach ist die
+WDF einer Zufallsvariable $U := f(Z)$, welche aus der Transformation einer
+Zufallsvariable $Z$ mit WDF $p_Z$ durch eine stückweise bijektive Abbildung
+hervorgeht, gegeben durch
+\begin{equation}\label{eq:piecewise_pdf_transform}
+p_U(u) = \sum_{i=1}^k 1_{\mathcal{U}_i} \frac{1}{|f'_i(f_i^{-1}(u))|}p_Z\left(f_i^{-1} (u)\right).
+\end{equation}
+Wir definieren
+\begin{equation}
+\mathcal{U}_1 := ]-\infty,0[,
+\mathcal{U}_2 := ]0,\infty[, \mbox{ und }
+\mathcal{U}_i := \mathbb{R}_{>0} \mbox{ für } i = 1,2,
+\end{equation}
+sowie
+\begin{equation}
+f_i : \mathcal{Z}_i \to \mathcal{U}_i, x \mapsto f_i(z) := z^2 =: u \mbox{ für } i = 1,2.
+\end{equation}
+Die Ableitung und die Umkehrfunktion der $f_i$ ergeben sich zu
+\begin{equation}
+f_i' : \mathcal{Z}_i \to \mathcal{Z}_i, x \mapsto f_i'(z) = 2z \mbox{ für } i = 1,2,
+\end{equation}
+und
+\begin{equation}
+f_1^{-1} : \mathcal{U}_1 \to \mathcal{U}_1, u \mapsto f_1^{-1}(u) = - \sqrt{u}
+\mbox{ und }
+f_2^{-1} : \mathcal{U}_2 \to \mathcal{U}_2, u \mapsto f_2^{-1}(u) = \sqrt{u},
+\end{equation}
+respektive. Einsetzen in Gleichung \eqref{eq:piecewise_pdf_transform} ergibt dann
+\begin{align}
+\begin{split}
+p_U(u)
+& = 1_{\mathcal{U}_1}(u) \frac{1}{|f'_1(f_1^{-1}(u))|}p_Z\left(f_1^{-1} (u)\right)
+  + 1_{\mathcal{U}_2}(u) \frac{1}{|f'_2(f_2^{-1}(u))|}p_Z\left(f_2^{-1} (u)\right) \\
+& = \frac{1}{|2(-\sqrt{u})|}\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}(-\sqrt{u})^2\right)
+  + \frac{1}{|2( \sqrt{u})|}\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}( \sqrt{u})^2\right) \\
+& = \frac{1}{2\sqrt{u}}\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}u\right)
+  + \frac{1}{2\sqrt{u}}\frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}u\right)\\
+& = \frac{1}{\sqrt{2\pi}}\frac{1}{\sqrt{u}}\exp\left(-\frac{1}{2}u\right).
+\end{split}
+\end{align}
+Andererseits gilt, dass mit $\Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$, die
+PDF einer $\chi^2$-Zufallsvariable $U$ mit $n = 1$ durch
+\begin{equation}
+\frac{1}{\Gamma\left(\frac{1}{2}\right)2^{\frac{1}{2}}} u^{\frac{1}{2}-1}\exp\left(-\frac{1}{2}u\right)
+= \frac{1}{\sqrt{2\pi}}\frac{1}{\sqrt{u}}\exp\left(-\frac{1}{2}u\right)
+\end{equation}
+gegeben ist. Also gilt, dass wenn $Z \sim N(0,1)$ ist, dann ist $U := Z^2 \sim \chi^2(1)$.
+
+```
+
+### $T$-Transformation {-}
+
+```{definition, name = "$t$-Zufallsvariable"} 
+
+$T$ sei eine Zufallsvariable mit Ergebnisraum $\mathbb{R}$ und WDF
+\begin{equation}
+p : \mathbb{R} \to \mathbb{R}_{>0}, t \mapsto p(t)
+:= \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi}\Gamma\left(\frac{n}{2}\right)}
+\left(1 + \frac{t^2}{n} \right)^{-\frac{n+1}{2}},
+\end{equation}
+wobei $\Gamma$ die Gammafunktion bezeichne. Dann sagen wir, dass $T$ einer 
+$t$-Verteilung mit $n$ Freiheitsgraden unterliegt und nennen $T$ eine 
+$t$-Zufallsvariable mit $n$ Freiheitsgraden. Wir kürzen dies mit $T \sim t(n)$ ab. 
+Die WDF einer $t$-Zufallsvariable bezeichnen wir mit
+\begin{equation}
+T(t;n) := \frac{\Gamma\left(\frac{n+1}{2}\right)}{\sqrt{n\pi}\Gamma\left(\frac{n}{2}\right)}
+\left(1 + \frac{t^2}{n} \right)^{-\frac{n+1}{2}}.
+\end{equation}
+```
+
+Wahrscheinlichkeitsdichtefunktionen der $t$-Verteilung ABBILDUNG
+
+* Die Verteilung ist um 0 symmetrisch
+* Steigendes $n$ verschiebt Wahrscheinlichkeitsmasse aus den Ausläufen zum Zentrum.
+* Ab $n = 30$ gilt $T(t;n) \approx N(0,1)$.
+
+
+```{theorem, name = "$T$-Transformation"}
+
+$Z \sim N(0,1)$ sei eine  $Z$-Zufallfsvariable, $U \sim \chi^2(n)$ sei eine 
+$\chi^2$-Zufallsvariable mit  $n$ Freiheitsgraden, und $Z$ und $U$ seien 
+unabhängige Zufallsvariablen. Dann ist die Zufallsvariable
+\begin{equation}
+T := \frac{Z}{\sqrt{U/n}}
+\end{equation}
+eine $t$-verteilte Zufallsvariable mit $n$ Freiheitsgraden, es gilt also $T \sim t(n)$.
+
+```
+
+Bemerkungen
+
+* Das Theorem geht auf \citep{student_probable_1908} zurück.
+* Das Theorem ist ein zentrales Resultat der frequentistischen Statistik.
+* @zabell_student_2008 gibt hierzu einen historischen Überblick.
+* Die T-Statistik und die T-Teststatistik sind wichtige Anwendungsfälle.
+
+ABBILDUNG $T$-Transformation
+
+THERE IS A LATEX TYPO IN THE PROOF.
+
+<!-- ```{proof} -->
+<!-- THERE IS A LATEX TYPON IN THE PROOF. -->
+
+<!-- # Wir halten zunächst fest, dass die zweidimensionale WDF der gemeinsamen -->
+<!-- # (unabhängigen) Verteilung von $Z$ und $U$ durch -->
+<!-- # \begin{equation} -->
+<!-- # p_{Z,U}(z,u) -->
+<!-- # = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}z^2\right) -->
+<!-- # \frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}}u^{\frac{n}{2}-1} \exp\left(-\frac{1}{2}u\right). -->
+<!-- # \end{equation} -->
+<!-- # gegeben ist. Wir betrachten dann die multivariate vektorwertige Abbildung -->
+<!-- # \begin{equation} -->
+<!-- # f : \mathbb{R}^2 \to \mathbb{R}^2, -->
+<!-- # (z,u) -->
+<!-- # \mapsto -->
+<!-- # f(z,u) -->
+<!-- # := -->
+<!-- # \left(\frac{z}{\sqrt{u/n}},u\right) -->
+<!-- # =: -->
+<!-- # (t,w) -->
+<!-- # \end{equation} -->
+<!-- # und benutzen das multivariate WDF Transformationstheorem für bijektive -->
+<!-- # Abbildungen um die WDF von $(t,w)$ herzuleiten. Dazu erinnern wir uns, dass -->
+<!-- # wenn $X$ ein $n$-dimensionaler Zufallsvektor mit WDF $p_X$ und $Y := f(X)$ -->
+<!-- #   für eine differenzierbare und bijektive Abbildung $f : \mathbb{R}^n -->
+<!-- # \to \mathbb{R}^n$ ist, die WDF des Zufallsvektors $Y$ durch -->
+<!-- # \begin{equation}\label{eq:pdftmv} -->
+<!-- # p_Y : \mathbb{R}^n \to \mathbb{R}_{\ge 0}, -->
+<!-- # y \mapsto p_Y(y) := -->
+<!-- # \frac{1}{|J^f\left(f^{-1}(y)\right)|}p_X\left(f^{-1}(y)\right) -->
+<!-- # \end{equation} -->
+<!-- # gegeben ist. Für die im vorliegenden Fall betrachtete Abbildung halten wir zunächst fest, dass -->
+<!-- # \begin{equation} -->
+<!-- #  -->
+<!-- # f^{-1}:\mathbb{R}^2 \to \mathbb{R}^2, -->
+<!-- # (t,w) -->
+<!-- # \mapsto -->
+<!-- # f^{-1} -->
+<!-- # (t,w) -->
+<!-- # :=\left(\sqrt{w/n}t, w\right). -->
+<!-- # \end{equation} -->
+<!-- # Dies ergibt sich direkt aus -->
+<!-- # \begin{equation} -->
+<!-- # f^{-1}(f(z,u)) -->
+<!-- # = -->
+<!-- # f^{-1}\left(\frac{z}{\sqrt{u/n}},u\right) -->
+<!-- # = -->
+<!-- # \left(\frac{\sqrt{u/n}z}{\sqrt{u/n}}, u \right) -->
+<!-- # = -->
+<!-- # (z,u) -->
+<!-- # \mbox{ für alle } -->
+<!-- # (z,u) -->
+<!-- # \in \mathbb{R}^2. -->
+<!-- # \end{equation} -->
+<!-- # Wir halten dann fest, dass die Determinante der Jacobi-Matrix von $f$ an der Stelle $(z,u)$ durch -->
+<!-- # \begin{equation} -->
+<!-- # |J^f(z,u)| -->
+<!-- # = -->
+<!-- # \begin{vmatrix} -->
+<!-- #   \frac{\partial}{\partial z} \left(\frac{z}{\sqrt{u/n}}\right) -->
+<!-- # & \frac{\partial}{\partial u} \left(\frac{z}{\sqrt{u/n}}\right) \\ -->
+<!-- #   \frac{\partial}{\partial z} u -->
+<!-- # & \frac{\partial}{\partial u} u\\ -->
+<!-- # \end{vmatrix} -->
+<!-- # = \left(\frac{v}{n}\right)^{-1/2}, -->
+<!-- # \end{equation} -->
+<!-- # gegeben ist, sodass folgt, dass -->
+<!-- # \begin{equation} -->
+<!-- # \frac{1}{|J^f\left(f^{-1}(z,u)\right)|} -->
+<!-- # = \left(\frac{w}{n}\right)^{1/2}. -->
+<!-- # \end{equation} -->
+
+<!-- # Einsetzen in Gleichung \eqref{eq:pdftmv} ergibt dann -->
+<!-- # \begin{equation} -->
+<!-- # p_{T,W}(t,w) = \left(\frac{w}{n}\right)^{1/2}p_{Z,V}\left(\sqrt{w/n}t,w\right), -->
+<!-- # \end{equation} -->
+<!-- # Es folgt also -->
+<!-- # \begin{align} -->
+<!-- # \begin{split} -->
+<!-- # p_T(t) -->
+<!-- # & = -->
+<!-- # \int_0^\infty  p_{T,W}(t,w) -->
+<!-- # \,dw 													\\ -->
+<!-- # & = -->
+<!-- # \int_0^\infty -->
+<!-- # \left(\frac{w}{n}\right)^{1/2} -->
+<!-- # p_{Z,V}\left(\sqrt{w/n}t,w\right) -->
+<!-- # \,dw  \\ -->
+<!-- # & = -->
+<!-- # \int_0^\infty -->
+<!-- # \frac{1}{\sqrt{2\pi}}\exp\left(-\frac{1}{2}(\sqrt{w/n}t)^2\right) -->
+<!-- # \frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}}w^{\frac{n}{2}-1} \exp\left(-\frac{1}{2}w\right) -->
+<!-- # \left(\frac{w}{n}\right)^{1/2} -->
+<!-- # \,dw \\ -->
+<!-- # & = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}n^{\frac{1}{2}}} -->
+<!-- # \int_0^\infty -->
+<!-- # \exp\left(-\frac{1}{2}\frac{w}{n}t^2\right) -->
+<!-- # w^{\frac{n}{2}-1} \exp\left(-\frac{1}{2}w\right)w^{1/2} -->
+<!-- # \,dw \\ -->
+<!-- # & = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}n^{\frac{1}{2}}} -->
+<!-- # \int_0^\infty -->
+<!-- # \exp\left(-\frac{1}{2}\frac{w}{n}t^2 -\frac{1}{2}w\right) -->
+<!-- # w^{\frac{n}{2}-1} w^{\frac{1}{2}} -->
+<!-- # \,dw \\ -->
+<!-- # & = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}n^{\frac{1}{2}}} -->
+<!-- # \int_0^\infty -->
+<!-- # \exp\left(-\frac{1}{2}\left(\frac{w}{n}t^2 + w\right)\right) -->
+<!-- # w^{\frac{n + 1}{2}-1} -->
+<!-- # \,dw \\ -->
+<!-- # & = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}n^{\frac{1}{2}}} -->
+<!-- # \int_0^\infty -->
+<!-- # \exp\left(-\frac{1}{2}\left(1 + \frac{t^2}{n}\right)\right) -->
+<!-- # w^{\frac{n + 1}{2}-1} -->
+<!-- # \,dw \\ -->
+<!-- # \end{split} -->
+<!-- # \end{align} -->
+<!-- # Wir stellen dann fest, dass der Integrand auf der linken Seite der obigen -->
+<!-- # Gleichung dem Kern einer Gamma WDF mit Parametern  $\alpha = \frac{n+1}{2}$ -->
+<!-- #   und $\beta = \frac{2}{1+\frac{t^2}{n}}$ entspricht, wie man leicht einsieht: -->
+<!-- # \begin{align*} -->
+<!-- # \Gamma(w;\alpha,\beta) -->
+<!-- # = \frac{1}{\Gamma(\alpha)\beta^{\alpha}}w^{\alpha-1}\exp\left(-\frac{w}{\beta}\right) & \\ -->
+<!-- # \Rightarrow -->
+<!-- # \Gamma\left(w;\frac{n+1}{2},\frac{2}{1+\frac{t^2}{n}}\right) -->
+<!-- # & = \frac{1}{\Gamma(\frac{n+1}{2})\left(\frac{2}{1+\frac{t^2}{n}}\right)^{\frac{n+1}{2}}} -->
+<!-- # w^{\frac{n+1}{2}-1}\exp\left(-\frac{w}{\frac{2}{1+\frac{t^2}{n}}}\right) \\ -->
+<!-- # & = \frac{1}{\Gamma( \frac{n+1}{2})\left(\frac{2}{1+\frac{t^2}{n}}\right)^{ \frac{n+1}{2}}} -->
+<!-- # \exp\left(-\frac{1}{2}\left(1 + \frac{t^2}{n}\right)\right) w^{\frac{n+1}{2}-1}. -->
+<!-- # \end{align*} -->
+<!-- # Es ergibt sich also -->
+<!-- # \begin{equation} -->
+<!-- # p_T(t) -->
+<!-- # = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}n^{\frac{1}{2}}} -->
+<!-- # \int_0^\infty -->
+<!-- # \Gamma\left(w;\frac{n+1}{2},\frac{2}{1+\frac{t^2}{n}}\right) -->
+<!-- # \,dw . -->
+<!-- # \end{equation} -->
+<!-- # Schließlich stellen wir fest, dass der Integralterm in obiger Gleichung dem -->
+<!-- # Normalisierungsterm einer Gamma WDF entspricht. Abschließend ergibt sich also -->
+<!-- # \begin{equation} -->
+<!-- # p_T(t) = -->
+<!-- # \frac{1}{\sqrt{2\pi}}\frac{1}{\Gamma(\frac{n}{2})2^{\frac{n}{2}}n^{\frac{1}{2}}} -->
+<!-- # \Gamma\left(\frac{n+1}{2}\right)\left(\frac{2}{1 + \frac{t^2}{n}} \right)^{\frac{n+1}{2}}. -->
+<!-- # \end{equation} -->
+<!-- # Die Verteilung von $Z/\sqrt{U/n}$ hat also die WDF einer $T$-Zufallsvariable. -->
+
+<!-- ``` -->
+
+
+
+### $F$-Transformation {-}
+
+```{definition, name = "$f$-Zufallsvariable"}
+
+$F$ sei eine Zufallsvariable mit Ergebnisraum $\mathbb{R}_{>0}$ und WDF
+\begin{equation}
+p_F : \mathbb{R} \to \mathbb{R}_{>0}, f \mapsto p_F(f)
+:= m^{\frac{m}{2}}n^{\frac{n}{2}}
+   \frac{\Gamma\left(\frac{m+n}{2}\right)}{\Gamma\left(\frac{m}{2}\right)\Gamma\left(\frac{n}{2}\right)}
+   \frac{f^{\frac{m}{2}-1}}{\left(1 + \frac{m}{n}f \right)^{\frac{m+n}{2}}},
+\end{equation}
+wobei $\Gamma$ die Gammafunktion bezeichne. Dann sagen wir, dass $F$ einer
+$f$-Verteilung mit $n,m$ Freiheitsgraden unterliegt und nennen $F$ eine
+$f$-Zufallsvariable mit $n,m$ Freiheitsgraden. Wir kürzen dies mit
+$F \sim f(n,m)$ ab. Die WDF einer $f$-Zufallsvariable bezeichnen wir mit
+\begin{equation}
+F(f;n,m)
+:= m^{\frac{m}{2}}n^{\frac{n}{2}}
+   \frac{\Gamma\left(\frac{m+n}{2}\right)}{\Gamma\left(\frac{m}{2}\right)\Gamma\left(\frac{n}{2}\right)}
+   \frac{f^{\frac{m}{2}-1}}{\left(1 + \frac{m}{n}f \right)^{\frac{m+n}{2}}}.
+\end{equation}
+
+```
+
+
+ABBILDUNG Wahrscheinlichkeitsdichtefunktionen der $f$-Verteilung
+
+
+```{theorem, name = "$F$-Transformation"}
+$V \sim \chi^2(n)$ und $W \sim \chi^2(m)$ seien zwei unabhängige
+$\chi^2$-Zufallfsvariablen mit $n$ und $m$ Freiheitsgraden, respektive.
+Dann ist die Zufallsvariable
+\begin{equation}
+F := \frac{V/n}{W/m}
+\end{equation}
+eine $f$-verteilte Zufallsvariable mit $n,m$ Freiheitsgraden, es gilt also $F \sim f(n,m)$.
+
+```
+
+
+Bemerkungen
+
+*Wir verzichten auf einen expliziten Beweis.
+*Das Theorem kann bewiesen werden, in dem man zunächst ein Transformation für
+Quotienten von Zufallsvariablen mithilfe des multivariaten Transformationstheorems
+und Marginalisierung herleitet und dieses Theorem dann auf die WDF von
+$\chi^2$-verteilten ZVen anwendet. Dabei ist die Regel zur Integration durch
+Substitution von zentraler Bedeutung.
+
+
+ABBILDUNG $F$-Transformation
+
+
+## Selbstkontrollfragen
+
+1. Erläutern Sie den Begriff der Transformation einer Zufallsvariable.
+2. Erläutern Sie die zentrale Idee der Transformationstheoreme.
+3. Erläutern Sie die Bedeutung der Standardtransformationen für die Statistik.
+4. Geben sie das Summentransformationstheorem wieder.
+5. Geben sie das Mittelwerttransformationstheorem wieder.
+6. Geben sie das $Z$-Transformationstheorem wieder.
+7. Geben sie das $\chi^2$-Transformationstheorem wieder.
+8. Beschreiben Sie die WDF der $t$-Verteilung in Abhängigkeit ihrer Freiheitsgrade.
+9. Geben sie das $T$-Transformationstheorem wieder.
+10. Geben sie das $F$-Transformationstheorem wieder.
+
+
+
+

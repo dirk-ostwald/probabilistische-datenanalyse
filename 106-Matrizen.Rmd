@@ -1,0 +1,906 @@
+\chapter{Matrices}\label{sec:matrices}
+Matrices and matrix computations are essential in the development of the theory of the GLM. In brief, matrices provide a general language to subsume many variants of linear statistical models and represent their associated theory in an integrated fashion, while they also allow for representing a given modelling scenario in a precise mathematical form that can readily be implemented in a computational environment. In this Section, we first define the notion of a matrix (\autoref{sec:definition}) and then discuss a number of essential matrix operations (\autoref{sec:matrix_operations}). We also introduce two matrix concepts that are important for introducing multivariate Gaussian distributions, determinants (\autoref{sec:determinants}) and positive-definite matrices (\autoref{sec:symmetry_posdef}). In essence, we here review the very minimum of concepts from linear algebra that still allows for obtaining a first understanding of the GLM. For a more comprehensive view, it is strongly recommended to consult standard undergraduate textbooks on linear algebra, such as \citet{strang_introduction_2009}.
+
+\section{Matrix definition}\label{sec:definition}
+A matrix is a rectangular collection of numbers. Matrices are usually denoted by capital letters as follows:
+\begin{equation}
+A := \left(\begin{matrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{matrix} \right) = {(a_{ij})}_{1\le i\le n,\, 1\le j\le m}.
+\end{equation}
+An entry $a_{ij}$ in a matrix $A$ is indexed by its row index $i$ and its column index $j$. For example, the entry $a_{32}$ in the matrix 
+\begin{equation}\label{eq:mat_example}
+A:=\left(\begin{matrix}
+2 & 7 & 5 & 2 \\
+8 & 2 & 5 & 6 \\
+6 & 4 & 0 & 9 \\
+9 & 2 & 1 & 2 
+\end{matrix}\right)
+\end{equation}
+is $4$. The size of a matrix is determined by its number of rows $n\in \mathbb{N}$ and its number of columns $m\in \mathbb{N}$. If a matrix has the same number of rows and columns, i.e., if $n = m$, the matrix is called a \textit{square matrix}. When referring to a matrix, it is very useful to mention its size and the properties of its entries. In the theory of the GLM, the entries of a matrix are usually elements of the set of real numbers $\mathbb{R}$. We thus write
+\begin{equation}\label{eq:mat_notation}
+A\in \mathbb{R}^{n\times m} 
+\end{equation}
+to denote that a given matrix $A$ has entries from the set of real numbers and that it comprises $n$ rows and $m$ columns. In words, \eqref{eq:mat_notation} is to be read as ``the matrix $A$ consists of $n$ rows and $m$ columns and the entries in $A$ are real numbers''. For example, for the matrix $A$ in \eqref{eq:mat_example}, we write
+\begin{equation}
+A\in \mathbb{R}^{4\times 4},
+\end{equation}
+because it has four rows and four columns. Note that this matrix is a square matrix. Matrices comprising a single column require special attention: in the context of matrix algebra, we can identify the $n$-dimensional vectors introduced in \textcolor{red}{Section 2 $\vert$ Sets, sums, and functions} with the set of $n\times 1$ matrices. In other words, we treat $n$-dimensional vectors and matrices with $n$ rows and a single column as equivalent. This means that we usually set $\mathbb{R}^n := \mathbb{R}^{n\times 1}$ for $n\in \mathbb{N}$. 
+
+\section{Matrix operations}\label{sec:matrix_operations}
+Just as one can compute with real numbers, one can do algebra with matrices. More specifically, one can
+\begin{itemize}[leftmargin = *]
+\item add and subtract two matrices of the same size, referred to as  \textit{matrix addition} and \textit{subtraction},
+\item multiply a matrix with a scalar, referred to as \textit{matrix scalar multiplication},
+\item multiply two matrices under certain conditions, referred to as \textit{matrix multiplication},
+\item divide by a matrix or, more precisely, multiply by a matrix inverse, which is found by a process referred to as \textit{matrix inversion},
+\item change the ordering of elements of a matrix in a prescribed manner, referred to as \textit{matrix transposition}.
+\end{itemize}
+In the following, we discuss these operations in some detail and provide examples.
+
+\subsubsection*{Matrix addition and subtraction}
+Two matrices of the same size can be added or subtracted by adding or subtracting their 
+entries in an element-wise fashion. Formally, in case of addition, this can be expressed as
+\begin{equation}
+A+B=C
+\end{equation}
+with $A, B, C \in \mathbb{R}^{n\times m}$, and where the matrix $C$ is given by
+\begin{align} 
+\begin{split}
+A+B & =   
+\left(\begin{matrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{matrix} \right)
++
+\left(\begin{matrix}
+b_{11} & b_{12} & \cdots & b_{1m} \\
+b_{21} & b_{22} & \cdots & b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{n1} & b_{n2} & \cdots & b_{nm}
+\end{matrix} \right) \\
+& = 
+\left(\begin{matrix}
+a_{11} + b_{11} & a_{12} + b_{12} & \cdots & a_{1m} + b_{1m} \\
+a_{21} + b_{21} & a_{22} + b_{22} & \cdots & a_{2m} + b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n2} + b_{n1} & a_{n2} + b_{n2} & \cdots & a_{nm} + b_{nm}
+\end{matrix} \right).
+\end{split}
+\end{align}
+The analogue element-wise operation is defined for subtraction:
+\begin{equation}
+A-B=D.
+\end{equation}
+
+\paragraph{Example.} As an example, consider the $2\times 3$ matrices $A,B\in \mathbb{R}^{2\times 3}$ defined as
+\begin{equation}
+A:=\left(\begin{matrix}
+2 & -3 & 0\\
+1 &  6 & 5\\
+\end{matrix} \right)
+\mbox{ and } 
+B := \left(\begin{matrix}
+ 4 & 1 & 0\\
+-4 & 2 & 0\\
+\end{matrix}\right).
+\end{equation}
+Since both matrices have the same size, we can compute their sum
+\begin{align}
+\begin{split}
+C 
+& = A+B \\
+& =  
+\left(\begin{matrix}
+2 & -3 & 0\\
+1 &  6 & 5\\
+\end{matrix} \right)
++
+\left(\begin{matrix}
+ 4 & 1 & 0\\
+-4 & 2 & 0\\
+\end{matrix}\right) \\
+& =  
+\left(\begin{matrix}
+2 + 4 & -3 + 1 & 0 + 0\\
+1 - 4 &  6 + 2 & 5 + 0\\
+\end{matrix} \right) \\
+& =  
+\left(\begin{matrix}
+6 & -2 & 0\\
+-3 &  8 & 5 \\
+\end{matrix} \right)
+\end{split}
+\end{align}
+and their difference
+\begin{align}
+\begin{split}
+D & = A-B \\ 
+& =    
+\left(\begin{matrix}
+2 & -3 & 0\\
+1 &  6 & 5\\
+\end{matrix} \right)
+-
+\left(\begin{matrix}
+ 4 & 1 & 0\\
+-4 & 2 & 0\\
+\end{matrix}\right) \\
+& =  
+\left(\begin{matrix}
+2 - 4 & -3 - 1 & 0 - 0\\
+1 + 4 &  6 - 2 & 5 - 0\\
+\end{matrix} \right) \\
+& =  
+\left(\begin{matrix}
+-2 & -4 & 0\\
+5 &  4 & 5 \\
+\end{matrix} \right).
+\end{split}
+\end{align}
+
+\subsubsection*{Matrix scalar multiplication}
+One can also multiply a matrix $A\in \mathbb{R}^{n\times m}$ by a \textit{scalar} $c\in \mathbb{R}$. In contrast to a matrix or vector, a \textit{scalar} is a single number. The operation of multiplying a matrix by a scalar is called \textit{scalar multiplication} and, like matrix addition and subtraction, is performed in an element-wise fashion. Formally, we have 
+\begin{align}
+\begin{split}
+cA & = 
+c\left(\begin{matrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{matrix} \right) \\
+& = 
+\left(\begin{matrix}
+ca_{11} & ca_{12} & \cdots & ca_{1m} \\
+ca_{21} & ca_{22} & \cdots & ca_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+ca_{n1} & ca_{n2} & \cdots & ca_{nm}
+\end{matrix} \right) \\
+& =: 
+\left(\begin{matrix}
+b_{11} & b_{12} & \cdots & b_{1m} \\
+b_{21} & b_{22} & \cdots & b_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{n1} & b_{n2} & \cdots & b_{nm}
+\end{matrix} \right) \\
+& = 
+B.
+\end{split}
+\end{align}
+
+\paragraph{Example.} As an example, consider the matrix $A\in \mathbb{R}^{4\times 3}$ defined as
+\begin{equation}
+A := \left(\begin{matrix}
+3 & 1 & 1\\
+5 & 2 & 5\\
+2 & 7 & 1\\
+3 & 4 & 2
+\end{matrix}\right)
+\end{equation}
+and let $c:=-3$. Then $B = cA$ evaluates to
+\begin{equation}
+B = -3\left(\begin{matrix}
+3 & 1 & 1\\
+5 & 2 & 5\\
+2 & 7 & 1\\
+3 & 4 & 2
+\end{matrix}\right)
+= \left(\begin{matrix}
+-3\cdot3 & -3\cdot1 & -3\cdot1\\
+-3\cdot5 & -3\cdot2 & -3\cdot5\\
+-3\cdot2 & -3\cdot7 & -3\cdot1\\
+-3\cdot3 & -3\cdot4 & -3\cdot2
+\end{matrix}\right)
+= \left(\begin{matrix}
+-9  &  -3 & -3  \\
+-15 &  -6 & -15 \\
+-6  & -21 & -3  \\
+-9  & -12 & -6
+\end{matrix}\right).
+\end{equation}
+
+\subsubsection*{Matrix multiplication}
+In addition to adding and subtracting matrices of the same size, as well as 
+multiplying a matrix by a scalar, one can also multiply two matrices. 
+However, matrix multiplication is not an element-wise operation, but has a special definition. Importantly, two matrices $A$ and $B$ can only be multiplied in the order
+\begin{equation}
+AB,
+\end{equation}
+if the first matrix $A$ has as many columns as the second matrix $B$ has rows, or in other words, if 
+\begin{equation}
+A\in \mathbb{R}^{n\times m} \mbox{ and } B\in \mathbb{R}^{m\times p}
+\end{equation}
+with $n,m,p\in \mathbb{N}$. This condition is sometimes referred to as the equality of the \textit{inner dimensions} of the product $AB$. If this equality does not hold, the two matrices cannot be multiplied. If the inner dimensions of the matrices $A$ and $B$ are equal, the matrix product of $AB$ is defined as  
+\begin{equation}
+AB = C,
+\end{equation}
+where the resulting matrix $C\in \mathbb{R}^{n\times p}$ is computed as
+\begin{align}\label{eq:MP}
+\begin{split}
+AB & =
+\left(\begin{matrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{matrix} \right)
+\left(\begin{matrix}
+b_{11} & b_{12} & \cdots & b_{1p} \\
+b_{21} & b_{22} & \cdots & b_{2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mp}
+\end{matrix} \right)\\
+& =
+\left(\begin{matrix}
+\sum_{i=1}^m a_{1i}b_{i1} & \sum_{i=1}^m a_{1i}b_{i2} & \cdots & \sum_{i=1}^m a_{1i}b_{ip} \\
+\sum_{i=1}^m a_{2i}b_{i1} & \sum_{i=1}^m a_{2i}b_{i2} & \cdots & \sum_{i=1}^m a_{2i}b_{ip} \\
+\vdots & \vdots & \ddots & \vdots \\
+\sum_{i=1}^m a_{ni}b_{i1} & \sum_{i=1}^m a_{ni}b_{i2} & \cdots & \sum_{i=1}^m a_{ni}b_{ip} 
+\end{matrix} \right) \\
+& =:
+\left(\begin{matrix}
+c_{11} & c_{12} & \cdots & c_{1p} \\
+c_{21} & c_{22} & \cdots & c_{2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+c_{n1} & c_{n2} & \cdots & c_{np}
+\end{matrix} \right) \\
+& = C.
+\end{split}
+\end{align}
+The expression for the matrix product may appear a bit unhandy, but it is very important. The expression states that the entry in the $i$th row and $j$th column of the matrix $C \in \mathbb{R}^{n \times p}$ is given by overlaying the entries in the $i$th row of matrix $A$ with the $j$th column entries of matrix $B$, multiplying the overlaid entries, and then adding them up.
+
+\paragraph{Example.} Let $A\in \mathbb{R}^{2\times 3}$ and $B\in \mathbb{R}^{3\times 2}$ be 
+defined as
+\begin{equation}
+A := \left(\begin{matrix}
+2 & -3 &  0   \\
+1 &  6 &  5 
+\end{matrix}\right)
+\mbox{ and }
+B := \left(\begin{matrix}
+ 4 & 2  \\
+-1 & 0  \\
+ 1 & 3 
+\end{matrix}\right).
+\end{equation}
+We first consider the size of the matrix $C:=AB$. We know that $A$ has two 
+rows and three columns, while $B$ has three rows and two columns. Because 
+$B$ has the same number of rows as $A$ has columns, the matrix product 
+$AB=C$ is defined. Expression \eqref{eq:MP} tells us that the resulting matrix 
+$C$ has two rows and two columns, because the number of rows of the 
+resulting matrix $C$ is determined by the number of rows of the first matrix 
+$A$, and the number of columns of the resulting matrix $C$ is determined by 
+the number of columns of the second matrix $B$. We thus know that $C$ is a 
+$2\times2$ matrix, i.e., $C\in \mathbb{R}^{2\times 2}$. Overlaying the rows of $A$ on the columns of $B$, multiplying the entries, and adding up the results yields
+\begin{align}
+\begin{split}
+C & = AB  \\
+& = \left(\begin{matrix}
+2 & -3 & 0 \\
+1 &  6 & 5 \\
+\end{matrix} \right)
+\left(\begin{matrix}
+4  & 2 \\
+-1 & 0 \\
+1  & 3
+\end{matrix} \right)\\
+& =
+\left(\begin{matrix}
+2\cdot 4 + (-3)\cdot (-1) + 0\cdot 1 & 2\cdot 2 + (-3)\cdot 0 + 0\cdot 3 \\
+1\cdot 4 + 6\cdot (-1)  + 5\cdot 1 & 1\cdot 2 +  6\cdot 0 + 5\cdot 3 \\
+\end{matrix} \right) \\
+& =
+\left(\begin{matrix}
+8 + 3 + 0 & 4 + 0 + 0 \\
+4 - 6 + 5 & 2 + 0 + 15 \\
+\end{matrix} \right) \\
+& =
+\left(\begin{matrix}
+11 & 4 \\
+3 & 17 \\
+\end{matrix} \right).
+\end{split}
+\end{align}
+It is essential to always keep track of the sizes of the matrices that are 
+involved in matrix multiplications. Specifically, if matrix $A$ is of size $n\, 
+\times m$ and matrix $B$ is of size $m \times p$, then the product $AB$ 
+will always be of size $n\times p$. This can be visualized as 
+\begin{equation}
+(n\times m )\cdot(m\times p)=(n\times p),
+\end{equation}
+i.e., the inner numbers $m$ disappear. 
+
+Note that if one is calculating with scalars, multiplication is \textit{commutative}, i.e., for $a,b\in \mathbb{R}$, it holds that $ab=ba$. In contrast, matrix multiplication is generally not commutative, i.e., the order of $A$ and $B$ in the matrix product matters. As an example, consider the matrices $A$ and $B$ above. We have just seen that
+\begin{equation}
+C : = AB =
+\left(\begin{matrix}
+2 & -3 & 0 \\
+1 &  6 & 5 \\
+\end{matrix} \right)
+\left(\begin{matrix}
+4  & 2 \\
+-1 & 0 \\
+1  & 3
+\end{matrix} \right)
+=
+\left(\begin{matrix}
+11 & 4 \\
+3 & 17 \\
+\end{matrix} \right).
+\end{equation}
+On the other hand, we have
+\begin{equation}
+D : = BA =
+\left(\begin{matrix}
+4  & 2 \\
+-1 & 0 \\
+1  & 3
+\end{matrix} \right)
+\left(\begin{matrix}
+2 & -3 & 0 \\
+1 &  6 & 5 \\
+\end{matrix} \right)
+=
+\left(\begin{matrix}
+10 &  0 & 10 \\
+-2 &  3 & 0 \\
+ 5 & 15  & 15 \\
+\end{matrix} \right),
+\end{equation}
+and thus, for the current example, $AB \neq BA$. Depending on the matrix sizes, the commuted matrix product may not even be defined: if $A \in \mathbb{R}^{2 \times 3}$ and $B = \mathbb{R}^{3 \times 4}$, the matrix product $AB$ exists, but the matrix product $BA$ does not.
+
+\subsubsection*{Matrix inversion}
+To motivate the idea of matrix inversion consider the equation
+\begin{equation}\label{eq:inv_1}
+Ax = b,
+\end{equation}
+where $A\in \mathbb{R}^{n\times n}$, $x\in \mathbb{R}^{n}$, and  $b\in \mathbb{R}^{n}$. We next simplify eq. \eqref{eq:inv_1} by assuming that $n=1$. To remind us of this assumption, we rewrite \eqref{eq:inv_1} using lower-case letters
+\begin{equation}\label{eq:inv_2}
+ax = b,
+\end{equation}
+where now $a,x,b\in\mathbb{R}$.
+We further assume that we know that $a=2$ and $b=6$, i.e., we have 
+the equation
+\begin{equation}\label{eq:inv_3}
+2x=6.
+\end{equation}
+From high school mathematics we know how to solve equations such as \eqref{eq:inv_3} 
+for the unknown variable $x$. The general strategy is to isolate $x$ on the left-hand side by the appropriate algebraic operations, such as additions and/or multiplications by the known variables,  and observe the outcome on the right-hand side of the equation. For the current case, such a strategy takes the following form:
+\begin{align}\label{eq:inv_4}
+\begin{split}
+2x & = 6 \quad \, \vert \mbox{ divide both sides by 2} \\
+\frac{2}{2}x & = \frac{6}{2} \quad \vert \mbox{  evaluate the ratios} \\
+x & = 3,
+\end{split}
+\end{align}
+and we have found that the value of the unknown variable $x$ that solves eq. \eqref{eq:inv_3} is $x = 3$. From high school mathematics, we also recall that division by a scalar number $a$ corresponds to multiplication by its multiplicative inverse. The \textit{multiplicative inverse}, also referred to as the \textit{reciprocal}, of a scalar $a$ is the number which yields $1$ if it is multiplied with $a$, i.e., $1/a$. We may thus also write the solution strategy \eqref{eq:inv_4} in the form 
+\begin{align}\label{eq:inv_5}
+\begin{split}
+2x & = 6 \quad  \quad \vert \mbox{ multiply both sides by } \frac{1}{2} \\
+\frac{1}{2}\cdot 2x & = \frac{1}{2} \cdot 6 \,\,\, \vert \mbox{  evaluate the ratios} \\
+x & = 3.
+\end{split}
+\end{align}
+Of course both strategies, \eqref{eq:inv_4} and \eqref{eq:inv_5}, yield the same result. From high school mathematics,  one may also remember that the multiplicative inverse $1/a$ of a scalar $a$ can be denoted by $a^{-1}$. In general mathematics, $a^{-1}$ is called the multiplicative inverse of $a$ if, and only if,
+\begin{equation}\label{eq:inv_6}
+aa^{-1}=a^{-1}a=1,
+\end{equation}
+where $1$ denotes the \textit{neutral element} with respect to multiplication, i.e., 
+\begin{equation}\label{eq:inv_7}
+a\cdot 1=1\cdot a=a,
+\end{equation}
+for all $a$. Recapitulating \eqref{eq:inv_4} in more abstract terms, we have thus carried 
+out the following operations
+\begin{align}\label{eq:inv_8}
+\begin{split}
+ax & = b \quad \quad \quad \vert \mbox{ multiply both sides by } a^{-1} \\
+a^{-1}ax & = a^{-1}b \quad \, \, \vert \mbox{  evaluate the multiplications} \\
+x & = a^{-1}b.
+\end{split}
+\end{align}
+We now return to the case that $A\in \mathbb{R}^{n\times n}$, $x\in \mathbb{R}^{n}$, and $b\in \mathbb{R}^{n}$ are in fact matrices and vectors, i.e., $n>1$. In matrix algebra, one often encounters statements of the form
+\begin{equation}\label{eq:inv_9}
+Ax=b,
+\end{equation}
+which are referred to as \textit {systems of linear equations}. Here, the values of $A \in \mathbb{R}^{n \times n}$ and $b \in \mathbb{R}^n$ are known and one would like to find an $x \in \mathbb{R}^n$  which solves \eqref{eq:inv_9}. In complete analogy to the solution strategy described in \eqref{eq:inv_8}, one can multiply both sides of \eqref{eq:inv_9} with the  \textit{inverse} $A^{-1} \in \mathbb{R}^{n\times n}$ of $A$ (if it exists) to obtain
+\begin{equation}\label{eq:inv_10}
+A^{-1}Ax =A^{-1}b.
+\end{equation}
+In analogy to the scalar case $a^{-1}a=1$, the matrix product $A^{-1}A$ yields, by definition, a specific matrix, known as the \textit{identity matrix} $I_{n}\in \mathbb{R}^{n\times n}$. The identity matrix comprises ones on its main diagonal and zeros everywhere else. That is, by definition, we have
+\begin{equation}\label{eq:inv_11}
+A^{-1}A= I_{n} :=
+\left(\begin{matrix}
+1 & 0 & \cdots & 0 \\
+0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & 1
+\end{matrix} \right).
+\end{equation}
+In analogy to $a\cdot 1 = 1 \cdot a = a$ for scalars, the product of a matrix $A$ with the identity matrix always yields the matrix $A$ again,
+\begin{equation}\label{eq:inv_12}
+AI = IA = A,
+\end{equation}
+i.e., the identity matrix is the neutral element with respect to matrix multiplication. We thus see that we can evaluate the left-hand side of \eqref{eq:inv_9} as follows
+\begin{align}\label{eq:inv_13}
+\begin{split}
+Ax & = b \quad \quad \quad \vert \mbox{ multiply both sides by } A^{-1} \\
+A^{-1}Ax & = A^{-1}b \, \quad \vert \mbox{  evaluate the multiplications} \\
+x & = A^{-1}b.
+\end{split}
+\end{align}
+In other words, if we have a way to evaluate the inverse $A^{-1}$ of the square matrix $A$, we can solve for the unknown $x \in \mathbb{R}^n$ in the same way that we can solve for the unknown $x \in \mathbb{R}$ in the scalar case.
+
+Matrix inversion is fundamental for solving systems of linear equations and scientific computing in general. However, a comprehensive discussion of algorithms for matrix inversion is beyond the scope of an introduction to the GLM. In the following, we thus content with providing two examples for the evaluation of matrix inverses in special cases, namely diagonal matrices and small invertible matrices.
+
+\paragraph{The inverse of a diagonal matrix.} A \textit{diagonal matrix} $D$ is a square matrix with non-zero elements $d_i > 0, i = 1,...,n$ along its main diagonal and zeros everywhere else,
+\begin{equation}\label{eq:inv_16}
+D=\left(\begin{matrix}
+d_1 & 0 & \cdots & 0              \\
+0   & d_2 & \cdots & 0            \\
+\vdots & \vdots & \ddots & \vdots \\
+0   & 0 & \cdots & d_n
+\end{matrix} \right)
+\in \mathbb{R}^{n\times n}.
+\end{equation}
+The inverse of a diagonal matrix is given by a diagonal matrix $D^{-1}$ with the scalar inverses $d_{i}^{-1}$ of the $d_i$ on its main diagonal and zeros everywhere else,
+\begin{equation}\label{eq:inv_17}
+D^{-1}
+=\left(\begin{matrix}
+\frac{1}{d_1} & 0 				& \cdots & 0 \\
+0  			  & \frac{1}{d_2}  	& \cdots & 0 \\
+\vdots        & \vdots 		    & \ddots & \vdots \\
+0   		  & 0 				& \cdots & \frac{1}{d_n} 
+\end{matrix} \right)
+\in \mathbb{R}^{n\times n}, 
+\end{equation}
+because
+\begin{align}
+\begin{split}
+D^{-1}D 
+& = \left(\begin{matrix}
+\frac{1}{d_1} & 0 				& \cdots & 0 \\
+0  			  & \frac{1}{d_2}  	& \cdots & 0 \\
+\vdots        & \vdots 		    & \ddots & \vdots \\
+0   		  & 0 				& \cdots & \frac{1}{d_n} 
+\end{matrix} \right)
+\left(\begin{matrix}
+d_1 & 0 & \cdots & 0              \\
+0   & d_2 & \cdots & 0            \\
+\vdots & \vdots & \ddots & \vdots \\
+0   & 0 & \cdots & d_n
+\end{matrix} \right) \\
+& = \left(\begin{matrix}
+\frac{d_1}{d_1} & 0 				& \cdots & 0 \\
+0  			  & \frac{d_2}{d_2}  	& \cdots & 0 \\
+\vdots        & \vdots 		    & \ddots & \vdots \\
+0   		  & 0 				& \cdots & \frac{d_n}{d_n} 
+\end{matrix} \right)\\
+& = I_n,
+\end{split}
+\end{align}
+and likewise for $DD^{-1}$.
+
+\paragraph{Gaussian elimination.} Small matrices can be inverted using \textit{Gaussian elimination}. We will demonstrate this approach in the context of solving the system of linear equations
+\begin{equation}\label{eq:Axb}
+Ax = b \mbox{ with }
+A
+:= \left(\begin{matrix}
+1 &  0 & 2 \\
+2 & -1 & 3 \\
+4 &  1 & 8
+\end{matrix} \right)
+\in \mathbb{R}^{3 \times 3},
+x \in \mathbb{R}^3,
+\mbox{ and }
+b:= \left(\begin{matrix}
+2 \\
+1 \\
+2 
+\end{matrix}\right) \in \mathbb{R}^3. 
+\end{equation}
+Based on the discussion above, we know that we can solve the system of linear equations for $x \in \mathbb{R}^3$,  if we are able to determine the inverse $A^{-1}$ of $A$, because then
+\begin{equation}\label{eq:xAb}
+x = A^{-1}b.
+\end{equation}
+We also know that for the inverse of $A$, we have 
+\begin{equation}
+\label{eq96}
+A^{-1}A=I_3.
+\end{equation}
+The inverse of $A$ can be found using the following procedure:
+\begin{enumerate}[leftmargin = *]
+\item Write down the matrix $A$ and next to it the identity matrix $I_3$
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 2\\
+2 & -1 & 3\\
+4 & 1 & 8\\
+\end{matrix} 
+\begin{matrix}
+& \vert \\
+& \vert \\
+& \vert \\
+\end{matrix} 
+\begin{matrix}
+& 1 & 0 & 0\\
+& 0 & 1 & 0\\
+& 0 & 0 & 1\\
+\end{matrix} \right).
+\end{equation}
+\item Use three kinds of operations on the rows of $A$ to transform $A$ in the array above into the identity matrix. 
+Apply the same operations to the identity matrix in parallel. The admissible operations are:
+\begin{enumerate}
+\item exchanging two rows of $A$,
+\item multiplying a row of $A$ by a number, and
+\item adding or subtracting a multiple of another row of $A$ from any row of $A$.
+\end{enumerate}
+\end{enumerate}
+Adding -2 times the first row to the second row, and -4 times the first 
+row to the third row yields
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 2\\
+0 & -1 & -1\\
+0 & 1 & 0\\
+\end{matrix} 
+\begin{matrix}
+& \vert \\
+& \vert \\
+& \vert \\
+\end{matrix} 
+\begin{matrix}
+& 1 & 0 & 0\\
+& -2 & 1 & 0\\
+& -4 & 0 & 1\\
+\end{matrix} \right).
+\end{equation}
+Exchanging the second and third row yields
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 2\\
+0 & 1 & 0\\
+0 & -1 & -1\\
+\end{matrix} 
+\begin{matrix}
+& \vert \\
+& \vert \\
+& \vert \\
+\end{matrix} 
+\begin{matrix}
+& 1 & 0 & 0\\
+& -4 & 0 & 1\\
+& -2 & 1 & 0\\
+\end{matrix} \right).
+\end{equation}
+Adding the second row to the third row yields
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 2\\
+0 & 1 & 0\\
+0 & 0 & -1\\
+\end{matrix} 
+\begin{matrix}
+& \vert \\
+& \vert \\
+& \vert \\
+\end{matrix} 
+\begin{matrix}
+& 1 & 0 & 0\\
+& -4 & 0 & 1\\
+& -6 & 1 & 1\\
+\end{matrix} \right).
+\end{equation}
+Adding 2 times the third row to the first row yields
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & -1\\
+\end{matrix} 
+\begin{matrix}
+& \vert \\
+& \vert \\
+& \vert \\
+\end{matrix} 
+\begin{matrix}
+& -11 & 2 & 2\\
+& -4 & 0 & 1\\
+& -6 & 1 & 1\\
+\end{matrix} \right).
+\end{equation}
+Multiplying the third row by -1 yields
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1\\
+\end{matrix} 
+\begin{matrix}
+& \vert \\
+& \vert \\
+& \vert \\
+\end{matrix} 
+\begin{matrix}
+& -11 & 2 &  2 \\
+& -4 &  0 &  1 \\
+&  6 & -1 & -1 
+\end{matrix} \right).
+\end{equation}
+Having transformed the matrix on the left into the identity matrix, the matrix that is left on the right is now the inverse $A^{-1}$ of $A$, as can be verified by computing
+\begin{equation}
+\left(\begin{matrix}
+1 & 0 & 2\\
+2 & -1 & 3\\
+4 & 1 & 8\\
+\end{matrix}\right)
+\left(\begin{matrix}
+-11 & 2 & 2\\
+-4 & 0 & 1\\
+6 & -1 & -1\\
+\end{matrix} \right)
+=\left(\begin{matrix}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1\\
+\end{matrix} \right).
+\end{equation}
+Hence, with
+\begin{equation}
+A^{-1} = 
+\left(\begin{matrix}
+-11 & 2 & 2\\
+-4 & 0 & 1\\
+6 & -1 & -1\\
+\end{matrix}\right),
+\end{equation}
+the solution of \eqref{eq:Axb} can be computed using \eqref{eq:xAb} as
+\begin{equation}
+x = A^{-1}b = 
+\left(\begin{matrix}
+-11 & 2 & 2\\
+-4 & 0 & 1 \\
+6 & -1 & -1\\
+\end{matrix} \right)
+\left(\begin{matrix}
+2 \\
+1 \\
+2 \\
+\end{matrix}\right)
+= \left(\begin{matrix}
+-16 \\
+ -6 \\
+  9 \\
+\end{matrix}\right).
+\end{equation}
+
+\subsubsection*{Matrix transposition}
+The transposition of a matrix is the exchange of its row and column elements. Transposition of a matrix $A$ is denoted by $A^{T}$ and implies that if $A \in \mathbb{R}^{n\times m}$, then $A^{T}\in \mathbb{R}^{m\times n}$. Formally, we have for 
+\begin{equation}
+A:= 
+\left(\begin{matrix}
+a_{11} & a_{12} & \cdots & a_{1m} \\
+a_{21} & a_{22} & \cdots & a_{2m} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nm}
+\end{matrix} \right) \in \mathbb{R}^{n\times m}
+\end{equation}
+and 
+\begin{equation}
+B:=A^{T} \in \mathbb{R}^{m\times n},
+\end{equation}
+that
+\begin{equation}
+B =\left(\begin{matrix}
+b_{11} & b_{12} & \cdots & b_{1n} \\
+b_{21} & b_{22} & \cdots & b_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+b_{m1} & b_{m2} & \cdots & b_{mn}
+\end{matrix} \right) 
+:= 
+\left(\begin{matrix}
+a_{11} & a_{21} & \cdots & a_{n1} \\
+a_{12} & a_{22} & \cdots & a_{n2} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{1m} & a_{2m} & \cdots & a_{nm}
+\end{matrix} \right) \in \mathbb{R}^{n\times m}.
+\end{equation}
+
+\paragraph{Example.} For example, if
+\begin{equation}
+A:=\left(\begin{matrix}
+2 & 3 & 0 \\
+1 & 6  & 5 \\
+\end{matrix}\right),
+\end{equation}
+then
+\begin{equation}
+A^{T} := 
+\left(\begin{matrix}
+2  & 1 \\
+3 & 6 \\
+0  & 5 \\
+\end{matrix} \right).
+\end{equation}
+Note that the transpose of a $1\times 1$ matrix, i.e., a scalar, is just the same scalar again.
+
+\section{Determinants}\label{sec:determinants}
+Historically, determinants were used to characterize the solution space of systems of linear equations of the form \eqref{eq:inv_1}: if the determinant of the coefficient matrix $A$ is non-zero, the system has a unique solution, if the determinant of $A$ is zero, the system either has infinitely many solutions or no solution at all. There exists a rich general theory of determinants in Linear Algebra. However, from the perspective of an introduction to the GLM, it suffices to review the determinants of a few basic matrices that will reappear in the context of Gaussian distributions.
+
+\paragraph{Determinants of $2 \times 2$ and $3 \times 3$ matrices.} In general, determinants can be understood as functions on the set of square matrices $A \in \mathbb{R}^{n \times n}$ which take on scalar values. The determinant of a matrix $A\in\mathbb{R}^{n\times n}$ is denoted by $|A|$. For a matrix $A \in \mathbb{R}^{2\times 2}$, the determinant is defined as 
+\begin{equation}
+|\cdot| : \mathbb{R}^{2 \times 2} \to \mathbb{R}, 
+A \mapsto \left|A\right|
+=  \left| \left(\begin{matrix}
+a_{11} & a_{12}\\
+a_{21} & a_{22}\\
+\end{matrix}\right)\right|
+:= a_{11}a_{22} - a_{12}a_{21}.
+\end{equation}
+For a matrix $A\in \mathbb{R}^{3\times 3}$, the determinant is defined as
+\begin{align}
+\begin{split}
+|\cdot|: \mathbb{R}^{3 \times 3} \to \mathbb{R}, 
+A \mapsto \left|A \right| 
+= \left|\left(\begin{matrix}
+a_{11} & a_{12} & a_{13}\\
+a_{21} & a_{22} & a_{23}\\
+a_{31} & a_{32} & a_{33}\\
+\end{matrix}\right)\right|  
+:= & a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} + a_{13}a_{21}a_{32} \\
+& - a_{12}a_{21}a_{33} - a_{11}a_{23}a_{32} - a_{13}a_{22}a_{31}.
+\end{split}
+\end{align}
+
+\paragraph{Determinants of diagonal matrices.} Let $D\in \mathbb{R}^{n\times n}$ denote a diagonal matrix, i.e., $D = (d_{ij})_{1\le i,j \le n}$ with $d_{ij} \neq 0$ for the diagonal elements (i.e., $i = j$) and $d_{ij} = 0$  for the off-diagonal elements (i.e., $i \neq j$). Then the determinant of $D$ is the product of its diagonal elements:
+\begin{equation}
+|\cdot|: \mathbb{R}^{n \times n} \to \mathbb{R}, 
+D \mapsto \left|D \right| = 
+\left|D \right| 
+= \left| \left( \begin{matrix}
+d_{11} 	& 0 		& \cdots 	& 0 		\\
+0 		& d_{22}	& \cdots	& 0 		\\
+\vdots  & \cdots 	& \ddots 	& \vdots	\\
+0 		& \cdots 	& 0 		& d_{nn}
+\end{matrix} \right) \right|
+= \prod_{i=1}^n d_{ii}.
+\end{equation}
+
+
+\section{Symmetry and positive-definiteness}\label{sec:symmetry_posdef}
+A square matrix $A\in \mathbb{R}^{n\times n}$ is called \textit{symmetric}, if it equals its transpose, i.e., if $A=A^{T}$. For example, the matrix
+\begin{equation}
+A=\left(\begin{matrix}
+2 & 1 & 3\\
+1 & 4 & 5\\
+3 & 5 & 0\\
+\end{matrix} \right)
+\end{equation}
+is symmetric which is easily seen by writing down its transpose. Note that non-square matrices cannot be symmetric, because their transposition results in a new matrix which differs from the original matrix in the number of its rows and columns, and thus cannot be identical to the original matrix.
+
+Symmetric matrices can have an additional property known as \textit{positive-definiteness}. The concept of positive-definiteness can be approached from multiple perspectives and it is usually not trivial to check whether a given matrix is in fact positive-definite. A very fundamental notion of positive-definiteness is the following definition: a symmetric matrix $A\in \mathbb{R}^{n\times n}$ is called positive-definite, if 
+\begin{equation}
+x^TAx > 0 \mbox{ for all } x \in \mathbb{R}^n, x \neq 0.
+\end{equation}
+\noindent Note that based on this definition, one would have to evaluate the product $x^TAx$ for all $x\in \mathbb{R}^{n}$ to check whether $A$ is in fact positive-definite. This is not realistic. Therefore a variety of additional and equivalent criteria exist for the positive-definiteness of a matrix, which are, however, beyond the scope of this introduction to the GLM. In the following example, we consider a simple scenario where the positive-definiteness of an exemplary matrix can actually be determined directly.
+
+\paragraph{Example.} We consider the symmetric matrix
+\begin{equation}\label{eq:apd}
+A=\left(\begin{matrix}
+2 & 1\\
+1 & 2\\
+\end{matrix} \right) \in \mathbb{R}^{2\times 2}.
+\end{equation}
+If we consider an arbitrary, but non-zero, vector 
+\begin{equation}
+x := \left(\begin{matrix}
+x_1\\
+x_2\\
+\end{matrix} \right) \in \mathbb{R}^2,
+\end{equation}
+we find that
+\begin{align}\label{eq:xAx}
+\begin{split}
+x^TAx 
+& = \left(\begin{matrix}
+x_{1} & x_{2}\\
+\end{matrix} \right)\left(\begin{matrix}
+2 & 1\\
+1 & 2\\
+\end{matrix} \right)\left( \begin{matrix}
+x_{1}\\
+x_{2}\\
+\end{matrix} \right) \\
+& = \left(\begin{matrix}
+2x_1 + x_2 & x_1  + 2x_2 \\
+\end{matrix} \right)\left(\begin{matrix}
+x_1\\
+x_2\\
+\end{matrix} \right) \\
+& = \left(2x_1+x_2\right)x_1+\left(x_1+2x_2 
+\right)x_2.
+\end{split}
+\end{align}
+From the right-hand side of eq. \eqref{eq:xAx}, we then have
+\begin{align}
+\begin{split}
+\left(2x_1+x_2\right)x_1+\left(x_1+2x_2\right)x_2 
+& = 2x_1^2 +x_2x_1+x_1x_2+2x_2^2 		\\
+& = 2x_1^2 +2x_1x_2+2x_2^2				\\
+& = x_1^2+2x_1x_2+x_2^2+x_1^2+x_2^2		\\
+& =\left(x_1+x_2\right)^2+x_1^2+x_2^2.	
+\end{split}
+\end{align}
+For an arbitrary non-zero $x = (x_{1}, x_{2})^T$, we thus obtained a sum of squares of the components of $x$, which is always larger than zero. We have thus shown that $A$ in \eqref{eq:apd} is positive-definite.
+
+\section{Bibliographic remarks}
+In this Section, we reviewed some fundamental aspects of matrices and matrix computations as required for the remainder of this introduction to the GLM. There exists a large variety of introductory texts on linear algebra. A good starting point is the classical textbook by \citet{strang_introduction_2009}. A more advanced treatment is offered for example by \citet{horn_matrix_2012}. Comprehensive introductions to solution theory of systems of linear equations and the algorithmic evaluation of matrix inverses can be found for example in \citet{press_numerical_2007}. \citet{searle_matrix_1982} provides an excellent comprehensive overview of matrix algebra as relevant to statistics.
+  
+\section{Study Questions}
+\begin{enumerate}[leftmargin=*]
+\item Write down the definition of matrix addition, subtraction, and scalar multiplication.
+\item Write down the definition of the matrix product.
+\item If $X$ is an $n \times p$ matrix and $\beta$ is an $p \times 1$ vector, what is the size of $X\beta$?
+\item Let 
+\begin{equation}
+A := \left(\begin{matrix}
+1 & 2\\
+3 & 4\\
+\end{matrix} \right) \mbox{ and } B:=\left(\begin{matrix}
+1 & 1\\
+0 & 2\\
+\end{matrix} \right).
+\end{equation}
+Evaluate the following matrices:
+\begin{equation}
+C:=A+B^{T},D:=A-B, E:=AB\mbox{, and } F:=BA.
+\end{equation}
+\item Let
+\begin{equation}
+A := 
+\begin{pmatrix}
+ 2 & 4 \\
+ 1 & 3 \\
+ 0 & 2 \\
+\end{pmatrix}
+\mbox{ and }
+b = 
+\begin{pmatrix}
+3 \\ 2 
+\end{pmatrix}.
+\end{equation}
+Evaluate
+\begin{equation}
+x = Ab, B = bb^TA^T, \mbox{ and } C = b^TA^TA.
+\end{equation}
+
+\item Let $X\in \mathbb{R}^{10\times 3}$ and $y \in \mathbb{R}^{10}$. What are the sizes of $X^TX$, $(X^TX)^{-1}$, $X^Ty$, and of $(X^TX)^{-1}X^Ty$?
+
+\item Explain the concept of a matrix inverse.
+
+\item Evaluate the inverse $A^{-1}$ for
+\begin{equation}
+A := \left(\begin{matrix}
+1 & 0 &  0 \\
+0 & 2 &  0 \\
+0 & 0 & 4 \\
+\end{matrix} \right).
+\end{equation}
+
+\item Evaluate the determinants of the matrices 
+\begin{equation}
+M:=\left(\begin{matrix}
+1 & 2\\
+0 & 1\\
+\end{matrix} \right) \mbox{ and } N:=\left(\begin{matrix}
+2 & 1\\
+2 & 1\\
+\end{matrix} \right).
+\end{equation}
+\item Write down the definition of a positive-definite matrix.
+\end{enumerate}

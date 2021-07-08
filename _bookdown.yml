@@ -1,0 +1,18 @@
+# This file contains the bookdown configuration
+#
+# Author - Dirk Ostwald
+# ------------------------------------------------------------------------------
+book_filename: "probabilistische-datenanalyse"
+rmd_files: ["index.Rmd",
+            "101-Mengen.Rmd",
+            "102-Summen-Produkte-Potenzen.Rmd",
+            "103-Funktionen.Rmd",
+            "104-Differentialrechnung.Rmd",
+            "105-Integralrechnung.Rmd",
+            "201-Wahrscheinlichkeitsräume.Rmd",
+            "202-Zufallsvariablen.Rmd",
+            "203-Zufallsvektoren.Rmd",
+            "204-Erwartungswert-Varianz-Kovarianz.Rmd",
+            "205-Ungleichungen.Rmd",
+            "206-Grenzwerte.Rmd",
+            "207-Transformationen.Rmd"]

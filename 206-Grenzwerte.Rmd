@@ -1,0 +1,244 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Grenzwerte
+
+
+## Gesetze der großen Zahl
+
+* Es gibt ein *Schwaches Gesetz der großen Zahl* und ein *Starkes Gesetz der großen Zahl*.
+* Intuitiv besagen beide Gesetze, dass sich das Stichprobenmittel von unabhängigen und identisch verteilten Zufallsvariablen für eine große Anzahl an Zufallsvariablen dem Erwartungswert  der zugrundeliegenden Verteilung nähert.
+* Das Schwache und das Starke Gesetz der großen Zahl unterscheiden sich in Hinblick auf die zu ihrer Formulierung benutzen Formen der *Konvergenz von Zufallsvariablen*.
+* Das Schwache Gesetz basiert auf der *Konvergenz in Wahrscheinlichkeit*.
+* Das Starke Gesetz basiert auf der *fast sicheren Konvergenz*.
+* Wir begnügen uns mit Konvergenz in Wahrscheinlichkeit und dem Schwachen Gesetz.
+
+
+```{definition, name = "Konvergenz in Wahrscheinlichkeit"}
+Eine Folge von Zufallsvariable $X_1,X_2,...$ *konvergiert gegen eine Zufallsvariable $X$ in Wahrscheinlichkeit}, wenn für jedes noch so kleine $\epsilon > 0$ gilt, dass
+\begin{equation}
+\lim_{n \to \infty} \mathbb{P}(|X_n - X| < \epsilon) 	= 1 \Leftrightarrow
+\lim_{n \to \infty} \mathbb{P}(|X_n - X| \ge \epsilon) 	= 0
+\end{equation}
+Die Konvergenz von $X_1,X_2,....$ gegen $X$ in Wahrscheinlichkeit wird geschrieben als
+\begin{equation}
+X_n\xrightarrow[n \to \infty]{\mbox{P}} X
+\end{equation}
+
+```
+
+Bemerkungen
+
+* $X_n\xrightarrow[n \to \infty]{\text{P}} X$  heißt, dass sich die 
+Wahrscheinlichkeit, dass $X_n$ in dem zufälligen Intervall 
+$]X-\epsilon, X+\epsilon[$ liegt, unabhängig davon, wie klein dieses Intervall 
+sein mag, $1$ nähert, wenn $n$ gegen Unendlich strebt.
+
+* Intuitiv heißt das, dass sich für eine konstante Zufallsvariable $X := a$ 
+die Verteilung von $X_n$ mehr und mehr um $a$ konzentriert, wenn 
+$n$ gegen Unendlich strebt.
+
+```{theorem, name = "Schwaches Gesetz der großen Zahl"}
+
+$X_1,...,X_n$ seien unabhängig und gleichverteilte Zufallsvariablen mit 
+$\mathbb{E}(X_i) = \mu$ für alle $i = 1,...,n$. Weiterhin bezeichne
+\begin{equation}
+\bar{X}_n := \frac{1}{n}\sum_{i=1}^n X_i
+\end{equation}
+das Stichprobenmittel der $X_i, i = 1,...,n$. Dann konvergiert $\bar{X}_n$ in 
+Wahrscheinlichkeit gegen $\mu$,
+\begin{equation}
+\bar{X}_n \xrightarrow[n \to \infty]{\mbox{P}} \mu.
+\end{equation}
+
+```
+
+Bemerkung
+
+* Für einen Beweis siehe z.B. @georgii_stochastik_2009.
+* $\bar{X}_n \xrightarrow[n\to\infty]{\mbox{P}} \mu$ heißt, dass die Wahrscheinlichkeit, 
+dass das Stichprobenmittel nahe dem Erwartungswert der zugrundeliegenden Verteilung
+liegt, sich 1 nähert, wenn $n\to\infty$.
+
+### Beispiel ($X_1,...,X_n \sim N(0,1)$) {-}
+
+* Die linke Abbildung zeigt Realisationen von $\bar{X}_n$ als Funktion von $n$.
+* Die rechte Abbildung zeigt Schätzungen von $\mathbb{P}(|\bar{X}_n - \mu|\ge \epsilon)$ als Funktionen von $n$ und $\epsilon$.
+
+ABBILDUNGEN
+
+<!-- \begin{center} -->
+<!-- \includegraphics[scale=.42]{Abbildungen/inf_5_schwaches_gesetz.pdf} -->
+<!-- \end{center} -->
+
+```{definition, name = "Fast sichere Konvergenz"}
+
+Eine Folge $X_1,X_2,...$ von Zufallsvariablen *konvergiert fast sicher gegen 
+eine Zufallsvariable $X$*, wenn für jedes noch so kleine $\epsilon > 0$ gilt, 
+dass
+\begin{equation}
+\mathbb{P}\left(\lim_{n \to \infty} |X_n - X| < \epsilon \right) = 1.
+\end{equation}
+Die fast sichere Konvergenz von $X_1,X_2,....$ gegen $X$ wird geschrieben als
+\begin{equation}
+X_n\xrightarrow[n\to\infty]{\text{f.s.}} X.
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Wir erinnern uns, dass für $(\Omega, \mathcal{A}, \mathbb{P})$ Zufallsvariablen 
+Funktionen $X : \Omega \to \mathcal{X}$ sind.
+* Es sei $N\subset \Omega$ eine *Nullmenge*, d.h. $\mathbb{P}(N) = 0$.
+* Fast sichere Konvergenz impliziert $X_n(\omega) \to X(\omega)$ für alle $\omega \in \Omega \setminus N$.
+* Fast sichere Konvergenz entspricht der punktweisen Konvergenz von Funktionenfolgen.
+* Fast sichere Konvergence impliziert Konvergenz in Wahrscheinlichkeit, aber nicht anders herum.
+* Fast sichere Konvergenz ist eine starke Form der Zufallsvariablenkonvergenz.
+
+
+```{theorem, name = "Starkes Gesetz der großen Zahl"}
+
+Sei $X_1,...,X_n$ eine Stichprobe einer Verteilung mit Erwartungswert $\mu$. Weiterhin 
+bezeichne
+\begin{equation}
+\bar{X}_n := \frac{1}{n}\sum_{i=1}^n X_i
+\end{equation}
+das Stichprobenmittel. Dann konvergiert $\bar{X}_n$ fast sicher gegen $\mu$,
+\begin{equation}
+\bar{X}_n \xrightarrow[]{\text{f.s.}} \mu.
+\end{equation}
+
+```
+
+Bemerkung
+
+* $\bar{X}_n \xrightarrow[]{\text{a.s}} \mu$ heißt, dass die Wahrscheinlichkeit, 
+dass $|X_n - X|$ kleiner als ein noch so kleines $\epsilon > 0$ ist, $1$ ist, wenn
+$n \to \infty$.
+
+
+## Zentrale Grenzwertsätze
+
+Überblick
+
+* Die Zentralen Grenzwertsätze besagen grob, dass die Summe von unabhängigen 
+Zufallsvariablen asymptotisch, d.h. für unendlich viele Zufallsvariablen, 
+normalverteilt ist.
+
+* Modelliert man eine Messgröße $Y$ also als Summe eines deterministischen 
+Einflusses $\mu$ und der Summe $\varepsilon := \sum_{i=1}^n X_i$ einer Vielzahl 
+von unabhängigen Zufallsvariablen $X_i, i = 1,...,n$, welche unbekannte 
+Störeinflüsse beschreiben, so ist für großes $n$ die Annahme
+\begin{equation}\label{eq:stat_model}
+Y = \mu + \varepsilon \mbox{ mit } \varepsilon \sim N(m,s^2)
+\end{equation}
+also mathematisch gerechtfertigt. Wie wir später sehen werden, liegt die Annahme 
+in Gleichung \eqref{eq:stat_model} vielen statischen Modellen zugrunde.
+
+* In der "Lindenberg und Lévy" Form des Zentralen Grenzwertsatzes werden 
+unabhängig und identische Zufallsvariablen vorausgesetzt. In der "Liapunov" 
+Form werden nur unabhängige Zufallsvariablen voraussetzt. Der Beweis der 
+"Lindenberg und Lévy" Form ist einfacher als der Beweis der "Liapunov" 
+Form. Wir verzichten hier auf die Angabe von Beweisen.
+
+* In beiden Formulierungen des Zentralen Grenzwertsatzes die betrachtete Konvergenz von Zufallsvariablen die *Konvergenz in Verteilung*, welche wir zunächst einführen.
+
+
+```{definition, name = "Konvergenz in Verteilung"}
+
+Eine Folge $X_1,X_2,...$ von Zufallsvariablen *konvergiert in Verteilung gegen eine Zufallsvariable $X$}, wenn
+\begin{equation}
+\lim_{n \to \infty} P_{X_n}(x) = P_X(x).
+\end{equation}
+für alle $x$ an denen $P_X$ stetig ist. Die Konvergenz in Verteilung von 
+$X_1,X_2,...$ gegen $X$ wird geschrieben als
+\begin{equation}
+X_n\xrightarrow[n\to \infty]{\text{D}} X,
+\end{equation}
+Gilt $X_n\xrightarrow[n\to \infty]{\text{D}} X$, dann heißt die Verteilung von $X$ die *asymptotische Verteilung der Folge $X_1,X_2,...$}.
+
+```
+
+Bemerkungen
+
+* $X\xrightarrow[n\to \infty]{\text{D}} X$ ist eine Aussage über die Konvergenz von KVFs.
+* Konvergenz in Wahrscheinlichkeit impliziert Konvergenz in Verteilung.
+
+
+
+
+```{theorem, name = "Zentraler Grenzwertsatz nach Lindenberg und Lévy"}
+$X_1,...,X_n$ seien unabhängig und identisch verteilte Zufallsvariablen mit
+Erwartungswert $\mu := \mathbb{E}(X_i)$ und  Varianz $\sigma^2 := \mathbb{V}(X_i)$, 
+$0 < \sigma^2 < \infty$ für alle $i = 1,....,n$. Dann gilt für jedes feste $x$, 
+dass
+\begin{equation}
+\lim_{n \to \infty} \mathbb{P}\left(\frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \le x \right) = \Phi(x),
+\end{equation}
+wobei $\Phi$ KVF der Standardnormalverteilung bezeichnet.
+
+```
+
+Bemerkung
+
+* Wir beweisen später noch folgende Implikationen des Zentralen Grenzwertsatzes:
+  * Für $n \to \infty$ gilt asymptotisch $\sum_{i=1}^n X_i \sim N(n\mu, n\sigma^2)$.
+  * Für $n \to \infty$ gilt asymptotisch $\bar{X}_n \sim N\left(\mu,\frac{\sigma^2}{n}\right)$.
+
+
+
+### Beispiel ($X_1,...,X_n \sim \chi^2(k)$) {-}
+
+* Wir halten ohne Beweis fest, dass $\mathbb{E}(X_i) = k$ und $\mathbb{V}(X_i) = 2k$.
+* Wir betrachten das Szenario $X_i \sim \chi(3)$ für $i = 1,...,n$.
+* Die linken Abbildungen zeigen Histogrammschätzer der Wahrscheinlichkeitsdichte von
+\begin{equation}
+Y_n := \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}}
+\end{equation}
+basierend auf 1000 Realisationen von $Y_n$ für $n = 2$ und $n = 200$, sowie die WDF von $N(0,1)$.
+* Die rechte Abbildung zeigt die entsprechenden (empirischen) kumulativen Verteilungsfunktionen.
+
+ABBILDUNG
+<!-- \begin{center} -->
+<!-- \includegraphics[scale=.3]{Abbildungen/inf_5_lindenberg_levy.pdf} -->
+<!-- \end{center} -->
+
+
+```{theorem, name = "Zentraler Grenzwertsatz nach Liapounov"}
+$X_1,...,X_n$ seien unabhängige aber nicht notwendigerweise identisch verteilten 
+Zufallsvariablen mit den Eigenschaften
+\begin{equation}
+\mathbb{E}(|X_i - \mu_i|^3) < \infty \mbox{ und }
+\lim_{n \to \infty} \frac{\sum_{i=1}^n \mathbb{E}\left(|X_i - \mu_i|^3\right)}{(\sum_{i=1}^n \sigma_i^2)^{3/2}} = 0.
+\end{equation}
+Es sei weiterhin $\mu_i := \mathbb{E}(X_i)$ und $\sigma_i^2 = \mathbb{V}(X_i)$ 
+für $i = 1,...,n$. Dann gilt für jedes feste $x$, dass
+\begin{equation}
+\lim_{n \to \infty} \mathbb{P}\left(\frac{\sum_{i=1}^n X_i - \sum_{i=1}^n \mu_i}{\sqrt{\sum_{i=1}^n \sigma_i^2}}  \le x\right) = \Phi(x),
+\end{equation}
+wobei $\Phi$ KVF der Standardnormalverteilung bezeichnet.
+
+```
+
+Bemerkungen
+
+* Für $n \to \infty$ gilt also asymptotisch $\sum_{i=1}^n X_i \sim N\left(\sum_{i=1}^n \mu_i, \sum_{i=1}^n \sigma_i^2\right)$.
+* Die Summe vieler unabhängiger Zufallsvariablen ist asymptotisch normalverteilt.
+
+
+## Selbstkontrollfragen
+
+* Definieren Sie den Begriff der Konvergenz in Wahrscheinlichkeit.
+* Definieren Sie den Begriff der Konvergenz in Verteilung.
+* Geben Sie das Schwache Gesetz der großen Zahl wieder.
+* Erläutern Sie den Zentralen Grenzwertsatz nach Lindenberg und Lévy.
+* Erläutern Sie den Zentralen Grenzwertsatz nach Liapunov.
+* Warum sind die Zentralen Grenzwertsätze für die statistische Modellbildung wichtig?
+
+
+
+

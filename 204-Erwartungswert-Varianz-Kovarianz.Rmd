@@ -1,0 +1,969 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+# Erwartungswert, Varianz, Kovarianz
+
+## Erwartungswert
+
+```{definition, name = "Erwartungswert"}
+Es sei $(\Omega, \mathcal{A},\mathbb{P})$ ein Wahrscheinlichkeitsraum und $X$ 
+sei eine  Zufallsvariable. Dann ist der *Erwartungswert von $X$* definiert als
+
+* $\mathbb{E}(X) := \sum_{x \in \mathcal{X}} x\,p_X(x)$,
+wenn $X : \Omega \to \mathcal{X}$ diskret mit WMF $p_X$ ist, und als
+
+* $\mathbb{E}(X)
+:= \int_{-\infty}^{\infty} x \,p_X(x)\,dx$,
+wenn $X : \Omega \to \mathbb{R}$ kontinuierlich mit WDF $p_X$ ist.
+
+Der Erwartungswert einer Zufallsvariable heißt *existent*, wenn er endlich ist.
+```
+
+Bemerkungen
+
+* Der Erwartungswert ist eine skalare Zusammenfassung einer Verteilung.
+* Intuitiv ist $\mathbb{E}(X) \approx \frac{1}{n}\sum_{i=1}^n X_i$ für eine große Zahl $n$ von Kopien $X_i$ von $X$.
+
+### Beispiel (Erwartungswert einer Bernoulli Zufallsvariable) {-}
+
+Es sei $X \sim \mbox{Bern}(\mu)$. Dann gilt $\mathbb{E}(X) = \mu$.
+
+```{proof}
+$X$ ist diskret mit $\mathcal{X} = \{0,1\}$. Also gilt
+\begin{align}
+\begin{split}
+\mathbb{E}(X)
+& = \sum_{x \in \{0,1\}} x\,\mbox{Bern}(x;\mu) \\
+& = 0\cdot \mu^0 (1 - \mu)^{1-0} + 1\cdot \mu^1 (1 - \mu)^{1-1} \\
+& = 1\cdot \mu^1 (1 - \mu)^{0} \\
+& = \mu.
+\end{split}
+\end{align}
+
+```
+
+### Beispiel (Erwartungswert einer normalverteilten Zufallsvariable) {-}
+
+Es sei $X \sim N(\mu,\sigma^2)$. Dann gilt $\mathbb{E}(X) = \mu$.
+
+```{proof}
+Wir halten zunächst ohne Beweis fest, dass
+\begin{equation}
+\int_{-\infty}^{\infty} \exp(-x^2)\,dx = \sqrt{\pi}.
+\end{equation}
+Mit der Definition des Erwartungswerts für kontinuierliche Zufallsvariablen gilt
+\begin{equation}
+\mathbb{E}(X)
+= \int_{-\infty}^{\infty} x \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(x - \mu)^2\right) \,dx.
+\end{equation}
+Mit der Substitutionsregel
+\begin{equation}
+\int_{g(a)}^{g(b)} f(x)\,dx = \int_a^b f(g(x))g'(x)\,dx
+\end{equation}
+und der Definition von
+\begin{equation}
+g : \mathbb{R} \to \mathbb{R}, x \mapsto g(x) := \sqrt{2\sigma^2}x + \mu
+\mbox{ with } g'(x) = \sqrt{2\sigma^2},
+\end{equation}
+gilt dann
+\begin{align}
+\begin{split}
+\mathbb{E}(X)
+& = \frac{1}{\sqrt{2\pi\sigma^2}}
+\int_{-\infty}^{\infty} x
+\exp\left(-\frac{1}{2\sigma^2}(x - \mu)^2\right) \,dx \\
+& = \frac{1}{\sqrt{2\pi\sigma^2}}
+\int_{-\infty}^{\infty} (\sqrt{2\sigma^2}x + \mu)
+\exp\left(-\frac{1}{2\sigma^2}\left(\left(\sqrt{2\sigma^2}x + \mu \right) - \mu\right)^2\right)
+\sqrt{2\sigma^2}\,dx \\
+& = \frac{\sqrt{2\sigma^2}}{\sqrt{2\pi\sigma^2}}
+\int_{-\infty}^{\infty} (\sqrt{2\sigma^2}x + \mu)
+\exp\left(-x^2\right) \,dx \\
+& = \frac{1}{\sqrt{\pi}}
+\left(\sqrt{2\sigma^2} \int_{-\infty}^{\infty} x \exp\left(-x^2\right) \,dx
+      + \mu \int_{-\infty}^{\infty} \exp\left(-x^2\right) \,dx \right) \\
+& = \frac{1}{\sqrt{\pi}}
+\left(\sqrt{2\sigma^2} \int_{-\infty}^{\infty} x \exp\left(-x^2\right) \,dx
+      + \mu \sqrt{\pi} \right)
+\end{split}
+\end{align}
+Eine Stammfunktion von $x \exp\left(-x^2\right)$ ist $-\frac{1}{2}\exp(-x^2)$. Mit
+\begin{equation}
+\lim_{x \to -\infty} \exp(-x^2) = 0 \mbox{ und } \lim_{x \to \infty}\exp(-x^2) = 0
+\end{equation}
+verschwindet der Integralterm und wir erhalten
+\begin{align}
+\mathbb{E}(X)
+= \frac{1}{\sqrt{\pi}}\left(\mu \sqrt{\pi}\right)
+= \mu.
+\end{align}
+```
+
+
+```{theorem, name = "Eigenschaften des Erwartungswerts"}
+
+Der Erwartungswert hat folgende Eigenschaften:
+
+(1) (Linear-affine Transformation) Für eine Zufallsvariable $X$ und $a,b\in \mathbb{R}$ gilt
+\begin{equation}
+\mathbb{E}(aX + b) = a\mathbb{E}(X) + b.
+\end{equation}
+
+(2) (Linearkombination) Für Zufallsvariablen $X_1,...,X_n$ und $a_1,...,a_n \in \mathbb{R}$ gilt
+\begin{equation}
+\mathbb{E}\left(\sum_{i=1}^n a_iX_i \right) = \sum_{i = 1}^n a_i \mathbb{E}(X_i).
+\end{equation}
+
+(3) (Faktorisierung bei Unabhängigkeit) Für unabhängige Zufallsvariablen $X_1,...,X_n$ gilt
+\begin{equation}
+\mathbb{E}\left(\prod_{i=1}^n X_i \right) = \prod_{i = 1}^n \mathbb{E}(X_i).
+\end{equation}
+
+```
+
+Bemerkung
+
+* Die genannten Eigenschaften sind oft nützlich zur Berechnung von Erwartungswerten.
+
+
+```{proof}
+Eigenschaft (1) folgt aus den Linearitätseigenschaften von Summen und Integralen. Wir betrachten den Fall einer kontinuierlichen Zufallsvariable $X$ mit WDF $p_X$ genauer. In diesem Fall gilt
+\begin{align}
+\begin{split}
+\mathbb{E}(Y)
+& = \mathbb{E}(aX + b) 						\\
+& = \int_{-\infty}^{\infty} (ax + b)p_X(x) \,dx				\\
+& = \int_{-\infty}^{\infty}  axp_X(x)  + b p_X(x) \,dx			\\
+& = a\int_{-\infty}^{\infty} xp_X(x) \,dx + b \int_{-\infty}^{\infty} p_X(x) \,dx	\\
+& = a\mathbb{E}(X) + b.
+\end{split}
+\end{align}
+Eigenschaft (2) folgt gleichfalls aus den Linearitätseigenschaften von Summen 
+und Integralen. Wir betrachten den Fall von zwei kontinuierlichen Zufallsvariablen 
+$X_1$ und $X_2$ mit bivariater WDF $p_{X_1,X_2}$ genauer. In diesem Fall gilt
+\begin{align}
+\begin{split}
+& \mathbb{E}\left(\sum_{i=1}^2 a_iX_i\right)	\\
+& = \mathbb{E}(a_1X_1 + a_2X_2) \\
+& = \iint_{\mathbb{R}^2} (a_1x_1 + a_2x_2)p_{X_1,X_2}(x_1,x_2)\,dx_1\,dx_2 	\\
+& = \iint_{\mathbb{R}^2} a_1x_1 p_{X_1,X_2}(x_1,x_2)
+                                   + a_2x_2 p_{X_1,X_2}(x_1,x_2)\,dx_1\,dx_2			\\
+& =  a_1\iint_{\mathbb{R}^2} x_1 p_{X_1,X_2}(x_1,x_2) \,dx_1\,dx_2
+  +  a_2\iint_{\mathbb{R}^2} x_2 p_{X_1,X_2}(x_1,x_2)\,dx_1\,dx_2			\\
+& =  a_1\int_{-\infty}^{\infty} x_1 \left(\int_{-\infty}^{\infty} p_{X_1,X_2}(x_1,x_2) \,dx_2 \right)\,dx_1
+  +  a_2\int_{-\infty}^{\infty} x_2 \left(\int_{-\infty}^{\infty} p_{X_1,X_2}(x_1,x_2) \,dx_1 \right) \,dx_2 \\
+& =  a_1\int_{-\infty}^{\infty} x_1 p_{X_1}(x_1) \,dx_1
+  +  a_2\int_{-\infty}^{\infty} x_2 p_{X_2}(x_2) \,dx_2 \\
+& =  a_1 \mathbb{E}(X_1) +  a_2\mathbb{E}(X_2) \\
+& = \sum_{i=1}^2 a_i \mathbb{E}(X_i).
+\end{split}
+\end{align}
+Ein Induktionsargument erlaubt dann die Generalisierung vom bivariaten zum 
+$n$-variaten Fall. Zu Eigenschaft (3) betrachten wir den Fall von $n$ 
+kontinuierlichen Zufallsvariablen mit gemeinsamer WDF $p_{X_1,...,X_n}$. 
+Weil als $X_1,...,X_n$ unabhängig vorausgesetzt sind, gilt
+\begin{equation}
+p_{X_1,...,X_n}(x_1,...,x_n) = \prod_{i=1}^n p_{X_i}(x_i).
+\end{equation}
+Weiterhin gilt also
+\begin{align}
+\begin{split}
+\mathbb{E}\left(\prod_{i=1}^n x_i\right)
+& = \int_{-\infty}^{\infty}\cdots\int_{-\infty}^{\infty} \left(\prod_{i=1}^n x_i\right)
+		p_{X_1,...,X_n}(x_1,...,x_n) \,dx_1...\,dx_n	\\
+& = \int_{-\infty}^{\infty}\cdots\int_{-\infty}^{\infty}  \prod_{i=1}^n x_i
+		 \prod_{i=1}^n p_{X_i}(x_i)\,dx_1...\,dx_n	\\
+& = \int_{-\infty}^{\infty}\cdots \int_{-\infty}^{\infty}  \prod_{i=1}^n x_i p_{X_i}(x_i) \,dx_1...\,dx_n	\\
+& = \prod_{i=1}^n \int_{-\infty}^{\infty} x_i p_{X_i}(x_i) \,dx_i	\\
+& = \prod_{i=1}^n \mathbb{E}(X_i).
+\end{split}
+\end{align}
+		
+```
+
+
+
+## Varianz und Standardabweichung
+
+```{definition, name = "Varianz und Standardabweichung"}
+Es sei $X$ eine Zufallsvariable mit Erwartungswert $\mathbb{E}(X)$. Die *Varianz
+von $X$* ist definiert als
+\begin{equation}
+\mathbb{V}(X) := \mathbb{E}\left((X - \mathbb{E}(X))^2\right),
+\end{equation}
+unter der Annahme, dass dieser Erwartungswert existiert. Die *Standardabweichung 
+von $X$* ist definiert
+\begin{equation}
+\mathbb{S}(X) := \sqrt{\mathbb{V}(X)}.
+\end{equation}
+```
+
+
+Bemerkungen
+
+* Die Varianz misst die Streuung (Breite) einer Verteilung.
+* Quadration ist nötig wegen $\mathbb{E}(X-\mathbb{E}(X)) = \mathbb{E}(X) - \mathbb{E}(X) = 0$.
+* Ein alternatives Maß für die Streuung einer Verteilung ist $\mathbb{E}(|X - \mathbb{E}(X)|)$.
+* Ein weiteres Maß für die Streuung einer Verteilung ist die Entropie $-\mathbb{E}(\ln p_X(X))$.
+
+
+
+### Beispiel (Varianz einer Bernoulli Zufallsvariable) {-}
+Es sei $X \sim \mbox{Bern}(\mu)$. Dann ist die Varianz von $X$ gegeben durch
+\begin{equation}
+\mathbb{V}(X) = \mu(1-\mu).
+\end{equation}
+
+```{proof}
+$X$ ist eine diskrete Zufallsvariable und es gilt $\mathbb{E}(X) = \mu$. Also gilt
+\begin{align}
+\begin{split}
+\mathbb{V}(X)
+& = \mathbb{E}\left((X - \mu)^2\right) \\
+& = \sum_{x \in \{0,1\}} (x - \mu)^2 \mbox{Bern}(x;\mu) \\
+& = (0 - \mu)^2 \mu^0(1-\mu)^{1-0}  + (1 - \mu)^2\mu^1(1-\mu)^{1-1}  \\
+& = \mu^2 (1-\mu)  + (1 - \mu)^2\mu  \\
+& = \left(\mu^2  + (1 - \mu)\mu\right)(1-\mu)  \\
+& = \left(\mu^2 + \mu - \mu^2\right)(1 - \mu) \\
+& = \mu(1-\mu).
+\end{split}
+\end{align}
+```
+
+
+
+```{theorem, name = "Varianzverschiebungssatz"}
+Es sei $X$ eine Zufallsvariable. Dann gilt
+\begin{equation}
+\mathbb{V}(X) = \mathbb{E}\left(X^2 \right) - \mathbb{E}(X)^2.
+\end{equation}
+```
+
+
+```{proof}
+Mit der Definition der Varianz und der Linearität des Erwartungswerts gilt
+\begin{align}
+\begin{split}
+\mathbb{V}(X)
+& = \mathbb{E}\left((X - \mathbb{E}(X))^2\right) \\
+& = \mathbb{E}\left(X^2 - 2X\mathbb{E}(X) + \mathbb{E}(X)^2 \right) \\
+& =    \mathbb{E}(X^2)
+    - 2\mathbb{E}(X)\mathbb{E}(X)
+    +  \mathbb{E}\left(\mathbb{E}(X)^2\right)  \\
+& = \mathbb{E}(X^2) - 2\mathbb{E}(X)^2 + \mathbb{E}(X)^2  \\
+& = \mathbb{E}(X^2) - \mathbb{E}(X)^2.
+\end{split}
+\end{align}
+
+```
+
+Bemerkung
+
+* Das Theorem ist nützlich, wenn $\mathbb{E}\left(X^2 \right)$ und 
+$\mathbb{E}(X)$ leicht zu berechnen sind.
+
+
+### Beispiel (Varianz einer normalverteilten Zufallsvariable) {}
+Es sei $X \sim N(\mu,\sigma^2)$. Dann gilt $\mathbb{V}(X) = \sigma^2$.
+
+```{proof}
+TO COMPLETE.
+```
+
+<!-- Wir halten zunächst fest, dass mit dem Varianzverschiebungssatz gilt, dass -->
+<!-- \begin{align}\label{eq:var_gauss_1} -->
+<!-- \begin{split} -->
+<!-- \mathbb{V}(X) -->
+<!-- = \mathbb{E}(X^2) - \mathbb{E}(X)^2 -->
+<!-- = \frac{1}{2\pi\sigma^2}\int_{-\infty}^{\infty} x^2 \exp\left(-\frac{1}{2\sigma^2}(x-\mu)^2 \right)\,dx - \mu^2 -->
+<!-- \end{split} -->
+<!-- \end{align} -->
+<!-- Mit der Substitutionsregel -->
+<!-- \begin{equation} -->
+<!-- \int_{a}^{b} f(g(x))g'(x)\,dx = \int_{g(a)}^{g(b)} f(x)\,dx -->
+<!-- \end{equation} -->
+<!-- und der Definition von -->
+<!-- \begin{equation} -->
+<!-- g:\mathbb{R} \to \mathbb{R}, x \mapsto \sqrt{2\sigma^2}x + \mu, -->
+<!-- g(-\infty) := -\infty, g(\infty) := \infty, -->
+<!-- \mbox{ with } -->
+<!-- g'(x) = \sqrt{2\sigma^2}, -->
+<!-- \end{equation} -->
+<!-- kann das Integral auf der rechten Seite von Gleichung \eqref{eq:var_gauss_1} dann als -->
+<!-- \begin{align} -->
+<!-- \begin{split} -->
+<!-- \int_{-\infty}^{\infty} x^2 \exp & \left(-\frac{1}{2\sigma^2}(x - \mu)^2 \right) \,dx \\ -->
+<!-- & = -->
+<!-- \int_{-\infty}^{\infty} (\sqrt{2\sigma^2}x + \mu)^2 \exp\left(-\frac{1}{2\sigma^2}((\sqrt{2\sigma^2}x + \mu)-\mu)^2 \right)\sqrt{2\sigma^2}\,dx \\ -->
+<!-- & = -->
+<!-- \sqrt{2\sigma^2}\int_{-\infty}^{\infty} (\sqrt{2\sigma^2}x + \mu)^2 \exp\left(-\frac{2\sigma^2 x^2}{2\sigma^2} \right)\,dx \\ -->
+<!-- & = -->
+<!-- \sqrt{2\sigma^2}\int_{-\infty}^{\infty} (\sqrt{2\sigma^2}x + \mu)^2 \exp\left(-x^2\right)\,dx. -->
+<!-- \end{split} -->
+<!-- \end{align} -->
+<!-- geschrieben werden. Also gilt -->
+<!-- \begin{tiny} -->
+<!-- \begin{align} -->
+<!-- \begin{split} -->
+<!-- \mathbb{V}(X) -->
+<!-- & = -->
+<!-- \frac{\sqrt{2\sigma^2}}{\sqrt{2\pi\sigma^2}} -->
+<!-- \int_{-\infty}^{\infty} (\sqrt{2\sigma^2}x + \mu)^2 \exp\left(-x^2 \right)\,dx -->
+<!-- - \mu^2 -->
+<!-- \\ -->
+<!-- & -->
+<!-- = \frac{1}{\sqrt{\pi}} -->
+<!-- \int_{-\infty}^{\infty}(\sqrt{2\sigma^2}x)^2 + 2\sqrt{2\sigma^2}x\mu + \mu^2) \exp\left(-x^2 \right)\,dx -->
+<!-- - \mu^2 -->
+<!-- \\ -->
+<!-- & -->
+<!-- = \frac{1}{\sqrt{\pi}} -->
+<!-- \left( -->
+<!-- 		2\sigma^2\int_{-\infty}^{\infty} x^2 \exp\left(-x^2 \right)\,dx + -->
+<!-- 		2\sqrt{2\sigma^2}\mu\int_{-\infty}^{\infty} x\exp\left(-x^2 \right)\,dx + -->
+<!-- 		\mu^2\int_{-\infty}^{\infty} \exp\left(-x^2 \right)\,dx -->
+<!-- \right) -->
+<!-- - \mu^2 -->
+<!-- \end{split} -->
+<!-- \end{align} -->
+<!-- \end{tiny} -->
+<!-- Wir halten weiterhin ohne Beweis fest, dass -->
+<!-- \begin{equation} -->
+<!-- \int_{-\infty}^{\infty} x \exp(-x^2)\,dx = 0 -->
+<!-- \mbox{ und } -->
+<!-- \int_{-\infty}^{\infty} \exp(-x^2)\,dx = \sqrt{\pi}. -->
+<!-- \end{equation} -->
+<!-- Es ergibt sich dann -->
+<!-- \begin{align} -->
+<!-- \begin{split} -->
+<!-- \mathbb{V}(X) -->
+<!-- & = \frac{1}{\sqrt{\pi}} -->
+<!-- \left(2\sigma^2\int_{-\infty}^{\infty} x^2 \exp\left(-x^2 \right)\,dx + \mu^2\sqrt{\pi} \right) -->
+<!-- - \mu^2 -->
+<!-- \\ -->
+<!-- & = \frac{2\sigma^2}{\sqrt{\pi}} -->
+<!-- \int_{-\infty}^{\infty} x^2 \exp\left(-x^2 \right)\,dx -->
+<!-- + \mu^2 - \mu^2 -->
+<!-- \\ -->
+<!-- & = \frac{2\sigma^2}{\sqrt{\pi}} \int_{-\infty}^{\infty} x^2 \exp\left(-x^2 \right)\,dx -->
+<!-- \end{split} -->
+<!-- \end{align} -->
+<!-- Mit der partiellen Integrationsregel -->
+<!-- \begin{equation} -->
+<!-- \int_{a}^{b} f'(x)g(x)\,dx = -->
+<!-- f(x)g(x)|_{a}^{b} - \int_{a}^{b} f(x)g'(x)\,dx -->
+<!-- \end{equation} -->
+<!-- und der Definition von -->
+<!-- \begin{equation} -->
+<!-- f : \mathbb{R} \to \mathbb{R}, x \mapsto f(x) := \exp(-x^2) \mbox{ with } f'(x) = -2\exp(-x^2) -->
+<!-- \end{equation} -->
+<!-- und -->
+<!-- \begin{equation} -->
+<!-- g : \mathbb{R} \to \mathbb{R}, x\mapsto g(x) := -\frac{1}{2}x \mbox{ with } g'(x) = -\frac{1}{2}, -->
+<!-- \end{equation} -->
+<!-- so dass -->
+<!-- \begin{equation} -->
+<!-- f'(x)g(x) = -2\exp(-x^2)\left(-\frac{1}{2}x \right) = x^2\exp(-x^2), -->
+<!-- \end{equation} -->
+<!-- gilt, ergibt sich dann -->
+<!-- \begin{align} -->
+<!-- \begin{split} -->
+<!-- \mathbb{V}(X) -->
+<!-- & = \frac{2\sigma^2}{\sqrt{\pi}} \int_{-\infty}^{\infty} x^2 \exp\left(-x^2 \right)\,dx  \\ -->
+<!-- & = \frac{2\sigma^2}{\sqrt{\pi}} -->
+<!-- \left( -\frac{1}{2}x\exp(-x^2)|_{-\infty}^{\infty} -->
+<!-- - \int_{-\infty}^{\infty} \exp\left(-x^2 \right)\left(-\frac{1}{2} \right)\,dx \right)  \\ -->
+<!-- & = \frac{2\sigma^2}{\sqrt{\pi}} -->
+<!-- \left( -->
+<!--  -\frac{1}{2}x\exp(-x^2)|_{-\infty}^{\infty} -->
+<!-- + \frac{1}{2}\int_{-\infty}^{\infty} \exp\left(-x^2 \right)\,dx -->
+<!-- \right), -->
+<!-- \end{split} -->
+<!-- \end{align} -->
+<!-- Aus $\lim_{x\to \pm \infty} \exp(-x^2) = 0$ schließen wir, dass der erste Term in den Klammern auf der rechten Seite der obigen Gleichung gleich $0$ ist. Schließlich ergibt sich -->
+<!-- \begin{align} -->
+<!-- \begin{split} -->
+<!-- \mathbb{V}(X) -->
+<!-- = \frac{2\sigma^2}{\sqrt{\pi}} \left(\frac{1}{2}\int_{-\infty}^{\infty} \exp\left(-x^2 \right)\,dx\right) -->
+<!-- = \frac{\sigma^2}{\sqrt{\pi}} \sqrt{\pi} -->
+<!-- = \sigma^2. -->
+<!-- \end{split} -->
+<!-- \end{align} -->
+
+
+
+
+
+
+```{theorem, name = "Eigenschaften der Varianz"}
+
+Die Varianz hat folgende Eigenschaften:
+
+(1) (Linear-affine Transformation) Für eine Zufallsvariable $X$ und 
+$a,b\in \mathbb{R}$ gelten
+\begin{equation}
+\mathbb{V}(aX + b) = a^2 \mathbb{V}(X)
+\mbox{ und }
+\mathbb{S}(aY + b) = |a|\mathbb{S}(X).
+\end{equation}
+
+(2) (Linearkombination bei Unabhängigkeit) Für unabhängige Zufallsvariablen 
+$X_1,...,X_n$ und $a_1,...,a_n \in \mathbb{R}$ gilt
+\begin{equation}
+\mathbb{V}\left(\sum_{i=1}^n a_iX_i\right) = \sum_{i=1}^n a_i^2 \mathbb{V}(X_i).
+\end{equation}
+
+```
+
+
+```{proof}
+
+Um Eigenschaft (1) zu zeigen, definieren wir zunächst $Y := aX + b$ und halten 
+fest, dass $\mathbb{E}(Y) = a\mathbb{E}(X) + b$. Für die Varianz von $Y$ ergibt 
+sich dann
+\begin{align}
+\begin{split}
+\mathbb{V}(Y)
+& = \mathbb{E}\left((Y - \mathbb{E}(Y))^2\right) 		\\
+& = \mathbb{E}\left((aX+b-a\mathbb{E}(X)-b)^2\right) 	\\
+& = \mathbb{E}\left((aX-a\mathbb{E}(X))^2\right) 		\\
+& = \mathbb{E}\left((a(X - \mathbb{E}(X))^2\right) 		\\
+& = \mathbb{E}\left(a^2(X - \mathbb{E}(X))^2\right) 	\\
+& = a^2\mathbb{E}\left((X - \mathbb{E}(X))^2\right) 	\\
+& = a^2\mathbb{V}(X) 									\\
+\end{split}
+\end{align}
+Wurzelziehen ergibt dann das Resultat für die Standardabweichung.
+
+Für Eigenschaft (2) betrachten wir den Fall zweier unabhängiger Zufallsvariablen 
+$X_1$ und $X_2$ genauer. Wir halten zunächst fest, dass in diesem Fall gilt, dass
+\begin{equation}
+\mathbb{E}\left(a_1X_1 + a_2X_2\right) = a_1\mathbb{E}(X_1) + a_2\mathbb{E}(X_2).
+\end{equation}
+Es ergibt sich also
+\begin{align*}
+\begin{split}
+& \mathbb{V}\left(\sum_{i=1}^2 a_i X_i\right) 											\\
+& = \mathbb{V}(a_1X_1 + a_2X_2) \\
+& = \mathbb{E}\left((a_1X_1 + a_2X_2 - \mathbb{E}\left(a_1X_1 + a_2X_2\right))^2\right) \\
+& = \mathbb{E}\left((a_1X_1 + a_2X_2 - a_1\mathbb{E}(X_1) - a_2\mathbb{E}(X_2))^2\right) \\
+& = \mathbb{E}\left((a_1X_1 - a_1\mathbb{E}(X_1) + a_2X_2  - a_2\mathbb{E}(X_2))^2\right) \\
+& = \mathbb{E}\left(((a_1(X_1 - \mathbb{E}(X_1)) + (a_2(X_2 - \mathbb{E}(X_2)))^2\right) \\
+& = \mathbb{E}\left((a_1(X_1 - \mathbb{E}(X_1)))^2
+				   - 2(a_1(X_1 - \mathbb{E}(X_1))(a_2(X_2 - \mathbb{E}(X_2))
+				  + (a_2(X_2 - \mathbb{E}(X_2)))^2\right) \\
+& = \mathbb{E}\left((a_1^2(X_1 - \mathbb{E}(X_1))^2
+				   - 2a_1a_2(X_1 - \mathbb{E}(X_1))(X_2 - \mathbb{E}(X_2))
+				  + a_2^2(X_2 - \mathbb{E}(X_2))^2\right) \\
+& = a_1^2\mathbb{E}\left((X_1 - \mathbb{E}(X_1))^2\right)
+   - 2a_1a_2\mathbb{E}\left((X_1 - \mathbb{E}(X_1))(X_2 - \mathbb{E}(X_2))\right)
+   + a_2^2\mathbb{E}\left((X_2 - \mathbb{E}(X_2))^2\right) \\
+& = a_1^2\mathbb{V}(X_1)
+   - 2a_1a_2\mathbb{E}\left((X_1 - \mathbb{E}(X_1))(X_2 - \mathbb{E}(X_2))\right)
+   + a_2^2\mathbb{V}(X_2) \\
+& = \sum_{i=1}^2 a_i^2\mathbb{V}(X_i)
+   - 2a_1a_2\mathbb{E}\left((X_1 - \mathbb{E}(X_1))(X_2 - \mathbb{E}(X_2))\right)
+\end{split}.
+\end{align*}
+Weil $X_1$ und $X_2$ unabhängig sind, ergibt sich mit den Eigenschaften des 
+Erwartungswerts für unabhängige Zufallsvariablen, dass
+\begin{align}
+\begin{split}
+\mathbb{E}\left((X_1 - \mathbb{E}(X_1))(X_2 - \mathbb{E}(X_2))\right)
+& = \mathbb{E}\left((X_1 - \mathbb{E}(X_1))\right)
+	\mathbb{E}\left((X_2 - \mathbb{E}(X_2))\right) \\
+& = (\mathbb{E}(X_1) - \mathbb{E}(X_1))
+  	(\mathbb{E}(X_2) - \mathbb{E}(X_2)) \\
+& = 0
+\end{split}
+\end{align}
+ist. Damit folgt also
+\begin{equation}
+\mathbb{V}\left(\sum_{i=1}^2 a_i X_i\right)
+=  \sum_{i=1}^2 a_i^2\mathbb{V}(X_i).
+\end{equation}
+Ein Induktionsargument erlaubt dann die Generalisierung vom bivariaten zum 
+$n$-variaten Fall.
+
+```
+
+## Stichprobenmittel, Stichprobenvarianz, Stichprobenstandardabweichung
+```{definition, name = "Stichprobenmittel, -varianz, -standardabweichung"}
+
+$X_1,...,X_n$ seien Zufallsvariablen.
+
+* Das *Stichprobenmittel* von $X_1,...,X_n$ ist definiert als der arithmetische Mittelwert
+\begin{equation}
+\bar{X}_n := \frac{1}{n}\sum_{i=1}^n X_i.
+\end{equation}
+
+* Die *Stichprobenvarianz* von $X_1,...,X_n$ ist definiert als
+\begin{equation}
+S_n^2 := \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X}_n)^2.
+\end{equation}
+
+* Die *Stichprobenstandardabweichung* ist definiert als
+\begin{equation}
+S_n := \sqrt{S_n^2}.
+\end{equation}
+
+```
+
+Bemerkungen
+
+* $\mathbb{E}(X),\mathbb{V}(X)$, und $\mathbb{S}(X)$ sind Kennzahlen einer Zufallsvariable $X$.
+* $\bar{X}_n, S_n^2$, und $S_n$ sind Kennzahlen einer Stichprobe $X_1,...,X_n$.
+* $\bar{X}_n, S_n^2$, und $S_n$ sind Zufallsvariablen, ihre Realisationen werden mit $\bar{x}_n, s_n^2,$ und $s_n$ bezeichnet.
+
+
+### Beispiel (Stichprobenmittel, Stichprobenvarianz, Stichprobenstandardabweichung) {-}
+
+* Es seien $X_1,...,X_{10} \sim N(1,2)$.
+* Wir nehmen die folgenden Realisationen an
+
+TABELLE
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{ccccccccccc}
+   $x_1$
+&  $x_2$
+&  $x_3$
+&  $x_4$
+&  $x_5$
+&  $x_6$
+&  $x_7$
+&  $x_8$
+&  $x_9$
+&  $x_{10}$ \\\hline
+   0.54
+&  1.01
+& -3.28
+&  0.35
+&  2.75
+& -0.51
+&  2.32
+&  1.49
+&  0.96
+&  1.25
+\end{tabular}
+\end{center}
+\end{table}
+* Die Stichprobenmittelrealisation ist
+\begin{equation}
+\bar{x}_{10}
+= \frac{1}{10}\sum_{i = 1}^{10}x_i
+= \frac{6.88}{10}
+= 0.68.
+\end{equation}
+* Die Stichprobenvarianzrealisation ist
+\begin{equation}
+s_{10}^2
+= \frac{1}{9}\sum_{i=1}^{10} (x_i - \bar{x}_{10})^2
+= \frac{1}{9}\sum_{i=1}^{10} (x_i - 0.68)^2
+= \frac{25.37}{9}
+= 2.82.
+\end{equation}
+* Die Stichprobenstandardabweichungrealisation ist
+\begin{equation}
+s_{10} = \sqrt{s_{10}^2} = \sqrt{2.82} = 1.68.
+\end{equation}
+
+
+## Kovarianz und Korrelation
+
+
+
+```{definition, name = "Kovarianz und Korrelation"}
+
+Die *Kovarianz* zweier Zufallsvariablen $X$ und $Y$ ist definiert als
+\begin{equation}
+\mathbb{C}(X,Y) :=
+\mathbb{E}\left(\left(X - \mathbb{E}(X) \right)\left(Y - \mathbb{E}(Y)\right)\right).
+\end{equation}
+Die *Korrelation* zweier Zufallsvariablen $X$ und $Y$ ist definiert als
+\begin{equation}
+\rho(X,Y)
+:= \frac{\mathbb{C}(X,Y)}{\sqrt{\mathbb{V}(X)}\sqrt{\mathbb{V}(Y)}}
+= \frac{\mathbb{C}(X,Y)}{\mathbb{S}(X){\mathbb{S}(Y)}}.
+\end{equation}
+
+```
+
+
+Bemerkungen
+
+* Die Kovarianz von $X$ mit sich selbst ist die Varianz von $X$,
+\begin{equation}
+\mathbb{C}(X,X) =
+\mathbb{E}\left(\left(X - \mathbb{E}(X) \right)^2\right) =
+\mathbb{V}(X).
+\end{equation}
+* $\rho(X,Y)$ wird auch *Korrelationskoeffizient* von $X$ und $Y$ genannt.
+* Wenn $\rho(X,Y) = 0$ ist, werden $X$ und $Y$ *unkorreliert* genannt.
+* Wir zeigen später mit der Cauchy-Schwarz Ungleichung, dass $-1 \le \rho(X,Y) \le 1$.
+
+
+
+
+### Beispiel (Kovarianz und Korrelation zweier diskreter Zufallsvariablen) {-}
+Es sei $X := (X_1,X_2)$ ein Zufallsvektor mit WMF $p_{X_1,X_2}$ definiert durch
+@lange_statistik_2017
+
+TABELLE
+
+\begin{table}[h]
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{c|ccc|c}
+$p_{X_1,X_2}(x_1,x_2)$	& 	$x_2 = 1$ 	& 	$x_2 = 2$ 	& 	$x_2 = 3$ 	&	$p_{X_1}(x_1)$		\\\hline
+$x_1 = 1$				&	$0.10$		&	$0.05$		&	$0.15$		&	$0.30$				\\
+$x_1 = 2$				&	$0.60$		&	$0.05$		&	$0.05$		&	$0.70$				\\\hline
+$p_{X_2}(x_2)$			&	$0.70$		&	$0.10$		& 	$0.20$		&				    	\\
+\end{tabular}
+\end{center}
+\end{table}
+$X_1$, $X_2$ sind also zwei Zufallsvariablen mit einer definierten bivariaten Verteilung.
+Um $\mathbb{C}(X_1,X_2)$ und $\rho(X_1,X_2)$ zu berechnen, halten wir zunächst fest, dass
+\begin{equation}
+\mathbb{E}(X_1) = \sum_{x_1=1}^2 x_1 p_{X_1}(x_1) = 1\cdot 0.3 + 2\cdot 0.7 = 1.7
+\end{equation}
+und
+\begin{equation}
+\mathbb{E}(X_2) = \sum_{x_2=1}^3 x_2 p_{X_2}(x_2) = 1\cdot 0.7 + 2\cdot 0.1 + 3\cdot 0.2 = 1.5.
+\end{equation}
+Mit der Definition der Kovarianz von $X_1$ und $X_2$, gilt dann
+\begin{align*}
+\begin{split}
+& \mathbb{C}(X_1,X_2) 																						\\
+& = \mathbb{E}((X_1 - \mathbb{E}(X_1))(X_2 - \mathbb{E}(X_2)))												\\
+& = \sum_{x_1 = 1}^2 \sum_{x_2 = 1}^3 (x_1 - \mathbb{E}(X_1))(x_2 - \mathbb{E}(X_2))p_{X_1,X_2}(x_1,x_2) 	\\
+& = \sum_{x_1 = 1}^2 \sum_{x_2 = 1}^3 (x_1 - 1.7)(x_2 - 1.5)p_{X_1,X_2}(x_1,x_2) 							\\
+& = \sum_{x_1 = 1}^2   	(x_1 - 1.7)(1 - 1.5)p_{X_1,X_2}(x_1,1)  											\\
+& 	\quad\quad\quad	 + 	(x_1 - 1.7)(2 - 1.5)p_{X_1,X_2}(x_1,2)   											\\
+& 	\quad\quad\quad  + 	(x_1 - 1.7)(3 - 1.5)p_{X_1,X_2}(x_1,3) 												\\
+& = \quad 		(1 - 1.7)(1 - 1.5)p_{X_1,X_2}(1,1)
+		 	+	(1 - 1.7)(2 - 1.5)p_{X_1,X_2}(1,2)
+		 	+	(1 - 1.7)(3 - 1.5)p_{X_1,X_2}(1,3) 															\\
+& \quad\, 	+ 	(2 - 1.7)(1 - 1.5)p_{X_1,X_2}(2,1)
+	     	+ 	(2 - 1.7)(2 - 1.5)p_{X_1,X_2}(2,2)
+	     	+ 	(2 - 1.7)(3 - 1.5)p_{X_1,X_2}(2,3) 															\\
+& = \quad 		(-0.7)\cdot (-0.5) \cdot 0.10	\quad\quad\quad\quad\quad\quad
+			+ 	(-0.7)\cdot   0.5  \cdot 0.05 	\quad\quad\quad\quad\quad\quad\quad\quad
+			+ 	(-0.7)\cdot   1.5  \cdot 0.15																\\
+& \quad 	+  	0.3   \cdot (-0.5) \cdot 0.60   \quad\quad\quad\quad\quad\quad\quad\quad
+	    	+  	0.3   \cdot   0.5  \cdot 0.05	\quad\quad\quad\quad\quad\quad\quad\quad\quad\quad
+			+  	0.3   \cdot   1.5  \cdot 0.05 																\\
+& = \,    0.035
+		- 0.0175
+		- 0.1575
+        - 0.09
+	    + 0.0075
+		+ 0.0225\\
+& = - 0.2.
+\end{split}
+\end{align*}
+
+```{theorem, name = "Kovarianzverschiebungssatz"}
+$X$ und $Y$ seien Zufallsvariablen. Dann gilt
+\begin{equation}
+\mathbb{C}(X,Y) = \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y).
+\end{equation}
+```
+
+Bemerkungen
+
+* Das Theorem ist nützlich, wenn $\mathbb{E}(XY),\mathbb{E}(X)$, und $\mathbb{E}(Y)$ leicht zu berechnen sind.
+* Für $Y = X$ erhalten wir $\mathbb{V}(X) = \mathbb{E}(X^2) - \mathbb{E}(X)^2$.
+
+```{proof}
+
+Mit der Definition der Kovarianz gilt
+\begin{align}
+\begin{split}
+\mathbb{C}(X,Y)
+& = \mathbb{E}\left((X - \mathbb{E}(X))(Y - \mathbb{E}(Y))\right) 											\\
+& = \mathbb{E}\left(XY - X \mathbb{E}(Y) - \mathbb{E}(X)Y  + \mathbb{E}(X) \mathbb{E}(Y)\right) 			\\
+& = \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y) - \mathbb{E}(X)\mathbb{E}(Y) + \mathbb{E}(X) \mathbb{E}(Y)	\\
+& = \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y).
+\end{split}
+\end{align}
+
+```
+
+
+
+```{theorem, name = "Korrelation und Unabhängigkeit"}
+$X$ und $Y$ seien zwei Zufallsvariablen. Wenn $X$ und $Y$ unabhängig sind, dann 
+ist $\mathbb{C}(X,Y) = 0$ und $X$ und $Y$ sind unkorreliert. Ist dagegen 
+$\mathbb{C}(X,Y) = 0$ und sind $X$ und $Y$ somit unkorreliert, dann sind $X$ und
+$Y$ nicht notwendigerweise unabhängig.
+```
+
+
+
+```{proof}
+Wir zeigen zunächst, dass aus der Unabhängigkeit von $X$ und $Y$ 
+$\mathbb{C}(X,Y) = 0$ folgt. Hierzu halten wir zunächst fest, dass für 
+unabhängige Zufallsvariablen gilt, dass
+\begin{equation}
+\mathbb{E}(XY) = \mathbb{E}(X)\mathbb{E}(Y).
+\end{equation}
+Mit dem Kovarianzverschiebungssatz folgt dann
+\begin{equation}
+\mathbb{C}(X,Y)
+= \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y)
+= \mathbb{E}(X)\mathbb{E}(Y) - \mathbb{E}(X)\mathbb{E}(Y)
+= 0.
+\end{equation}
+Mit der Definition des Korrelationskoeffizienten folgt dann unmittelbar, dass 
+$\rho(X,Y) = 0$ und $X$ und $Y$ somit unkorreliert sind. Wir zeigen nun durch 
+Angabe eines Beispiels, dass die Kovarianz von abhängigen Zufallsvariablen $X$ und $Y$ 
+null sein kann.
+
+Zu diesem Zweck betrachten wir den Fall zweier diskreter Zufallsvariablen $X$ 
+und $Y$ mit Ergebnisräumen $\mathcal{X} = \{-1,0,1\}$ und $\mathcal{Y} = \{0,1\}$, 
+marginaler WMF von $X$ gegeben durch $p_X(X = x) = 1/3$ für $x \in \mathcal{X}$ 
+und der Definition $Y := X^2$. Wir halten dann zunächst fest, dass
+\begin{equation}
+\mathbb{E}(X)
+= \sum_{x \in \mathcal{X}} x p_X(X = x)
+= -1 \cdot \frac{1}{3} + 0\cdot \frac{1}{3} + 1\cdot\frac{1}{3}
+= 0
+\end{equation}
+und
+\begin{equation}
+\mathbb{E}(XY)
+= \mathbb{E}(XX^2)
+= \mathbb{E}(X^3)
+= \sum_{x \in \mathcal{X}} x^3 p_X(X = x)
+= -1^3 \cdot \frac{1}{3} + 0^3\cdot \frac{1}{3} + 1^3\cdot\frac{1}{3}
+= 0.
+\end{equation}
+Mit dem Kovarianzverschiebungssatz ergibt sich dann
+\begin{equation}
+\mathbb{C}(X,Y)
+= \mathbb{E}(XY) - \mathbb{E}(X)\mathbb{E}(Y)
+= \mathbb{E}(X^3) - \mathbb{E}(X)\mathbb{E}(Y)
+= 0 - 0\cdot \mathbb{E}(Y)
+= 0.
+\end{equation}
+Die Kovarianz von $X$ und $Y$ ist also null. Wie unten gezeigt faktorisiert die 
+gemeinsame WMF von $X$ und $Y$ jedoch nicht, und somit sind $X$ und $Y$ nicht 
+unabhängig. Die Definition of $Y := X^2$ impliziert die folgende bedingte WMF
+
+TABELLE
+
+\begin{center}
+\renewcommand{\arraystretch}{1}
+\begin{tabular}{c|ccc}
+$p_{Y|X}(y|x)$	& 	$x = -1$ 	& 	$x = 0$ 	& 	$x = 1$ \\\hline
+$y = 0$			&	$0$			&	$1$			&	$0$		\\
+$y = 1$			&	$1$			&	$0$			&	$1$		\\
+\end{tabular}
+\end{center}
+
+
+Die marginale WMF $p_X$ und die bedingte WMF $p_{Y|X}$ implizieren die gemeinsame WMF
+
+
+\begin{center}
+\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{c|ccc|c}
+$p_{X,Y}(x,y)$	& 	$x = -1$ 	& 	$x = 0$ 	& 	$x = 1$ & $p_Y(y)$		\\\hline
+$y = 0$			&	$0$			&	$1/3$		&	$0$		& $1/3$			\\
+$y = 1$			&	$1/3$		&	$0$			&	$1/3$	& $2/3$			\\\hline
+$p_X(x)$ 		&  	$1/3$	 	&  	$1/3$	 	&  	$1/3$
+\end{tabular}
+\end{center}
+
+Es gilt also zum Beispiel
+\begin{equation}
+p_{X,Y}(x = -1, y = 0) = 0 \neq \frac{1}{9} = \frac{1}{3} \cdot \frac{1}{3} = p_{X}(x = -1)p_{Y}(y = 0)
+\end{equation}
+und damit sind $X$ und $Y$ nicht unabhängig.
+
+```
+
+
+```{theorem, name = "Varianzen von Summen und Differenzen von Zufallsvariablen"}
+$X$ und $Y$ seien zwei Zufallsvariablen und es seien $a,b,c \in \mathbb{R}$. Dann gilt
+\begin{equation}
+\mathbb{V}(aX + bY + c) = a^2\mathbb{V}(X) + b^2\mathbb{V}(Y) + 2ab\mathbb{C}(X,Y).
+\end{equation}
+Speziell gelten
+\begin{equation}
+\mathbb{V}(X + Y) = \mathbb{V}(X) + \mathbb{V}(Y) + 2 \mathbb{C}(X,Y)
+\end{equation}
+und
+\begin{equation}
+\mathbb{V}(X - Y) = \mathbb{V}(X) + \mathbb{V}(Y) - 2 \mathbb{C}(X,Y)
+\end{equation}
+```
+
+Bemerkungen
+
+* Varianzen von Zufallsvariablen addieren sich nicht einfach.
+* Die Varianz der Summe zweier Zufallsvariablen hängt von ihrer Kovarianz ab.
+
+
+```{proof}
+Wir halten zunächst fest, dass
+\begin{equation}
+\mathbb{E}(aX + bY + c) = a\mathbb{E}(X) + b\mathbb{E}(Y) + c.
+\end{equation}
+Es ergibt sich also
+\begin{align}
+\begin{split}
+& \mathbb{V}(aX + bY + c)																\\
+& = \mathbb{E}\left((aX + bY + c - a\mathbb{E}(X) - b\mathbb{E}(Y) - c)^2\right) 	\\
+& = \mathbb{E}\left((a(X  - \mathbb{E}(X)) + b(Y  - \mathbb{E}(Y)))^2\right) 		\\
+& = \mathbb{E}\left(a^2(X - \mathbb{E}(X))^2
+				  + b^2(Y - \mathbb{E}(Y))^2
+				  + 2ab(X - \mathbb{E}(X))(Y - \mathbb{E}(Y)))\right) 				\\
+& = a^2\mathbb{E}\left((X - \mathbb{E}(X))^2\right)
+  + b^2\mathbb{E}\left((Y - \mathbb{E}(Y))^2\right)
+  + 2ab\mathbb{E}\left((X - \mathbb{E}(X))(Y - \mathbb{E}(Y)))\right) 				\\
+& = a^2\mathbb{V}(X)+ b^2\mathbb{V}(Y) + 2ab\mathbb{C}(X,Y)
+\end{split}
+\end{align}
+Die Spezialfälle folgen dann direkt mit $a := b := 1$ und $a := 1, b := -1$, respektive.
+
+```
+
+
+## Stichprobenkovarianz und Stichprobenkorrelation
+
+
+
+```{definition, name = "Stichprobenkovarianz und Stichprobenkorrelation"}
+$(X_1,Y_1),...,(X_n,Y_n)$ seien zweidimensionale Zufallsvektoren.
+
+* Das Stichprobenmittel der $(X_1,Y_1),...,(X_n,Y_n)$ ist definiert als
+\begin{equation}
+\overline{(X,Y)}_n
+:= (\bar{X}_n,\bar{Y}_n)
+= \left(\frac{1}{n}\sum_{i=1}^n X_i, \frac{1}{n} \sum_{i=1}^n Y_i \right).
+\end{equation}
+
+* Die Stichprobenkovarianz der $(X_1,Y_1),...,(X_n,Y_n)$ ist definiert als
+\begin{equation}
+C_n := \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X}_n)(Y_i - \bar{Y}_n).
+\end{equation}
+
+* Der Stichprobenkorrelationskoeffizient der $(X_1,Y_1),...,(X_n,Y_n)$ ist definiert als
+\begin{equation}
+R_n := \frac{C_n}{S_{X,n}S_{Y,n}},
+\end{equation}
+wobei $S_{X,n}$ und $S_{Y,n}$ die Stichprobenstandardabweichungen von $X_1,...,X_n$ 
+und $Y_1,..., Y_n$, bezeichnen.
+
+```
+
+Bemerkungen
+
+* $\overline{(X,Y)}_n$, $C_n$, und $R_n$ sind Zufallsvariablen
+* $\overline{(x,y)}_n$, $c_n$, und $r_n$ bezeichnen ihre Realisierungen
+
+### (Stichprobenkovarianz und Stichprobenkorrelation) {-}
+
+* Es seien $(X_1,Y_1),...,(X_{10},Y_{10})$ zweidimensionale Zufallsvariablen.
+* Wir nehmen folgende Realisierungen an
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{ccccccccccc}
+   $(x_1, 	 y_1)$
+&  $(x_2, 	 y_2)$
+&  $(x_3, 	 y_3)$
+&  $(x_4, 	 y_4)$
+&  $(x_5, 	 y_5)$
+&  $(x_6, 	 y_6)$
+&  $(x_7, 	 y_7)$
+&  $(x_8, 	 y_8)$
+&  $(x_9,	 y_9)$
+&  $(x_{10}, y_{10})$ \\\hline
+    (0.8,  -0.7)
+&   (1.1,   1.6)
+&   (-0.8,   1.1)
+&   (-0.2,   0.1)
+&	(1.1,   0.4)
+&	(0.5,   1.5)
+&	(1.3,  -1.2)
+&	(1.8,   0.6)
+&	(0.4,   0.2)
+&	(1.5,  -1.0)
+\end{tabular}
+\end{center}
+
+* Die Stichprobenmittelrealisation ergibt sich zu
+\begin{equation}
+\overline{(x,y)}_{10}
+= \left(\frac{1}{10}\sum_{i = 1}^{10}x_i, \frac{1}{10}\sum_{i = 1}^{10}y_i\right)
+= (0.75, 0.26).
+\end{equation}
+* Die Stichprobenstandardabweichungrealisationen ergeben sich zu
+\begin{equation}
+s_{X,n}
+= \sqrt{\frac{1}{9}\sum_{i=1}^{10} (x_i - \bar{x}_{10})^2}
+= 0.79
+\mbox{ und }
+s_{Y,n}
+= \sqrt{\frac{1}{9}\sum_{i=1}^{10} (y_i - \bar{y}_{10})^2}
+= 0.99.
+\end{equation}
+* Die Stichprobenkovarianz- und Stichprobenkorrelationsrealisationen ergeben sich zu
+\begin{equation}
+c_n
+= \frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x}_n)(y_i - \bar{y}_n)
+= -0.26
+\mbox{ und }
+r_n
+= \frac{c_n}{s_{x,n}s_{y,n}}
+= -0.33.
+\end{equation}
+
+
+## Literaturhinweise
+
+@georgii_stochastik_2009, @wasserman_all_2004, @degroot_probability_2012
+
+## Selbstkontrollfragen
+
+
+1. Definieren und interpretieren Sie den Erwartungswert einer Zufallsvariable.  
+2. Berechnen Sie den Erwartungswert einer Bernoulli Zufallsvariable.
+3. Nennen Sie die Linearitäts- und Multiplikationseigenschaften des Erwartungswerts.
+4. Definieren und interpretieren Sie die Varianz einer Zufallsvariable.
+5. Drücken Sie $\mathbb{E}(X^2)$ mithilfe der Varianz und des Erwartungswerts von $X$ aus.
+6. Was ist $\mathbb{V}(aX)$ für konstantes $a \in \mathbb{R}$?
+7.Definieren Sie die Kovarianz und Korrelation zweier Zufallsvariablen $X$ und $Y$.
+8. Schreiben Sie die Kovarianz zweier Zufallsvariablen mithilfe ihrer Erwartungswerte.
+9. Was ist die Varianz der Summe zweier Zufallsvariablen $X$ und $Y$ bei Unabhängigkeit?
+10. Was ist die Varianz der Summe zweier Zufallsvariablen $X$ und $Y$ im Allgemeinen?
+11. Gegeben seien folgende Realisationen von Zufallsvektoren $(X_1,Y_1), ..., (X_5, Y_5)$:
+\begin{center}
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{ccccccccccc}
+   $(x_1, 	 y_1)$
+&  $(x_2, 	 y_2)$
+&  $(x_3, 	 y_3)$
+&  $(x_4, 	 y_4)$
+&  $(x_5, 	 y_5)$  \\\hline
+    (5.2,   4.1)
+&   (-1.1,  -0.8)
+&   (2.7,   2.1)
+&   (-3.2,  -2.8)
+&	(0.1,  -0.2)
+\end{tabular}
+\end{center}
+Berechnen Sie bitte mithilfe eines Taschenrechners das Stichprobenmittel, die 
+Stichprobenvarianz, und die Stichprobenstandarabweichung der Realisationen von 
+$X_1,...,X_5$, das Stichprobenmittel, die Stichprobenvarianz und die 
+Stichprobenstandarabweichung der Realisationen von $Y_1,...,Y_5$, und die 
+Stichprobenkovarianz und die Stichprobenkorrelation der Realisationen von 
+$(X_1,Y_1)$,...,$(X_5,Y_5)$. Überprüfen Sie Ihre Ergebnisse mithilfe der R 
+Funktionen mean(), var(), sd(), cov(), und cor().
+
+
+

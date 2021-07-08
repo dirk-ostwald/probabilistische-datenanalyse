@@ -1,0 +1,51 @@
+# This file contains the .html and .pdf bookdown configurations
+#
+# Author - Dirk Ostwald
+# ------------------------------------------------------------------------------
+
+
+# HTML Gitbook Format
+bookdown::gitbook:
+  css: style.css
+  config:
+
+    # Table of Contents
+    toc:
+      before: |
+        <li><a href="./">Probabilistische Datenanalyse</a></li>
+      collapse: section
+    edit: null
+
+    # Default fontsetting
+    fontsettings:
+      theme: white
+      family: serif
+      size: 1
+
+    # User sharing
+    sharing: null
+
+    # Download options
+    download: ["pdf"]
+
+    # Figure captions
+    fig_caption: yes
+
+
+# PDF XeLateX Format
+bookdown::pdf_book:
+
+  # Latex Code
+  includes:
+
+    # Latex Header
+    in_header: _texheader.tex
+
+  fig_caption: yes
+
+  latex_engine: xelatex
+
+  citation_package: natbib
+
+  keep_tex: yes
+

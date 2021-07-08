@@ -1,0 +1,466 @@
+# Integralrechnung
+
+Integrale kommen in der W-Theorie und Statistik an vielen Stellen vor, z.B. WDF 
+Definition und Berechnen von Wahrscheinlichkeiten aus WDF, Beziehung von WDF und
+KVF, Erwartungswerte inklusive Varianz und Kovarianz u.v.a.m.  Ziel hier ist es,
+zentrale Begriffe aus der Schulmathematik zu wiederholen. In der Schulmathematik
+wird üblicherweise das *Riemannintegral* betrachtet. Zentrale Begriffe dabei 
+sind *Stammfunktion, unbestimmtes Integral, bestimmtes Integral, Hauptsätze der 
+Differential- und Integralrechnung, uneigentliches Integral, und 
+mehrdimensionales Integral. Der Fokus liegt auf der Klärung von Begriffen und 
+Symbolen, nicht dem Rechnen. Auf die Einführung des modernen Integralbegriffs 
+nach Lebesgue wird verzichtet.
+
+
+
+## Stammfunktionen und unbestimmte Integrale
+
+```{definition, name = "Stammfunktion, Unbestimmtes Integral"}
+
+Für ein Intervall $I \subset \mathbb{R}$ sei $f : I \to \mathbb{R}$ eine 
+univariate reellwertige Funktion. Dann heißt eine differenzierbare Funktion 
+$F : I \to \mathbb{R}$ mit der Eigenschaft
+\begin{equation}
+F' = f
+\end{equation}
+*Stammfunktion von $f$*. Ist $F$ eine Stammfunktion von $f$, dann heißt
+\begin{equation}
+\int f(x) \,dx := F(x) + c \mbox{ mit } c \in \mathbb{R}
+\end{equation}
+*unbestimmtes Integral* der Funktion $f$.
+```
+
+
+Die Ableitung der Stammfunktion $F$ von $f$ ist $f$. Das unbestimmte Integral 
+ist die Gesamtheit aller Stammfunktionen von $f$. Die Konstante 
+$c \in \mathbb{R}$ heißt *Integrationskonstante}, es gilt $\frac{d}{dx}c = 0$.
+Der Ausdruck $\int f(x) \,dx$ ist als $F(x) + c$ definiert. In $\int f(x) \,dx$ 
+haben $\int$ und $\,dx$ keine eigentliche Bedeutung, $f(x)$ heißt *Integrand*.
+
+
+
+
+Für die elementaren Funktionen der Statistik ergeben sich folgende 
+Stammfunktionen **Tabelle**. Beweise ergeben sich direkt durch Ableiten der 
+Stammfunktionen.
+
+<!-- \renewcommand{\arraystretch}{1.3} -->
+<!-- \begin{table} -->
+<!-- \centering -->
+<!-- \begin{tabular}{lll} -->
+<!-- Name 							& Definition	    			& Stammfunktion										\\\hline -->
+<!-- Polynomfunktionen 				& $f(x) := \sum_{i=0}^n a_ix^i$ & $F(x) = \sum_{i=0}^n \frac{a_i}{i+1}x^{i+1}$ 		\\ -->
+<!-- $\quad$ Konstante Funktion 		& $f(x) := a$					& $F(x) = \highlight{ax}$ 							\\ -->
+<!-- $\quad$ Identitätsfunktion  	& $f(x) := x$ 					& $F(x) = \highlight{\frac{1}{2}x^2}$				\\ -->
+<!-- $\quad$ Lineare Funktion 		& $f(x) := ax + b$				& $F(x) = \frac{1}{2}ax^2 + bx$						\\ -->
+<!-- $\quad$ Quadratfunktion 		& $f(x) := x^2$ 				& $F(x) = \frac{1}{3}x^3$							\\ -->
+<!-- Exponentialfunktion				& $f(x) := \exp(x)$ 			& $F(x) = \highlight{\exp(x)}$						\\ -->
+<!-- Logarithmusfunktion				& $f(x) := \ln(x)$ 				& $F(x) = x \ln x - x$								\\ -->
+<!-- \end{tabular} -->
+<!-- \end{table} -->
+<!-- ``` -->
+
+
+```{theorem, name = "Rechenregeln für Stammfunktionen"}
+$f$ und $g$ seien univariate reellwertige Funktion, die Stammfunktionen besitzen, 
+und $g$ sei invertierbar. Dann gelten folgende Rechenregeln für die Bestimmung 
+von Integralen
+
+(1) Summenregel
+\begin{equation}
+\int a f(x) + bg(x)\,dx  = a\int f(x)\,dx + b\int g(x)\,dx \mbox{ für } a,b \in \mathbb{R}
+\end{equation}
+
+(2) Partielle Integration
+\begin{equation}
+\int f'(x)g(x)\,dx = f(x)g(x) - \int f(x)g'(x)\,dx
+\end{equation}
+
+(3) Substitionsregeln
+\begin{equation}
+\int f(g(x))g'(x)\,dx = \int f(t)\,dt \mbox{ mit } t  = g(x)
+\end{equation}
+
+```
+
+
+```{proof}
+
+Für die Herleitung der Summenregel wird auf die einschlägige Literatur verwiesen.
+Die Rechenregel der partiellen Integration ergibt sich durch Integration der 
+Produktregel der Differentiation. Wir erinnern uns, dass gilt
+\begin{equation}
+(f(x)g(x))' = f'(x)g(x) + f(x)g'(x).
+\end{equation}
+Integration beider Seiten der Gleichung und Berücksichtigung der Summenregel 
+für Stammfunktionen ergibt dann
+\begin{align}
+\begin{split}
+\smallint (f(x)g(x))' \,dx & = \smallint f'(x)g(x) + f(x)g'(x) \,dx 	\\
+\Leftrightarrow
+f(x)g(x) & = \smallint f'(x)g(x)\,dx + \smallint f(x)g'(x) \,dx 		\\
+\Leftrightarrow
+\smallint f'(x)g(x)\,dx & = f(x)g(x) - \smallint f(x)g'(x) \,dx
+\end{split}
+\end{align}
+Die Substitutionsregel ergibt sich für $F' = f$ durch Anwendung der Kettenregel der Differentiation auf die verkettete Funktion $F(g)$. Speziell gilt zunächst
+\begin{align}
+\begin{split}
+(F(g(x)))' = F'(g(x))g'(x) = f(g(x))g'(x)
+\end{split}
+\end{align}
+Integration beider Seiten der Gleichung
+\begin{equation}
+(F(g(x))) ' = f(g(x))g'(x)
+\end{equation}
+ergibt dann
+\begin{align}
+\begin{split}
+\smallint (F(g(x)))' \,dx  & = \smallint f(g(x))g'(x) \,dx				\\
+\Leftrightarrow
+F(g(x)) + c & = \smallint f(g(x))g'(x) \,dx								\\
+\Leftrightarrow
+\smallint f(g(x))g'(x) \,dx & = \smallint f(t)\,dt  \mbox{ mit } t := g(x).
+\end{split}
+\end{align}
+Dabei ist die rechte Seite der letzten obigen Gleichung zu verstehen als 
+$F(g(x)) + c$, also als Stammfunktion von $f$ evaluiert an der Stelle 
+$t := g(x)$. Das $dt$ ist \underline{nicht} durch $dg(x)$ zu ersetzen, sondern 
+rein notationstechnischer Natur.
+
+```
+
+**Nachbau von Abbildung 2.54 aus @baerwolff_hoehere_2017**
+
+## Das Riemann Integral
+
+```{definition, name = "Zerlegung eines Intervalls, Feinheit"}
+
+Es sei $[a,b] \subset \mathbb{R}$ ein Intervall und $x_0,x_1,x_2,...,x_n 
+\in [a,b]$ ein Menge von Punkten mit
+\begin{equation}
+a =: x_0 < x_1 <  x_2 \cdots < x_n := b
+\end{equation}
+mit
+\begin{equation}
+\Delta x_i := x_i - x_{i-1} \mbox{ für } i = 1,...,n.
+\end{equation}
+
+Dann heißt die Menge
+\begin{equation}
+Z := \{[x_0,x_1], [x_1,x_2], ..., [x_{n-1},x_n]\}
+\end{equation}
+der durch $x_0,x_1,x_2,...,x_n$ definierten Teilintervalle von $[a,b]$ 
+*Zerlegung von $[a,b]$*. Weiterhin heißt
+\begin{equation}
+Z_{\mbox{\tiny max}} := \max_{i \in n} \Delta x_i,
+\end{equation}
+also die größte der Teilintervalllängen $\Delta x_i$, die *Feinheit} von $Z$*.
+
+```
+
+
+$\Delta x_i$ ist die Breite der der Streifen in untenstehender Abbildung. 
+
+
+
+
+
+```{definition, name = "Riemannsche Summe"}
+
+$f : [a,b] \to \mathbb{R}$ sei eine beschränkte Funktion auf $[a,b]$, d.h. 
+$|f(x)| < c$ für $0 < c < \infty$ und alle $x \in [a,b]$, $Z$ sei eine Zerlegung 
+von $[a,b]$ mit Teilintervalllängen $\Delta x_i$ für $i = 1,...,n$. Weiterhin 
+sei für $i = 1,...,n$ $\xi_{i}$ ein beliebiger Punkt im Teilintervall 
+$[x_{i-1}, x_{i}]$ der Zerlegung $Z$. Dann heißt
+\begin{equation}
+R(Z) := \sum_{i=1}^n f(\xi_i)\Delta x_i
+\end{equation}
+*Riemannsche Summe von $f$ auf $[a,b]$ bezüglich der Zerlegung $Z$.*
+
+```
+
+* Wählt man in jedem $[x_{i-1}, x_{i}]$ das Maximum von $f$, ergibt sich die 
+*Riemannsche Obersumme*.
+
+* Wählt man in jedem $[x_{i-1}, x_{i}]$ das Minimum von $f$, ergibt sich die 
+*Riemannsche Untersumme*.
+
+* Für  $\Delta x_i \to 0, i = 1,...,n$ geht der Unterschied zwischen Ober- und 
+Untersumme gegen 0.
+
+
+**Nachbau von  Abbildung 2.55 aus @baerwolff_hoehere_2017**
+
+
+```{theorem, name = "Riemannsches Integral"}
+
+$f : [a,b] \to \mathbb{R}$ sei eine beschränkte reellwertige Funktion auf $[a,b]$. 
+Weiterhin sei für $Z_k, k = 1,2,3...$ eine Folge von Zerlegungen von $[a,b]$ mit 
+zugehörigen Feinheit $Z_{k, \mbox{\tiny max}}$. Wenn für jede Folge von 
+Zerlegungen $Z_1, Z_2,...$  mit $|Z_{k, \mbox{\tiny max}}| \to 0$ für $k \to \infty$ 
+und für beliebig gewählte Punkte $\xi_{ki}, i = 1,...,n$ im Teilintervall
+$[x_{k,i-1}, x_{k,i}]$ der Zerlegung $Z_k$ gilt, dass die Folge der zugehörigen 
+Riemannschen Summen $R(Z_1), R(Z_2), ...$ gegen den gleichen Grenzwert strebt, 
+dann heißt $f$ auf $[a,b]$ *integrierbar*. Der entsprechende Grenzwert der Folge 
+von Riemannschen Summen wird *bestimmtes Riemannsches Integral* genannt und mit
+\begin{equation}
+\int_a^b f(x)\,dx := \lim_{k \to \infty} R(Z_k) 
+\mbox{ für } |Z_{k, \mbox{\tiny max}}| \to 0
+\end{equation}
+bezeichnet.
+
+```
+
+Für $f > 0$ ist $\int_a^b f(x)\,dx$ der Flächeninhalt zwischen den $f(x)$ und 
+der $x$-Achse.  Generell ist $\int_a^b f(x)\,dx$ der vorzeichenbehaftete 
+Flächeninhalt zwischen dem Graphen von $f$ und der $x$-Achse. Positive und
+negative Flächeninhalt gleichen einander aus. $\int_a^b f(x)\,dx$ ist als 
+Mittelwert von $f$ auf $[a,b]$ zu verstehen.
+
+```{theorem, name = "Mittelwertsatz der Integralrechnung"}
+
+Für eine stetige Funktion $f : [a,b] \to \mathbb{R}$ existiert ein 
+$\xi \in ]a,b[$ mit
+\begin{equation}
+\int_a^b f(x)\,dx = f(\xi)(b-a)
+\end{equation}
+
+```
+
+
+Statt eines Beweises verweisen wir auf untenstehende graphische Darstellung  
+**Nachbau von  Abbildung 2.59 aus @baerwolff_hoehere_2017**.
+
+```{theorem, name = "Rechenregeln für bestimmte Integrale"}
+Es seien $f$ und $g$ integrierbare Funktionen auf $[a,b]$. Dann gelten folgende 
+Rechenregeln.
+
+(1) Linearität. Für $c_1,c_2\in \mathbb{R}$ gilt
+\begin{equation}
+\int_a^b (c_1 f(x) + c_2g(x))\,dx = c_1 \int_a^b f(x)\,dx + c_2 \int_a^b f(x)\,dx.
+\end{equation}
+
+
+(2) Additivität. Für $a < c < b$ gilt
+\begin{equation}
+\int_a^b f(x)\,dx = \int_a^c f(x)\,dx + \int_c^b f(x)\,dx.
+\end{equation}
+
+(3) Vorzeichenwechsel bei Umkehrung der Integralgrenzen
+\begin{equation}
+\int_a^b f(x)\,dx = - \int_b^a f(x)\,dx.
+\end{equation}
+
+```
+
+
+Für eine formale Herleitung  verweisen wir auf die einschlägige Literatur.  
+Eine graphische Darstellung der Additivität nach Abbildung 2.55 aus 
+@baerwolff_hoehere_2017 findet sich untenstehend.  
+
+
+## Hauptsätze der Differential- und Integralrechnung
+
+Statt eines Beweises verweisen wir auf untenstehende graphische Darstellung  
+**Nachbau von  Abbildung 2.55 aus @baerwolff_hoehere_2017**.
+
+
+```{theorem, name = "Erster Hauptsatz der Differential- und Integralrechnung"}
+
+
+Ist $f :  I  \to \mathbb{R}$ eine auf dem Intervall $I  
+\subset \mathbb{R}$ stetige Funktion, dann ist die Funktion
+\begin{equation}
+F :  I  \to \mathbb{R}, x \mapsto F(x) := \int_a^x f(t)\,dt \mbox{ mit } x, 
+a \in I
+\end{equation}
+eine Stammfunktion von $f$.
+
+```
+
+
+```{proof}
+Wir betrachten den Differenzquotienten
+\begin{equation}
+\frac{1}{h}(F(x+h) - F(x))
+\end{equation}
+Mit der Definition $F(x) := \smallint_a^x f(t)\,dt$ und der Additivität des 
+bestimmten Integrals gilt dann
+\begin{equation}
+\frac{1}{h}(F(x+h) - F(x))
+= \frac{1}{h}\left(\int_a^{x + h} f(t)\,dt - \int_a^{x} f(t)\,dt\right)
+= \frac{1}{h} \int_x^{x + h}f(t)\,dt
+\end{equation}
+Mit dem Mittelwertsatz der Integralrechnung gibt es also ein $\xi \in ]x,x+h[$, 
+so dass
+\begin{equation}
+\frac{1}{h}(F(x+h) - F(x)) = f(\xi)
+\end{equation}
+Grenzwertbildung ergibt dann
+\begin{equation}
+\lim_{h \to 0}\frac{1}{h}(F(x+h) - F(x)) = \lim_{h \to 0} f(\xi) \mbox{ für } 
+\xi \in ]x, x + h[
+\Leftrightarrow
+F'(x) = f(x).
+\end{equation}
+```
+
+
+```{theorem, name = "Zweiter Hauptsatz der Differential- und Integralrechnung"}
+
+Ist $F$ eine Stammfunktion einer stetigen Funktion $f : I \to \mathbb{R}$ auf 
+einem Intervall $I$, so gilt für $a,b \in I$ mit $a \le b$
+\begin{equation}
+\int_a^b f(x)\,dx = F(b) - F(a) =: F(x)\vert_a^b
+\end{equation}
+
+```
+
+
+```{proof}
+
+Mit den Rechenregeln für bestimmte Integrale und dem ersten Hauptsatz der 
+Differential- und Integralrechnung ergibt sich
+\begin{equation}
+F(b) - F(a) = \int_\alpha^b f(t)\,dt - \int_\alpha^a f(t)\,dt = \int_a^b f(x)\,dx
+\end{equation}
+
+```
+
+
+## Uneigentliche Integrale
+
+```{definition, name = "Uneigentliche Integrale"}
+
+$f : \mathbb{R} \to \mathbb{R}$ sei eine univariate reellwertige Funktion. Mit 
+den Definitionen
+\begin{equation}
+\int_{-\infty}^b f(x)\,dx := \lim_{a \to -\infty} \int_a^b f(x)\,dx
+\mbox{ und }
+\int_a^\infty f(x)\,dx := \lim_{b \to \infty} \int_a^b f(x)\,dx
+\end{equation}
+und der Additivität von Integralen
+\begin{equation}
+\int_{-\infty}^\infty f(x)\,dx = \int_{-\infty}^b f(x)\,dx + \int_b^{\infty}f(x)\,dx
+\end{equation}
+wird der Begriff des bestimmten Integrals auf die unbeschränkten 
+Integrationsintervalle $]-\infty,b]$,
+$[a,\infty[$ und $]-\infty,\infty[$ erweitert.
+Integrale mit unbeschränkten Integrationsintervallen heißen *uneigentliche 
+Integrale*. Wenn die entsprechenden Grenzwerte existieren, sagt man, dass die 
+uneigentlichen Integrale *konvergieren*.
+```
+
+Für die WDF $f$ einer Zufallsvariable ist die Forderung 
+$\int_{-\infty}^\infty f(x)\,dx = 1$ zentral.
+
+
+### Beispiel {-}
+
+
+\vspace{4mm}
+
+Wir betrachten das uneigentliche Integral $\int_1^{\infty} \frac{1}{x^2}\,dx$.
+Nach den Festlegungen in der Definition uneigentlicher Integrale gilt
+\begin{equation}
+\int_1^{\infty} \frac{1}{x^2}\,dx = \lim_{b \to \infty} \int_1^b \frac{1}{x^2}\,dx.
+\end{equation}
+Mit der Stammfunktion $F(x) = -x^{-1}$ von $f(x) = x^{-2}$ ergibt sich für das 
+bestimmte Integral in obiger Gleichung
+\begin{equation}
+\int_1^b \frac{1}{x^2}\,dx
+= F(b) - F(1)
+= -\frac{1}{b} - \left(-\frac{1}{1}\right)
+= -\frac{1}{b} + 1.
+\end{equation}
+Es ergibt sich also
+\begin{equation}
+\int_1^{\infty} \frac{1}{x^2}\,dx
+= \lim_{b \to \infty} \int_1^b \frac{1}{x^2}\,dx
+= \lim_{b \to \infty}\left(-\frac{1}{b} + 1\right)
+= - \lim_{b \to \infty}\frac{1}{b} + \lim_{b \to \infty} 1
+= 0 + 1
+= 1.
+\end{equation}
+
+
+## Mehrdimensionale Integrale
+
+
+```{definition, name = "Mehrdimensionale Integrale"}
+
+$f : \mathbb{R}^n \to \mathbb{R}$ sei eine multivariate reellwertige Funktion. 
+Dann heißen Integrale der Form
+\begin{equation}
+\int\limits_{[a_1,b_1]\times \cdots \times [a_n,b_n]} f(x)\,dx
+= \int_{a_1}^{b_1} \cdots \int_{a_n}^ {b_n} f(x_1,...,x_n)\,dx_1...\,dx_n
+\end{equation}
+*mehrdimensionale bestimmte Integrale auf Hyperrechtecken*. Weiterhin heißen 
+Integrale der Form
+\begin{equation}
+\int_{\mathbb{R}^n} f(x)\,dx
+= \int_{-\infty}^{\infty}  \cdots \int_{-\infty}^{\infty}
+f(x_1,...,x_n)\,dx_1...\,dx_n
+\end{equation}
+*mehrdimensionale uneigentliche Integrale.*
+
+```
+
+Man kann multivariate reellwertige Funktion nicht nur auf Hyperrechtecken, 
+sondern im Prinzip auf beliebigen Hyperflächen integrieren. Dies kann sich jedoch 
+oft schwierig gestalten. Der *Satz von Fubini* besagt, dass man mehrdimensionale 
+Integrale in beliebiger Koordinatenfolge auswerten kann, also dass zum Beispiel 
+\begin{equation}
+\int_{a_1}^{b_1} \left(\int_{a_2}^{b_2} f(x_1,x_2)\,dx_2\right) \,dx_1
+= \int_{a_2}^{b_2} \left(\int_{a_1}^{b_1} f(x_1,x_2)\,dx_1 \right) \,dx_2.
+\end{equation}
+Für die WDF eines Zufallsvektors ist die Forderung 
+$\int_{\mathbb{R}^n} f(x)\,dx = 1$ zentral. 
+
+
+### Beispiel 
+Wir betrachten das zweidimensionale bestimmte Integral der Funktion
+\begin{equation}
+f : \mathbb{R}^2 \to \mathbb{R}, (x_1,x_2) \mapsto f(x_1,x_2) := x_1^2 + 4x_2
+\end{equation}
+auf dem Rechteck $[0,1] \times [0,1]$.
+In
+\begin{equation}\label{eq:double_integral}
+\int_0^1 \int_0^1 x_1^2 + 4x_2 \,dx_1\,dx_2
+= \int_0^1 \left(\int_0^1 x_1^2 + 4x_2 \,dx_1\right)\,dx_2
+\end{equation}
+betrachten wir zunächst das innere Integral.$x_2$ nimmt hier die Rolle einer 
+Konstanten ein. Eine Stammfunktion von $g(x_1) := x_1^2  +4 x_2$ ist $G(x_1) 
+= \frac{1}{3}x_1^3 + 4x_2x_1$, wie man sich durch Ableiten von $G$ überzeugt.
+Es ergibt sich also für das innere Integral
+\begin{equation}
+\int_0^1 x_1^2 + 4x_2 \,dx_1
+= G(1) - G(0)
+= \frac{1}{3}\cdot1^3 + 4x_2\cdot 1 - \frac{1}{3}\cdot 0^3 - 4x_2\cdot 0 
+= \frac{1}{3} + 4x_2
+\end{equation}
+Betrachten des äußeren Integrals in Gleichung XXXREF ergibt 
+dann mit der Stammfunktion $H(x_2) = \frac{1}{3}x_2 + 2x_2^2$ von $h(x_2) 
+:= \frac{1}{3} + 4x_2$, dass
+\begin{equation}
+\int_0^1 \int_0^1 x_1^2 + 4x_2 \,dx_1\,dx_2
+= \int_0^1 \frac{1}{3} + 4x_2 \,dx_2
+= H(1) - H(0)
+= \frac{1}{3}\cdot 1 + 4\cdot 1^2 - \frac{1}{3}\cdot 0 + 4\cdot 0^2
+= \frac{13}{3}.
+\end{equation}
+
+
+
+## Selbstkontrollfragen  
+
+1. Definieren Sie den Begriff der Stammfunktion einer univariaten reellwertigen Funktion.
+2. Definieren Sie den Begriff des unbestimmten Integrals einer univariaten reellwertigen Funktion.
+3. Erläutern Sie den Begriff des Riemanschen Integrals.
+4. Geben Sie den ersten Hauptsatz der Differential- und Integralrechnung wieder.
+5. Geben Sie den zweiten Hauptsatz der Differential- und Integralrechnung wieder.
+6. Erläutern Sie den Begriff des uneigentlichen Integrals.
+7. Erläutern Sie den Begriff des mehrdimensionalen Integrals.
+8. Berechnen Sie das bestimmte Integral $\int_{0}^{1} 2x \,dx$.
+

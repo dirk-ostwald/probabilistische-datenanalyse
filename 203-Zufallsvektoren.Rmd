@@ -1,0 +1,643 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+# Zufallsvektoren
+
+## Definition und Notation von Zufallsvektoren
+
+
+
+```{definition, name = "Zufallsvektor"}
+Es sei $(\Omega, \mathcal{A}, \mathbb{P})$ ein W-Raum und 
+$(\mathcal{X},\mathcal{S})$ ein $n$-dimensionaler Messraum. 
+Ein $n$-dimensionaler *Zufallsvektor* ist dann definiert als eine Abbildung
+\begin{equation}
+X:\Omega \to \mathcal{X}, \omega \mapsto X(\omega) :=
+\begin{pmatrix}
+X_1(\omega) \\
+\vdots  	\\
+X_n(\omega)
+\end{pmatrix}
+\end{equation}
+mit der *Messbarkeitseigenschaft*
+\begin{equation}
+\{\omega \in \Omega|X(\omega) \in S \} \in \mathcal{A} \mbox{ für alle } S \in \mathcal{S}.
+\end{equation}
+```
+
+
+
+Bemerkungen
+
+* $X$ ist messbar, wenn die Komponentenfunktionen $X_1,...,X_n$ messbar sind.
+* Die Komponentenfunktionen eines Zufallsvektors sind also Zufallsvariablen.
+* Ein $n$-dimensionaler Zufallsvektor ist die Konkatenation von $n$ Zufallsvariablen.
+* Für einen Zufallsvektor schreiben wir auch häufig $X := (X_1,...,X_n)$.
+* Für $n := 1$ ist ein Zufallsvektor eine Zufallsvariable.
+
+
+ABBILDUNG
+
+## Multivariate Verteilungen
+
+```{definition, name = "Multivariate Verteilung"}
+Es sei $(\Omega, \mathcal{A}, \mathbb{P})$ ein Wahrscheinlichkeitsraum, 
+$(\mathcal{X},\mathcal{S})$ ein $n$-dimensionaler Messraum und
+\begin{equation}
+X : \Omega \to \mathcal{X}, \omega \mapsto X(\omega)
+\end{equation}
+ein Zufallsvektor. Dann heißt das Wahrscheinlichkeitsmaß $\mathbb{P}_X$, 
+definiert durch
+\begin{equation}
+\mathbb{P}_X : \mathcal{S} \to [0,1], S \mapsto \mathbb{P}_X(S)
+:= \mathbb{P}(X^{-1}(S))
+ = \mathbb{P}\left(\{\omega \in \Omega|X(\omega) \in S\}\right)
+\end{equation}
+die *multivariate Verteilung des Zufallsvektor $X$*.
+
+```
+
+Bemerkungen
+
+* Der Einfachheit halber spricht man oft auch nur von "der Verteilung des Zufallsvektors $X$".
+* Die Notationskonventionen für Zufallsvariablen gelten für Zufallsvektoren analog, z.B.
+\begin{align}
+\begin{split}
+\mathbb{P}_X(X \in S)
+& := \mathbb{P}\left(\{X \in S\} \right)
+= \mathbb{P}\left(\{\omega \in \Omega|X(\omega) \in S\} \right)
+\\
+\mathbb{P}_X(X = x)
+& := \mathbb{P}\left(\{X = x\} \right)
+= \mathbb{P}\left(\{\omega \in \Omega|X(\omega) = x\} \right)
+\\
+\mathbb{P}_X(X \le x)
+& := \mathbb{P}\left(\{X \le x\} \right)
+= \mathbb{P}\left(\{\omega \in \Omega|X(\omega) \le x\} \right)
+\\
+\mathbb{P}_X(x_1 \le X \le x_2)
+& := \mathbb{P}\left(\{x_1 \le X \le x_2\} \right)
+= \mathbb{P}\left(\{\omega \in \Omega|x_1 \le X(\omega) \le x_2\} \right)
+\end{split}
+\end{align}
+* Relationsoperatoren wie $\le$ werden hier komponentenweise verstanden, 
+d.h. zum Beispiel heißt $x \le y$ für $x,y \in \mathbb{R}^n$, dass $x_i \le y_i$ 
+für alle $i = 1,...,n$.
+
+
+
+```{definition, name = "Multivariate kumulative Verteilungsfunktionen"}
+
+$X$ sei ein Zufallsvektor mit Ergebnisraum $\mathcal{X}$. Dann heißt eine 
+Funktion der Form
+\begin{equation}
+P_X :  \mathcal{X}  \to [0,1],\, x \mapsto P_X(x) := \mathbb{P}_X(X \le x)
+\end{equation}
+*multivariate kumulative Verteilungsfunktion von $X$*.
+
+```
+
+
+Bemerkungen
+
+* Multivariate kumulative Verteilungsfunktionen können zur Definition multivariater
+Verteilungen genutzt werden.
+* Häufiger ist die Definition multivariater Verteilungen durch multivariate WMFen oder WDFen.
+
+```{definition, name = "Diskreter Zufallsvektor und multivariate Wahrscheinlichkeitsmassefunktion"}
+
+Es sei $(\Omega,\mathcal{A},\mathbb{P})$ ein Wahrscheinlichkeitsraum und 
+$X: \Omega \to \mathcal{X}$ ein Zufallsvektor. $X$ heißt *diskreter Zufallsvektor*, 
+wenn der Ergebnisraum $\mathcal{X}$ endlich viele oder höchsten abzählbar viele 
+Elemente $x_i, i = 1,2,...$ enthält. Die *multivariate 
+Wahrscheinlichkeitsmassefunktion (WMF)* eines diskreten Zufallsvektors $X$ wird 
+mit $p_X$ bezeichnet und ist definiert durch
+\begin{equation}
+p_X : \mathcal{X} \to [0,1], x \mapsto p_X(x) := \mathbb{P}_X(X = x).
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Der Begriff der multivariaten WMF ist analog zum Begriff der WMF.
+* Wie univariate WMFen sind multivariate WMFen nicht-negativ und normiert.
+
+
+
+### Beispiel (Multivariate Wahrscheinlichkeitsmassefunktion {-}
+
+Wir betrachten einen zweidimensionalen Zufallsvektor $X := (X_1,X_2)$ der Werte 
+in $\mathcal{X} := \mathcal{X}_1 \times \mathcal{X}_2$ annimmt, wobei 
+$\mathcal{X}_1 := \{1,2,3\}$ und $\mathcal{X}_2 = \{1,2,3,4\}$ seien. Eine 
+exemplarische bivariate WMF der Form
+\begin{equation}
+p_X: \{1,2,3\} \times \{1,2,3,4\} \to [0,1], (x_1,x_2) \mapsto p_X(x_1,x_2)
+\end{equation}
+ist dann durch nachfolgende Tabelle definiert.
+
+TABELLE
+
+\begin{table}\label{tab:wmf_bivariat}
+\begin{center}
+\begin{tabular}{|c|cccc|}
+\hline
+$p_X(x_1,x_2)$	& 	$x_2 = 1$ 	& 	$x_2 = 2$ 	& 	$x_2 = 3$ 	& 	$x_2 = 4$ 	\\\hline
+$x_1 = 1$		&	$0.1$		&	$0.0$		&	$0.2$		&	$0.1$		\\
+$x_1 = 2$		&	$0.1$		&	$0.2$		&	$0.0$		&	$0.0$		\\
+$x_1 = 3$		&	$0.0$		&	$0.1$		&	$0.1$		&	$0.1$		\\\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Man beachte, dass $\sum_{x_1 = 1}^3 \sum_{x_2 = 1}^4 p_X(x_1,x_2) = 1$. 
+
+
+
+```{definition, name = "Kontinuierlicher Zufallsvektor und  multivariate Wahrscheinlichkeitsdichtefunktion"}
+
+Es sei $(\Omega,\mathcal{A},\mathbb{P})$ ein Wahrscheinlichkeitsraum. Ein 
+Zufallsvektor der Form $X: \Omega \to \mathbb{R}^n$ heißt *kontinuierlicher*  
+Zufallsvektor. Die *multivariate Wahrscheinlichkeitsdichtefunktion (WDF)* 
+eines kontinuierlichen  Zufallsvektors $X$ ist eine Funktion
+\begin{equation}
+p_X : \mathbb{R}^n \to \mathbb{R}_{\ge 0}, x \mapsto p_X(x),
+\end{equation}
+mit den Eigenschaften
+
+(1) $\int_{\mathbb{R}^n} p_X(x)\,dx = 1$
+(2) $\mathbb{P}_X(x_1 \le X \le x_2) 
+= \int_{x_{1_1}}^{x_{2_1}} \cdots \int_{x_{1_n}}^{x_{2_n}} p_X(s_1,...,s_n)\,ds_1 \cdots ds_n$
+
+```
+
+
+Bemerkungen
+
+* Der Begriff der multivariaten WDF ist analog zum Begriff der WDF.
+* Wie univariate WDFen sind multivariate WDFen nicht-negativ und normiert.
+* Wie für kontinuierliche Zufallsvariablen gilt für kontinuierliche Zufallsvektoren
+\begin{equation}
+\mathbb{P}_X(X = x)
+= \mathbb{P}_X(x \le X \le x)
+= \int_{x_1}^{x_1} \cdots \int_{x_n}^{x_n} p_X(s_1,...,s_n)\,ds_1 \cdots ds_n
+\end{equation}
+
+
+## Marginalverteilungen
+
+
+
+```{definition, name = "Univariate Marginalverteilung"}
+
+$(\Omega, \mathcal{A}, \mathbb{P})$ sei ein Wahrscheinlichkeitsraum, 
+$(\mathcal{X}, \mathcal{S})$ sei ein $n$-dimensionaler Messraum, 
+$X: \Omega \to \mathcal{X}$ sei ein Zufallsvektor, $\mathbb{P}_X$ sei 
+die Verteilung von $X$, $\mathcal{X}_i \subset \mathcal{X}$ sei der 
+Ergebnisraum der $i$ten Komponente $X_i$ von $X$, und $\mathcal{S}_i$ sei 
+eine $\sigma$-Algebra auf $X_i$. Dann heißt die durch
+
+\begin{equation}
+\mathbb{P}_{X_i} : \mathcal{S}_i \to [0,1],
+S \mapsto \mathbb{P}_X\left(\mathcal{X}_1 
+                     \times
+                     \cdots
+                     \times
+                     \mathcal{X}_{i-1}
+                     \times S
+                     \times \mathcal{X}_{i+1}
+                     \times \cdots
+                     \times \mathcal{X}_n\right)
+\mbox{ für } S \in \mathcal{S}_i
+\end{equation}
+
+definierte Verteilung die *$i$te univariate Marginalverteilung von $X$*.
+
+```
+
+Bemerkungen
+
+* Univariate Marginalverteilungen sind die Verteilungen der Komponenten eines Zufallsvektors.
+* Die Komponenten eines Zufallsvektors sind Zufallsvariablen, univariate 
+Marginalverteilungen sind also Verteilungen von Zufallsvariablen.
+* Die Festlegung der multivariaten Verteilung von $X$ legt auch die Verteilungen 
+der $X_i$ fest.
+
+
+```{theorem, name = "Marginale Wahrscheinlichkeitsmasse/dichtefunktionen"}
+
+$X = (X_1,...,X_n)$ sei ein $n$-dimensionaler diskreter Zufallsvektor mit 
+Wahrscheinlichkeitsmassefunktion $p_X$ und Komponentenergebnisräumen 
+$\mathcal{X}_1, ..., \mathcal{X}_n$. Dann ergibt sich die 
+Wahrscheinlichkeitsmassefunktion der $i$ten Komponente $X_i$ von $X$ als
+\begin{equation}
+p_{X_i} : \mathcal{X}_i \to [0,1], x_i \mapsto p_{X_i}(x_i) := 
+\sum_{x_1} \cdots \sum_{x_{i-1}} \sum_{x_{i+1}} \cdots \sum_{x_n} p_X(x_1,...,x_{i-1},x_i,x_{i+1}, ...,x_n)
+\end{equation}
+
+$X = (X_1,...,X_n)$ sei ein $n$-dimensionaler kontinuierlicher Zufallsvektor 
+mit Wahrscheinlichkeitsdichtefunktion $p_X$ und Komponentenergebnisraum 
+$\mathbb{R}$. Dann ergibt sich die Wahrscheinlichkeitsdichtefunktion der $i$ten 
+Komponente $X_i$ von $X$ als
+\begin{equation}
+p_{X_i} : \mathbb{R} \to \mathbb{R}_{\ge 0},  x_i \mapsto p_{X_i}(x_i) :=  
+\smallint_{x_1} \cdots \smallint_{x_{i-1}} \smallint_{x_{i+1}} \cdots \smallint_{x_n}
+   p_X(x_1,..., x_{i-1},x_i,x_{i+1}, ...,x_n)
+   \,dx_1...\,dx_{i-1}\,dx_{i+1}...\,dx_n.
+\end{equation}
+```
+
+Bemerkungen
+
+* Wir verzichten auf einen Beweis
+* Die WMFen der univariaten Marginalverteilungen eines diskreten Zufallsvektors 
+werden durch Summation bestimmt, die WDFen der univariaten Marginalverteilungen 
+eines kontinuierlichen Zufallsvektors werden durch Integration bestimmt.
+
+
+### Beispiel (Marginale Wahrscheinlichkeitsmassefunktionen) {-}
+
+Wir betrachten erneut den zweidimensionalen Zufallsvektor $X := (X_1,X_2)$ der
+Werte in $\mathcal{X} := \mathcal{X}_1 \times \mathcal{X}_2$ annimmt, 
+wobei $\mathcal{X}_1 := \{1,2,3\}$ und $\mathcal{X}_2 = \{1,2,3,4\}$ seien.
+Basierend auf der oben definierten WMF ergeben sich folgende marginalen WMFen 
+$p_{X_1}$ und $p_{X_2}$ 
+
+TABELLE 
+
+\begin{table}\label{tab:wmf_marginal}
+\begin{center}
+\begin{tabular}{|c|cccc|c|}
+\hline
+$p_X(x_1,x_2)$	& 	$x_2 = 1$ 	& 	$x_2 = 2$ 	& 	$x_2 = 3$ 	& 	$x_2  = 4$ 	& $p_{X_1}(x_1)$	\\\hline
+$x_1 = 1$		&	$0.1$		&	$0.0$		&	$0.2$		&	$0.1$		& $0.4$				\\
+$x_1 = 2$		&	$0.1$		&	$0.2$		&	$0.0$		&	$0.0$		& $0.3$				\\
+$x_1 = 3$		&	$0.0$		&	$0.1$		&	$0.1$		&	$0.1$		& $0.3$				\\\hline
+$p_{X_2}(x_2)$	&   $0.2$	 	&   $0.3$ 		&   $0.3$ 		&   $0.2$       & 					\\\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+Man beachte, dass $\sum_{x_1 = 1}^3 p_{X_1}(x_1) = 1$ und $\sum_{x_2 = 1}^3 p_{X_2}(x_2) = 1$ gilt.
+
+## Bedingte Verteilungen
+
+
+
+### Vorbemerkungen {-}
+
+Wir erinnern uns, dass für einen Wahrscheinlichkeitsraum 
+$(\Omega, \mathcal{A}, \mathbb{P})$ und zwei Ereignisse $A,B \in \mathcal{A}$ 
+mit $\mathbb{P}(B) > 0$ die bedingte Wahrscheinlichkeit von $A$ gegeben $B$ 
+definiert ist als
+\begin{equation}
+\mathbb{P}(A|B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.
+\end{equation}
+Analog wird für zwei Zufallsvariablen $X_1,X_2$ mit Ereignisräumen 
+$\mathcal{X}_1,\mathcal{X}_2$ und messbaren Mengen 
+$S_1 \in \mathcal{X}_1, S_2 \in \mathcal{X}_2$ die bedingte Verteilung 
+von $X_1$ gegeben $X_2$ mithilfe der Ereignisse $A := \{X_1 \in S_1\}$ 
+und $B := \{X_2 \in S_2\}$ definiert. So ergibt sich zum Beispiel die bedingte 
+Wahrscheinlichkeit, dass $X_1 \in S_1$ gegeben dass $X_2 \in S_2$ unter der Annahme, 
+dass $\mathbb{P}(\{X_2 \in S_2\}) > 0$, zu
+\begin{equation}
+\mathbb{P}( \{X_1 \in S_1\}|\{X_2 \in S_2\})
+= \frac{\mathbb{P}(\{X_1 \in S_1\} \cap \{X_2 \in S_2\})}{\mathbb{P}(\{X_2 \in S_2\})}.
+\end{equation}
+In der Folge betrachten wir zunächst durch die WMFen/WDFen zweidimensionaler 
+Zufallsvektoren definierte bedingte Verteilungen.
+
+
+```{definition, name = "Bedingte WMF, diskrete bedingte Verteilung"}
+
+$X := (X_1,X_2)$ sei ein diskreter Zufallsvektor mit Ergebnisraum 
+$\mathcal{X} := \mathcal{X}_1 \times \mathcal{X}_2$, WMF $p_X = p_{X_1,X_2}$ 
+und marginalen WMFen $p_{X_1}$ und $p_{X_2}$. Die bedingte WMF von $X_1$ gegeben 
+$X_2 = x_2$ ist dann für $p_{X_2}(x_2) > 0$ definiert als
+\begin{equation}
+p_{X_1|X_2 = x_2} : \mathcal{X}_1 \to [0,1],
+x_1 \mapsto p_{X_1|X_2 = x_2}(x_1|x_2) := \frac{p_{X_1,X_2}(x_1,x_2)}{p_{X_2}(x_2)}
+\end{equation}
+Analog ist für $p_{X_1}(x_1) > 0$ die bedingte WMF von $X_2$ gegeben $X_1 = x_1$ 
+definiert als
+\begin{equation}
+p_{X_2|X_1 = x_1} : \mathcal{X}_2 \to [0,1],
+x_2 \mapsto p_{X_2|X_1 = x_2}(x_1|x_2) := \frac{p_{X_1,X_2}(x_1,x_2)}{p_{X_1}(x_1)}
+\end{equation}
+Die bedingten Verteilungen mit WMFen $p_{X_1|X_2 = x_2}$ und $p_{X_2|X_1 = x_1}$ 
+heißen dann die *diskreten bedingten Verteilungen von $X_1$ gegeben $X_2 = x_2$ 
+und $X_2$ gegeben $X_1 = x_1$*, respektive.
+
+```
+
+Bemerkungen
+
+* In Analogie zur Definition der bedingten Wahrscheinlichkeit von Ereignissen gilt also
+\begin{equation}
+p_{X_1|X_2}(x_1|x_2)
+= \frac{p_{X_1,X_2}(x_1,x_2)}{p_{X_2}(x_2)}
+= \frac{\mathbb{P}(\{X_1 = x_1\} \cap \{X_2 = x_2\})}{\mathbb{P}(\{X_2 = x_2\})}.
+\end{equation}
+* Bedingte Verteilungen sind lediglich normalisierte gemeinsame Verteilungen.
+
+
+### Beispiel (Bedingte Wahrscheinlichkeitsmassefunktionen) {-}
+
+Wir betrachten erneut den zweidimensionalen Zufallsvektor $X := (X_1,X_2)$ der 
+Werte in $\mathcal{X} := \mathcal{X}_1 \times \mathcal{X}_2$ annimmt, wobei 
+$\mathcal{X}_1 := \{1,2,3\}$ und $\mathcal{X}_2 = \{1,2,3,4\}$ seien. Basierend 
+auf der oben definierten WMF und den entsprechenden oben evaluierten marginalen 
+WMFen ergeben sich folgende bedingte WMFen für $p_{X_2|X_1 = x_1}$
+
+TABELLE
+
+\begin{table}\label{tab:wmf_bedingt}
+\renewcommand{\arraystretch}{1.4}
+\begin{center}
+\begin{tabular}{|c|cccc|}
+\hline
+$p_{X_1|X_2}(x_1,x_2)$
+& 	$x_2 = 1$
+& 	$x_2 = 2$
+& 	$x_2 = 3$
+& 	$x_2 = 4$
+\\\hline
+$p_{X_2|X_1 = 1}(x_2|x_1 = 1)$
+
+&	$\frac{0.1}{0.4} = 0.25$
+
+&	$\frac{0.0}{0.4} = 0.00$
+
+&	$\frac{0.2}{0.4} = 0.50$
+
+&	$\frac{0.1}{0.4} = 0.25$
+\\
+$p_{X_2|X_1 = 2}(x_2|x_1 = 2)$
+
+&	$\frac{0.1}{0.3} = 0.3\bar{3}$
+
+&	$\frac{0.2}{0.3} = 0.6\bar{6}$
+
+&	$\frac{0.0}{0.3} = 0.00$
+
+&	$\frac{0.0}{0.3} = 0.00$
+\\
+$p_{X_2|X_1 = 3}(x_2|x_1 = 3)$
+
+&	$\frac{0.0}{0.3} = 0.00$
+
+&	$\frac{0.1}{0.3} = 0.3\bar{3}$
+
+&	$\frac{0.1}{0.3} = 0.3\bar{3}$
+
+&	$\frac{0.1}{0.3} = 0.3\bar{3}$
+\\\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+
+Bemerkungen
+
+* Man beachte, dass $\sum_{x_2 = 1}^4 p_{X_2|X_1 = x_1}(x_2|x_1) = 1$ für alle $x_1 \in \mathcal{X}_1$.
+* Man beachte die qualitative Ähnlichkeit der WMFen $p_{X_1,X_2}(x_1,x_2)$ und $p_{X_2|X_1}(x_2|x_1)$.
+
+
+
+```{definition, name = "Bedingte Wahrscheinlichkeitsdichtfunktion und kontinuierliche bedingte Verteilungen"}
+$X := (X_1,X_2)$ sei ein kontinuierlicher Zufallsvektor mit Ergebnisraum $\mathbb{R}^2$,
+WDF $p_X = p_{X_1,X_2}$ und marginalen WDFen $p_{X_1}$ und $p_{X_2}$. Die bedingte 
+WDF von $X_1$ gegeben $X_2 = x_2$ ist dann für $p_{X_2}(x_2) > 0$ definiert als
+\begin{equation}
+p_{X_1|X_2 = x_2} : \mathbb{R} \to \mathbb{R}_{\ge 0},
+x_1 \mapsto p_{X_1|X_2 = x_2}(x_1|x_2) := \frac{p_{X_1,X_2}(x_1,x_2)}{p_{X_2}(x_2)}
+\end{equation}
+Analog ist für $p_{X_1}(x_1) > 0$ die bedingte WMF von $X_2$ gegeben $X_1 = x_1$ definiert als
+\begin{equation}
+p_{X_2|X_1 = x_1} : \mathbb{R} \to \mathbb{R}_{\ge 0},
+x_2 \mapsto p_{X_2|X_1 = x_2}(x_2|x_1) := \frac{p_{X_1,X_2}(x_1,x_2)}{p_{X_1}(x_1)}
+\end{equation}
+Die Verteilungen mit WDFen $p_{X_1|X_2 = x_2}$ und $p_{X_2|X_1 = x_1}$ heißen 
+dann die *kontinuierlichen bedingten Verteilungen von $X_1$ gegeben $X_2 = x_2$ 
+und $X_2$ gegeben $X_1 = x_1$*, respektive.
+```
+
+Bemerkungen
+
+* Im kontinuierlichen Fall gilt zwar $\mathbb{P}(X = x) = 0$, aber nicht 
+notwendig auch $p_X(x) = 0$.
+
+
+
+
+
+## Unabhängie Zufallsvariablen
+
+
+```{definition, name = "Unabhängige Zufallsvariablen"}
+
+$(\Omega, \mathcal{A}, \mathbb{P})$ sei ein Wahrscheinlichkeitsraum 
+und $X : = (X_1,X_2)$ ein zweidimensionaler Zufallsvektor. Die Zufallsvariablen 
+$X_1,X_2$ mit Ergebnisräumen $\mathcal{X}_1, \mathcal{X}_2$ heißen *unabhängig*, 
+wenn für alle $S_1 \subseteq \mathcal{X}_1$ und $S_2 \subseteq \mathcal{X}_2$ gilt, dass
+\begin{equation}
+\mathbb{P}_{X}(X_1 \in S_1, X_2 \in S_2) =
+\mathbb{P}_{X_1}(X_1 \in S_1)\mathbb{P}_{X_2}(X_2 \in S_2).
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Die Definition besagt, dass die Ereignisse $\{X_1 \in S_1\}$ und $\{X_2 \in S_2\}$ unabhängig sind.
+* Es gilt also auch, dass $\mathbb{P}(\{X_1 \in S_1\})|\{X_2 \in S_2\}) = \mathbb{P}(\{X_1 \in S_1\})$.
+* Wissen um das Ereignis $\{X_2 \in S_2\}$ verändert die Wahrscheinlichkeit von $\{X_1 \in S_1\}$ also nicht.
+* Einen formaleren Zugang bietet das Konzept der *Produktwahrscheinlichkeitsräume*.
+
+
+
+```{theorem, name = "Unabhängigkeit und Faktorisierung der WMF/WDF"}
+
+$X := (X_1,X_2)$ sei ein diskreter Zufallsvektor mit Ergebnisraum  
+$\mathcal{X}_1 \times \mathcal{X}_2$, WMF $p_X$ und marginalen WMFen $p_{X_1}, p_{X_2}$.
+Dann gilt
+\begin{equation}
+X_1 \mbox{ und } X_2 \mbox{ sind unabhängige Zufallsvariablen} \Leftrightarrow  
+p_X(x_1,x_2) = p_{X_1}(x_1)p_{X_2}(x_2) \mbox{ für alle } (x_1,x_2) \in \mathcal{X}_1 \times \mathcal{X}_2.
+\end{equation}
+$X := (X_1,X_2)$ sei ein kontinuierlicher Zufallsvektor mit Ergebnisraum  
+$\mathbb{R}^2$, WDF $p_X$ und marginalen WMFen $p_{X_1}, p_{X_2}$. Dann gilt
+\begin{equation}
+X_1 \mbox{ und } X_2 \mbox{ sind unabhängige Zufallsvariablen } \Leftrightarrow  
+p_X(x_1,x_2) = p_{X_1}(x_1)p_{X_2}(x_2) \mbox{ für alle } (x_1,x_2) \in \mathbb{R}^2.
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Wir verzichten auf einen Beweis.
+* Die Produkteigenschaft $p_{X}(x_1,x_2) = p_{X_1}(x_1)p_{X_2}(x_2)$ heißt auch *Faktorisierung*.
+* Unabhängigkeit zweier ZVen entspricht der Faktorisierung ihrer gemeinsamen WMF/WDF.
+
+### Beispiel (Unabhängige diskrete Zufallsvariablen) {-}
+
+Wir betrachten erneut den zweidimensionalen Zufallsvektor $X := (X_1, X_2)$, 
+der Werte in $\{1,2,3\} \times \{1,2,3,4\}$ annimmt, und dessenn gemeinsame und
+marginale WMFen die untenstehende Form haben
+\vspace{1mm}
+\begin{center}
+\begin{tabular}{|c|cccc|c|}
+\hline
+$p_X(x_1,x_2)$	& 	$x_2 = 1$ 	& 	$x_2 = 2$ 	& 	$x_2 = 3$ 	& 	$x_2 = 4$ 	& $p_{X_1}(x_1)$	\\\hline
+$x_1 = 1$		    &	$0.10$		&	$0.00$		&	$0.20$		&	$0.10$		& $0.40$			\\
+$x_1 = 2$		    &	$0.10$		&	$0.20$		&	$0.00$		&	$0.00$		& $0.30$			\\
+$x_1 = 3$		    &	$0.00$		&	$0.10$		&	$0.10$		&	$0.10$		& $0.30$			\\\hline
+$p_{X_2}(x_2)$	& $0.20$	  & $0.30$ 		& $0.30$ 		& $0.20$    & 					\\\hline
+\end{tabular}
+\end{center}
+Da hier gilt, dass
+\begin{equation}
+p_X(1,1)  = 0.10 \neq 0.08 = 0.40\cdot 0.20 =  p_{X_1}(1)p_{X_2}(1)
+\end{equation}
+sind die Zufallsvariablen $X_1$ und $X_2$ nicht unabhängig.
+
+### Beispiel (Unabhängige diskrete Zufallsvariablen) {-}
+
+Die gemeinsame Verteilung von $X_1$ und $X_2$ unter der Annahme der Unabhängigkeit
+von $X_1$ und $X_2$ bei gleichen Marginalverteilungen ergibt sich zu
+
+TABELLE
+\begin{center}
+\begin{tabular}{|c|cccc|c|}
+\hline
+$p_X(x_1,x_2)$	& $x_2 = 1$ 	&	$x_2 = 2$ 	&	$x_2 = 3$ 	& $x_2 = 4$ 	& $p_{X_1}(x_1)$	\\\hline
+$x_1 = 1$		    &	$0.08$		  &	$0.12$		  &	$0.12$		  &	$0.08$		  & $0.40$			    \\
+$x_1 = 2$		    &	$0.06$		  &	$0.09$		  &	$0.09$		  &	$0.06$		  & $0.30$			    \\
+$x_1 = 3$		    &	$0.06$		  &	$0.09$		  &	$0.09$		  &	$0.06$		  & $0.30$			    \\\hline
+$p_{X_2}(x_2)$	&  $0.20$	 	  & $0.30$ 		  & $0.30$ 		  & $0.20$      & 					      \\\hline
+\end{tabular}
+\end{center}
+Weiterhin ergeben sich im Falle der Unabhängigkeit von $X_1$ und $X_2$
+zum Beispiel die bedingten Wahrscheinlichkeitsmassefunktion $p_{X_2|X_1}$ zu
+
+TABELLE
+\renewcommand{\arraystretch}{1.3}
+\begin{center}
+\begin{tabular}{|c|cccc|}
+\hline
+$p_{X_1|X_2}(x_1,x_2)$
+& 	$x_2 = 1$
+& 	$x_2 = 2$
+& 	$x_2 = 3$
+& 	$x_2 = 4$
+\\\hline
+$p_{X_2|X_1 = 1}(x_2|x_1 = 1)$
+
+& $\frac{0.08}{0.40} = 0.2$
+
+&	$\frac{0.12}{0.40} = 0.3$
+
+&	$\frac{0.12}{0.40} = 0.3$
+
+&	$\frac{0.08}{0.40} = 0.2$
+\\
+$p_{X_2|X_1 = 2}(x_2|x_1 = 2)$
+
+&	$\frac{0.06}{0.30} = 0.2$
+
+&	$\frac{0.09}{0.30} = 0.3$
+
+&	$\frac{0.09}{0.30} = 0.3$
+
+&	$\frac{0.06}{0.30} = 0.2$
+\\
+$p_{X_2|X_1 = 3}(x_2|x_1 = 3)$
+%
+&	$\frac{0.06}{0.30} = 0.2$
+%
+&	$\frac{0.09}{0.30} = 0.3$
+%
+&	$\frac{0.09}{0.30} = 0.3$
+%
+&	$\frac{0.06}{0.30} = 0.2$
+\\\hline
+\end{tabular}
+\end{center}
+Im Falle der Unabhängigkeit von $X_1$ und $X_2$ ändert sich die Verteilung von 
+$X_2$ gegeben (oder im Wissen um) den Wert von $X_1$ also nicht und entspricht
+jeweils der Marginalverteilung von $X_2$. Dies entspricht natürlich der Intuition 
+der Unabhängigkeit von Ereignissen im Kontext elementarer Wahrscheinlichkeiten.
+
+
+
+
+```{definition, name = "$n$ unabhängige Zufallsvariablen"}
+$X := (X_1,...,X_n)$ sei ein $n$-dimensionaler Zufallsvektor mit Ergebnisraum 
+$\mathcal{X}= \times_{i=1}^n \mathcal{X}_i$. Die $n$ Zufallsvariablen $X_1,...,X_n$ 
+heißen *unabhängig*, wenn für alle $S_i \in \mathcal{X}_i, i = 1,...,n$ gilt, dass
+\begin{equation}
+\mathbb{P}_X(X_1 \in S_1, ...,X_n \in S_n) = \prod_{i=1}^n \mathbb{P}_{X_i}(X_i \in S_i).
+\end{equation}
+Wenn der Zufallsvektor eine $n$-dimensionale WMF oder WDF $p_{X}$ mit marginalen 
+WMFen oder WDFen $p_{X_i}, i = 1,...,n$ besitzt, dann ist die Unabhängigkeit von 
+$X_1,...,X_n$ gleichbedeutend mit der Faktorisierung der gemeinsamen WMF oder WDF,
+also mit
+\begin{equation}
+p_X(x_1,...,x_n) = \prod_{i=1}^n p_{X_i}(x_i).
+\end{equation}
+
+```
+
+Bemerkung
+
+* Es handelt sich um eine direkte Generalisierung des zweidimensionalen Falls.
+
+```{definition, name = "Unabhängig und identisch verteilte Zufallsvariablen"}
+
+$n$ Zufallsvariablen $X_1,...,X_n$ heißen *unabhängig und identisch verteilt 
+(u.i.v.)*, wenn
+
+1. $X_1,...,X_n$ unabhängige Zufallsvariablen sind, und
+2. die Marginalverteilungen der $X_i$ übereinstimmen, also gilt, dass
+\begin{equation}
+p_{X_i} = p_{X_j} \mbox{ für alle } 1 \le i,j \le n.
+\end{equation}
+Wenn die Zufallsvariablen $X_1,...,X_n$ unabhängig und identisch verteilt sind, 
+und die $i$te Marginalverteilung $\mathbb{P}_X := \mathbb{P}_{X_i}$ ist, so 
+schreibt man auch
+\begin{equation}
+X_1,...,X_n \sim \mathbb{P}_X.
+\end{equation}
+
+```
+
+
+Bemerkungen
+
+* Man sagt kurz, dass $X_1,...,X_n$ u.i.v. sind.
+* Im Englischen spricht man von  *independent and identically distributed (i.i.d)* Zufallsvariablen.
+* In der Statistik werden Stichproben meist mit u.i.v. Zufallsvariablen modelliert.
+* $n$ u.i.v. normalverteilte ZVen werden als $X_1,...,X_n \sim N(\mu,\sigma^2)$ geschrieben.
+
+
+## Literaturhinweise
+@georgii_stochastik_2009, @degroot_probability_2012, @wasserman_all_2004.
+
+
+## Selbstkontrollfragen
+
+1. Definieren Sie den Begriff des Zufallsvektors.
+2. Definieren Sie den Begriff der multivariaten Verteilung eines Zufallsvektors.
+3. Definieren Sie den Begriff der multivariaten WMF.
+4. Definieren Sie den Begriff der multivariaten WDF.
+5. Definieren Sie den Begriff der univariaten Marginalverteilung eines Zufallsvektors.
+6. Wie berechnet man die WMF der $i$ten Komponente eines diskreten Zufallsverktors?
+7. Wie berechnet man die WDF der $i$ten Komponente eines kontinuierlichen Zufallsverktors?
+8. Definieren Sie den Begriff der Unabhängigkeit zweier Zufallsvariablen.
+9 Wie erkennt man an der gemeinsamen WMF oder WDF eines zweidimensionalen Zufallsvektors, ob die
+Komponenten des Zufallsvektors unabhängig sind oder nicht?
+10. Definieren Sie den Begriff der Unabhängigkeit von $n$ Zufallsvariablen.
+11. Definieren Sie den Begriff $n$ unabhängig und identisch verteilter Zufallsvariablen.

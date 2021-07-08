@@ -1,0 +1,722 @@
+# Zufallsvariablen
+
+## Konstruktion, Definition, Notation
+
+
+### Konstruktion von Zufallsvariablen und Verteilungen {-}
+
+
+* Es seien $(\Omega,\mathcal{A},\mathbb{P})$ ein W-Raum und $X : \Omega \to \mathcal{X}$ eine Abbildung.
+* Es sei $\mathcal{S}$ eine $\sigma$-Algebra auf $\mathcal{X}$.
+* Für jedes $S \in \mathcal{S}$ sei das *Urbild von $S$* definiert als
+\begin{equation}
+X^{-1}(S) := \{\omega \in \Omega|X(\omega) \in S\}.
+\end{equation}
+* Wenn $X^{-1}(S) \in \mathcal{A}$ für alle $S \in \mathcal{S}$ gilt, dann heißt $X$ *messbar}.
+* $X : \Omega \to \mathcal{X}$ sei messbar. Allen $S \in \mathcal{S}$ kann die Wahrscheinlichkeit
+\begin{equation}
+\mathbb{P}_X : \mathcal{S} \to [0,1], S \mapsto
+\mathbb{P}_X(S)
+:= \mathbb{P}\left(X^{-1}(S)\right)
+ = \mathbb{P}\left(\{\omega \in \Omega|X(\omega) \in S\}\right)
+\end{equation}
+zugeordnet werden.
+* $X$ heißt nun *Zufallsvariable* und $\mathbb{P}_X$ heißt *Bildmaß* oder *Verteilung von $X$*.
+* $(\mathcal{X},\mathcal{S},\mathbb{P}_X)$ ist ein W-Raum.
+* Mit $\mathcal{X} := \mathbb{R}$ und $\mathcal{S} := \mathcal{B}$ rückt der W-Raum $(\mathbb{R},\mathcal{B},\mathbb{P}_X)$ ins Zentrum der Betrachtung.
+
+ABBILDUNG 
+
+
+```{definition, name = "Zufallsvariable"}
+
+Es sei $(\Omega, \mathcal{A}, \mathbb{P})$ ein W-Raum und
+$(\mathcal{X},\mathcal{S})$ ein *Messraum*. Eine *Zufallsvariable (ZV)* ist 
+dann definiert als eine Abbildung $X:\Omega \to \mathcal{X}$ mit der 
+*Messbarkeitseigenschaft*
+\begin{equation}
+\{\omega \in \Omega|X(\omega) \in S \} \in \mathcal{A} \mbox{ für alle } S \in \mathcal{S}.
+\end{equation}
+
+```
+
+Bemerkungen
+
+
+* ZVen sind weder "zufällig" noch "Variablen".
+* Intuitiv wird $\omega \in \Omega$ "zufällig" anhand von $\mathbb{P}$ gezogen 
+und $X(\omega)$ realisiert.
+* Wir nennen $\mathcal{X}$ den *Ergebnisraum der ZV $X$*.
+* Die Verteilungen (Bildmaße) von ZVen sind in der Statistik zentral.
+* Der Begriff der Verteilung wird oft auch für W-Maße und Dichten verwendet.
+
+
+
+### Beispiel (Summe zweier Würfel) {-}
+
+* Für das Werfen zweier Würfel ist ein sinnvolles Wahrscheinlichkeitsraum-Modell
+  * $\Omega := \{(d_1,d_2)| d_1 \in \mathbb{N}_6, d_2 \in \mathbb{N}_6\}$
+  * $\mathcal{A} := \mathcal{P}(\Omega)$.
+  * $\mathbb{P} : \mathcal{A} \to [0,1]$ mit $\mathbb{P}(\{(d_1, d_2)\}) = 1/36$ für alle $(d_1,d_2) \in \Omega$.
+* Die Augenzahl-Summenbildung wird dann sinnvoller Weise durch die Zufallsvariable
+\begin{equation}
+X : \Omega \mapsto \mathcal{X}, (d_1,d_2) \mapsto X((d_1,d_2)) := d_1 + d_2.
+\end{equation}
+beschrieben, wobei $\mathcal{X} := \{2,3,...,12\}$.
+* $\mathcal{S} := \mathcal{P}(\mathcal{X})$ ist eine sinnvolle $\sigma$-Algebra 
+auf $\mathcal{X}$.
+* Mithilfe der $\sigma$-Addivität von $\mathbb{P}$ können wir die Verteilung 
+$\mathbb{P}_X$ von $X$ für alle Elementarereignisse $\{x\} \in \mathcal{S}$ 
+berechnen, wie unten gezeigt.
+
+\begin{tabular}{llll}
+  $\mathbb{P}_X(\{2\})$
+& $ = \mathbb{P}\left(X^{-1}(\{2\}\right)$
+& $ = \mathbb{P}\left(\{(1,1)\}\right)$
+& $ = \frac{1}{36}$
+\\
+  $\mathbb{P}_X(\{3\})$
+& $ = \mathbb{P}\left(X^{-1}(\{3\}\right)$
+& $ = \mathbb{P}\left(\{(1,2),(2,1)\}\right)$
+& $ = \frac{2}{36}$
+\\
+  $\mathbb{P}_X(\{4\})$
+& $ = \mathbb{P}\left(X^{-1}(\{4\}\right)$
+& $ = \mathbb{P}\left(\{(1,3),(3,1),(2,2)\}\right)$
+& $ = \frac{3}{36}$
+\\
+  $\mathbb{P}_X(\{5\})$
+& $ = \mathbb{P}\left(X^{-1}(\{5\}\right)$
+& $ = \mathbb{P}\left(\{(1,4),(4,1),(2,3),(3,2)\}\right)$
+& $ = \frac{4}{36}$
+\\
+  $\mathbb{P}_X(\{6\})$
+& $ = \mathbb{P}\left(X^{-1}(\{6\}\right)$
+& $ = \mathbb{P}\left(\{(1,5),(5,1),(2,4),(4,2),(3,3)\}\right)$
+& $ = \frac{5}{36}$
+\\
+  $\mathbb{P}_X(\{7\})$
+& $ = \mathbb{P}\left(X^{-1}(\{7\}\right)$
+& $ = \mathbb{P}\left(\{(1,6),(6,1),(2,5),(5,2),(3,4),(4,3)\}\right)$
+& $ = \frac{6}{36}$
+\\
+  $\mathbb{P}_X(\{8\})$
+& $ = \mathbb{P}\left(X^{-1}(\{8\}\right)$
+& $ = \mathbb{P}\left(\{(2,6),(6,2),(3,5),(5,3),(4,4)\}\right)$
+& $ = \frac{5}{36}$
+\\
+  $\mathbb{P}_X(\{9\})$
+& $ = \mathbb{P}\left(X^{-1}(\{9\}\right)$
+& $ = \mathbb{P}\left(\{(3,6),(6,3),(4,5),(5,4)\}\right)$
+& $ = \frac{4}{36}$
+\\
+  $\mathbb{P}_X(\{10\})$
+& $ = \mathbb{P}\left(X^{-1}(\{10\}\right)$
+& $ = \mathbb{P}\left(\{(4,6),(6,4),(5,5)\}\right)$
+& $ = \frac{3}{36}$
+\\
+  $\mathbb{P}_X(\{11\})$
+& $ = \mathbb{P}\left(X^{-1}(\{11\}\right)$
+& $ = \mathbb{P}\left(\{(5,6),(6,5)\}\right)$
+& $ = \frac{2}{36}$
+\\
+  $\mathbb{P}_X(\{12\})$
+& $ = \mathbb{P}\left(X^{-1}(\{12\}\right)$
+& $ = \mathbb{P}\left(\{(6,6)\}\right)$
+& $ = \frac{1}{36}$
+\end{tabular}
+
+* Wir haben damit ein weiteres Wahrscheinlichkeitsraum-Modell $(\mathcal{X}, \mathcal{S}, \mathbb{P}_X)$ konstruiert.
+
+
+```{definition, name = "Notation für ZVen"}
+
+Es seien $(\Omega,\mathcal{A},\mathbb{P})$ und 
+$(\mathcal{X},\mathcal{S},\mathbb{P}_X)$ W-Räume und 
+$X : \Omega \to \mathcal{X}$ sei eine ZV. Dann gelten folgende Konventionen:
+\begin{align*}
+\begin{split}
+\{X \in S\} & := \{\omega \in \Omega|X(\omega) \in S\}, S \subset \mathcal{X}, 	\\
+\{X  =  x\} & := \{\omega \in \Omega|X(\omega)  =  x\}, x \in     \mathcal{X}, 	\\
+\{X \le x\} & := \{\omega \in \Omega|X(\omega) \le x\}, x \in     \mathcal{X}, 	\\
+\{X  <  x\} & := \{\omega \in \Omega|X(\omega)  <  x\}, x \in     \mathcal{X}. 	\\
+\end{split}
+\end{align*}
+Aus diesen Konventionen folgen exemplarisch die folgenden Konventionen für Verteilungen:
+\begin{align*}
+\begin{split}
+\mathbb{P}_X\left(X \in S\right)
+& = \mathbb{P}\left(\{X \in S\} \right)
+  = \mathbb{P}\left( \{\omega \in \Omega|X(\omega) \in S\} \right), S \subset\mathcal{X}  \\
+\mathbb{P}_X\left(X \le x \right)
+& = \mathbb{P}\left(\{X \le x\} \right)
+  = \mathbb{P}\left( \{\omega \in \Omega|X(\omega) \le x\} \right), x \in \mathcal{X}.  \\
+\end{split}
+\end{align*}
+Oft wird zudem auf das ZV Subskript bei Verteilungssymbolen verzichtet, z.B.
+\begin{align*}
+\begin{split}
+\mathbb{P}\left(X \in S\right) = \mathbb{P}_X\left(X \in S\right), S \subset \mathcal{X} ,	\\
+\mathbb{P}\left(X \le x\right) = \mathbb{P}_X\left(X \le S\right), x \in \mathcal{X}.  		\\
+\end{split}
+\end{align*}
+
+```
+
+
+
+Zum Zusammenhang von W-Maßen, ZVen, und Dichten
+
+* Verteilungen von Zufallsvariablen sind in der Statistik zentral.
+* Verteilungen von Zufallsvariablen werden üblicherweise mithilfe von WMFen und WDFen definiert.
+* Welche Rolle spielen dann Wahrscheinlichkeitsräume und Wahrscheinlichkeitsmaße?
+* Wahrscheinlichkeitsmaße $\Leftrightarrow$ Verteilungen von Zufallsvariable
+  * $\mathbb{P}$ sei ein Wahrscheinlichkeitsmaß auf der Borel $\sigma$-Algebra.
+  * $\Leftrightarrow$ $(\Omega, \mathcal{F}, \mathbb{P}) := (\mathbb{R}, \mathcal{B}, \mathbb{P})$ ist ein Wahrscheinlichkeitsraum
+  * $\Leftrightarrow$ $X : \Omega \to  \mathbb{R}, \omega \mapsto X(\omega) := \omega$ ist eine Zufallsvariable
+  * $\Leftrightarrow$ $\mathbb{P}_X = \mathbb{P}$.
+  * $\Leftrightarrow$ $\mathbb{P}$ ist die Verteilung einer Zufallsvariable.
+
+## Wahrscheinlichkeitsmassefunktionen 
+
+
+```{definition, name = "Diskrete Zufallsvariable und  Wahrscheinlichkeitsmassefunktion"}
+Eine ZV $X$ heißt *diskret*, wenn ihr Ergebnisraum $\mathcal{X}$ endlich oder 
+abzählbar ist. Die *Wahrscheinlichkeitsmassefunktion (WMF)* einer diskreten ZV 
+ist definiert als
+\begin{equation}
+p : \mathcal{X} \to [0,1], x \mapsto p(x) := \mathbb{P}(X = x).
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Eine Menge heißt abzählbar, wenn sie bijektiv auf $\mathbb{N}$ abgebildet werden kann.
+* WMFen sind nicht-negativ, d.h. $p(x) \ge 0$ für alle $x \in \mathcal{X}$.
+* WMFen sind normiert, d.h. $\sum_{x \in \mathcal{X}} p(x) = 1$.
+* WMFen heißen im Deutschen üblicherweise *W-Funktionen* oder *Zähldichten*.
+* WMFen heißen auf Englisch *probability mass functions (PMFs)*.
+* Zur Parallelität mit PMFs und WDFs bevorzugen wird den WMF Begriff.
+
+
+### Beispiele {-}
+
+```{definition, name = "Bernoulli-Zufallsvariable"}
+Es sei $X$ eine Zufallsvariable mit Ergebnisraum $\mathcal{X} = \{0,1\}$ und WMF
+\begin{equation}
+p : \mathcal{X} \to [0,1], 
+x \mapsto p(x) := \mu^{x}(1 - \mu)^{1-x} \mbox{ for } \mu \in [0,1].
+\end{equation}
+Dann sagen wir, dass $X$ einer *Bernoulli-Verteilung mit Parameter $\mu \in [0,1]$* 
+unterliegt und nennen $X$ eine *Bernoulli-Zufallsvariable*. Wir kürzen dies mit 
+$X \sim \mbox{Bern}(\mu)$ ab. Die WMF einer Bernoulli-Zufallsvariable bezeichnen 
+wir mit
+\begin{equation}
+\mbox{Bern}(x;\mu) := \mu^x (1 - \mu)^{1 - x}.
+\end{equation}
+```
+
+Bemerkungen
+
+
+* Eine Bernoulli-Zufallsvariable kann als Modell eines Münzwurfs dienen.
+* $\mu$ ist die Wahrscheinlichkeit dafür, dass $X$ den Wert 1 annimmt,
+\begin{equation}
+\mathbb{P}(X = 1) = \mu^1 (1 -\mu)^{1-1} = \mu.
+\end{equation}
+
+
+ABBILDUNG
+
+
+
+```{definition, name = "Binomial-Zufallsvariable"}
+Es sei $X$ eine Zufallsvariable mit Ergebnisraum $\mathcal{X} := \mathbb{N}_n^0$ 
+und WMF
+\begin{equation}
+p : \mathcal{X} \to [0,1],
+x\mapsto p(x) :=
+\begin{pmatrix}
+n \\ x
+\end{pmatrix}
+\mu^{x}(1 - \mu)^{n-x} \mbox{ for } \mu \in [0,1].
+\end{equation}
+Dann sagen wir, dass $X$ einer *Binomialverteilung mit Parametern $\mu \in [0,1]$ 
+und $n \in \mathbb{N}$* unterliegt und nennen $X$ eine Binomial-Zufallsvariable. 
+Wir kürzen dies mit $X \sim \mbox{Bin}(\mu,n)$ ab. Die WMF einer 
+Binomial-Zufallsvariable bezeichnen wir mit
+\begin{equation}
+\mbox{Bin}(x;\mu,n) :=
+\begin{pmatrix}
+n \\ x
+\end{pmatrix}
+\mu^{x}(1 - \mu)^{n-x}.
+\end{equation}
+
+```
+
+Bemerkung
+
+* Es gilt $\mbox{Bin}(x;\mu,1) = \mbox{Bern}(x;\mu)$.
+
+ABBILDUNG
+
+
+
+```{definition, name = "Diskret-gleichverteilte Zufallsvariable"}
+
+Es sei $X$ eine diskrete Zufallsvariable mit Ergebnisraum $\mathcal{X}$ und WMF
+\begin{equation}
+p : \mathcal{X} \to \mathbb{R}_{\ge 0}, x\mapsto p(x) := \frac{1}{|\mathcal{X}|}.
+\end{equation}
+Dann sagen wir, dass $X$ einer *diskreten Gleichverteilung* unterliegt und nennen 
+$X$ eine *diskret-gleichverteilte Zufallfsvariable*. Wir kürzen dies mit 
+$X \sim U(|\mathcal{X}|)$ ab. Die WMF einer diskret-gleichverteilten Zufallsvariable 
+bezeichnen wir mit
+\begin{equation}
+U(x;|\mathcal{X}|) := \frac{1}{|\mathcal{X}|}.
+\end{equation}
+
+```
+
+Bemerkungen
+
+* $\mbox{Bern}(x;0.5) = U(x;|\mathcal{X}|)$ für $\mathcal{X} = \{0,1\}$.
+* Es gilt zum Beispiel $\mbox{Bin}(x;0.5) = U(x;|\mathcal{X}|)$ für $\mathcal{X} = \{0,1\}$.
+
+
+
+ABBILDUNG
+
+
+## Wahrscheinlichkeitdichtefunktionen
+
+```{definition, name = "Kontinuierliche Zufallsvariable und Wahrscheinlichkeitsdichtefunktion"}
+
+Eine Zufallsvariable $X$ heißt *kontinuierlich*, wenn eine Funktion
+\begin{equation}
+p: \mathbb{R} \to \mathbb{R}_{\ge 0}, x \mapsto p(x)
+\end{equation}
+existiert, so dass gilt
+
+* $p(x) \ge 0$ für alle $x \in \mathbb{R}$,
+* $\int_{-\infty}^{\infty}p(x)dx = 1$,
+* $\mathbb{P}(a \le X \le b) = \int_a^b p(x)\,dx$ für alle $a,b\in\mathbb{R}, a \le b$.
+
+Eine entsprechende Funktion $p$ heißt *Wahrscheinlichkeitsdichtefunction (WDF)* von $X$.
+
+```
+
+Bemerkungen
+
+
+* WDFen können Werte größer als $1$ annehmen.
+* Es gilt $\mathbb{P}(X = a) = \int_a^a p(x) \,dx = 0$.
+* Wahrscheinlichkeiten werden aus WDFen durch Integration berechnet.
+* (Wahrscheinlichkeits)Masse = (Wahrscheinlichkeits)Dichte $\times$ (Mengen)Volumen.
+
+
+
+```{definition, name = "Normalverteilte und standardnormalverteilte Zufallsvariablen"}
+
+Es sei $X$ eine Zufallsvariable mit Ergebnisraum  $\mathbb{R}$ und WDF
+\begin{equation}
+p : \mathbb{R} \to \mathbb{R}_{>0}, x\mapsto p(x)
+:= \frac{1}{\sqrt{2\pi \sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(x - \mu)^2\right).
+\end{equation}
+
+Dann sagen wir, dass $X$ einer *Normalverteilung (oder *Gauß-Verteilung}) 
+mit Parametern $\mu \in \mathbb{R}$ und $\sigma^2 > 0$} unterliegt und nennen $X$
+eine *normalverteilte Zufallsvariable*. Wir kürzen dies mit 
+$X \sim N\left(\mu,\sigma^2\right)$ ab. Die WDF einer normalverteilten 
+Zufallsvariable bezeichnen wir mit
+\begin{equation}
+N\left(x;\mu,\sigma^2\right) := \frac{1}{\sqrt{2\pi \sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(x - \mu)^2\right).
+\end{equation}
+Eine normalverteilte Zufallsvariable mit $\mu = 0$ und $\sigma^2 = 1$ heißt
+*standardnormalverteilte Zufallsvariable* und wird oft auch als *$Z$-Zufallsvariable* 
+bezeichnet.
+
+```
+
+Bemerkungen
+
+* Der Parameter $\mu$ entspricht dem Wert höchster Wahrscheinlichkeitsdichte.
+* Der Parameter $\sigma^2$ spezifiziert die Breite der WDF.
+
+
+ABBILDUNG
+
+```{definition, name = "Gamma Zufallsvariable]"}
+
+Es sei $X$ eine Zufallsvariable mit Ergebnisraum $\mathcal{X} := \mathbb{R}_{>0}$ und WDF
+\begin{equation}
+p : \mathbb{R}_{>0} \to \mathbb{R}_{>0},  x \mapsto p(x) :=
+\frac{1}{\Gamma(\alpha)\beta^{\alpha}}x^{\alpha-1}\exp\left(-\frac{x}{\beta}\right),
+\end{equation}
+wobei $\Gamma$ die Gammafunktion bezeichne. Dann sagen wir, dass $X$ einer 
+*Gammaverteilung mit Formparameter $\alpha >0$ und Skalenparameter $\beta > 0$* 
+unterliegt und nennen $X$ eine *gammaverteilte Zufallsvariable*. Wir kürzen dies 
+mit $X \sim G(\alpha,\beta)$ ab. Die WDF einer gammaverteilen Zufallsvariable 
+bezeichnen wir mit
+\begin{equation}
+G(x;\alpha,\beta) := \frac{1}{\Gamma(\alpha)\beta^{\alpha}}x^{\alpha-1}\exp\left(-\frac{x}{\beta}\right).
+\end{equation}
+
+```
+Bemerkung
+
+* $G\left(\frac{n}{2},2\right)$ heißt auch *Chi-Quadrat ($\chi^2$) Verteilung mit $n$ Freiheitsgraden}.
+
+ABBILDUNG
+
+
+```{definition, name = "Beta-Zufallsvariable"}
+Es sei $X$ eine Zufallsvariable mit Ergebnisraum $\mathcal{X} := [0,1]$ und WDF
+\begin{equation}
+p : \mathcal{X} \to [0,1], x \mapsto p(x)
+:= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}
+x^{\alpha-1}(1-x)^{\beta-1} \mbox{ for } \alpha,\beta \in \mathbb{R}_{>0},
+\end{equation}
+wobei $\Gamma$ die Gammafunktion bezeichne. Dann sagen wir, dass $X$ einer 
+*Beta-Verteilung mit Parametern $\alpha >0$ und $\beta>0$* unterliegt, und 
+nennen $X$ eine Beta-verteilte Zufallsvariable. Wir kürzen dies mit 
+$X \sim \mbox{Beta}(\alpha,\beta)$ ab. Die WDF einer Beta-verteilten Zufallsvariable 
+bezeichnen wir mit
+\begin{equation}
+\mbox{Beta}(x;\alpha,\beta)
+:= \frac{\Gamma(\alpha + \beta)}{\Gamma(\alpha)\Gamma(\beta)}
+x^{\alpha-1}(1-x)^{\beta-1}.
+\end{equation}
+
+```
+
+ABBILDUNG
+
+
+
+```{definition, name = "Gleichverteilte Zufallsvariable"}
+
+Es sei $X$ eine kontinuierliche Zufallsvariable mit Ergebnisraum $\mathbb{R}$ und WDF
+\begin{equation}
+p : \mathbb{R} \to \mathbb{R}_{\ge 0}, x\mapsto p(x) :=
+\begin{cases}
+\frac{1}{b - a} & x \in [a,b] \\
+0 				& x \notin [a,b]
+\end{cases}.
+\end{equation}
+Dann sagen wir, dass $X$ einer *Gleichverteilung mit Parametern $a$ und $b$* 
+unterliegt und nennen $X$ eine *gleichverteilte Zufallsvariable*. Wir kürzen 
+dies mit $X \sim U(a,b)$ ab. Die WDF einer gleichverteilten Zufallsvariable 
+bezeichnen wir mit
+\begin{equation}
+U(x;a,b) := \frac{1}{b - a}.
+\end{equation}
+
+```
+
+ABBILDUNG
+
+## Kumulative Verteilungsfunktionen
+
+
+```{definition, name = "Kumulative Verteilungsfunktion"}
+
+Die *kumulative Verteilungsfunktion (KVF)* einer Zufallsvariable $X$ ist 
+definiert als
+\begin{equation}
+P : \mathbb{R} \to [0,1], x \mapsto P(x) := \mathbb{P}(X \le x).
+\end{equation}
+
+```
+
+Bemerkungen
+
+* KVFen sind sowohl für diskrete als auch kontinuierliche ZVen definiert.
+* $P(x)$ ist für jedes $x \in \mathbb{R}$ definiert, auch wenn $x \notin \mathcal{X}$.
+* Mithilfe von KVFen können Intervallwahrscheinlichkeiten angegeben werden
+
+
+
+
+
+
+```{theorem, name = "Überschreitungswahrscheinlichkeit"}
+Es sei $X$ eine Zufallsvariable mit Ereignisraum $\mathcal{X}$ und $P$ ihre 
+kumulative Verteilungsfunktion. Dann gilt für die *Überschreitungswahrscheinlichkeit* 
+  $\mathbb{P}(X > x)$, dass
+\begin{equation}
+\mathbb{P}(X > x) = 1 - P(x) \mbox{ für alle } x \in \mathcal{X}.
+\end{equation}
+
+```
+
+```{proof}
+
+Die Ereignisse $\{X > x\}$ und $\{X \le x\}$ sind disjunkt und
+\begin{equation}
+\Omega
+= \{\omega\in \Omega| X(\omega) > x\} \cup \{\omega\in \Omega|X(\omega) \le x\}
+= \{X > x\} \cup \{X \le x\}.
+\end{equation}
+Mit der $\sigma$-Additivität von $\mathbb{P}$ folgt dann
+\begin{align}
+\begin{split}
+\mathbb{P}(\Omega) & = 1 								            \\
+\Leftrightarrow
+\mathbb{P}( \{X > x\} \cup \{X \le x\}) & = 1			\\
+\Leftrightarrow
+\mathbb{P}(\{X > x\}) + \mathbb{P}(\{X \le x\}) & = 1 	\\
+\Leftrightarrow
+\mathbb{P}(\{X > x\}) &  =  1 -  \mathbb{P}(\{X \le x\}) \\
+\Leftrightarrow
+\mathbb{P}(\{X > x\}) &  =  1 -  P(x).
+\end{split}
+\end{align}
+
+```
+
+
+
+
+```{theorem, name = "Intervallwahrscheinlichkeiten"}
+
+Es sei $X$ eine Zufallsvariable mit Ereignisraum $\mathcal{X}$ und $P$ ihre
+kumulative Verteilungsfunktion. Dann gilt für die *Intervallwahrscheinlichkeit* 
+$\mathbb{P}(X \in \,]x_1,x_2])$, dass
+\begin{equation}
+\mathbb{P}(X \in \, ]x_1,x_2]) = P(x_2) - P(x_1)
+\mbox{ für alle } x_1,x_2 \in \mathcal{X}
+\mbox{ mit } x_1 < x_2.
+\end{equation}
+
+```
+
+```{proof}
+
+Wir betrachten die Ereignisse $\{X \le x_1\}$,$\{x_1 < X \le x_2\}$ und $\{X \le x_2\}$, wobei
+\begin{equation}
+\{X \le x_1\} \cap \{x_1 < X \le x_2\} = \emptyset
+\mbox{ und }
+\{X \le x_1\} \cup \{x_1 < X \le x_2\} = \{X \le x_2\}.
+\end{equation}
+gelten.
+Mit der $\sigma$-Additivität von $\mathbb{P}$ gilt dann
+\begin{align}
+\begin{split}
+\mathbb{P}(\{X \le x_1\} \cup \{x_1 < X \le x_2\}) & = \mathbb{P}(\{X \le x_2\}) 				\\
+\Leftrightarrow
+\mathbb{P}(\{X \le x_1\}) + \mathbb{P}(\{x_1 < X \le x_2\}) & = \mathbb{P}(\{X \le x_2\}) 		\\
+\Leftrightarrow
+\mathbb{P}(\{x_1 < X \le x_2\}) & = \mathbb{P}(\{X \le x_2\}) - \mathbb{P}(\{X \le x_1\}) 		\\
+\Leftrightarrow
+\mathbb{P}(\{x_1 < X \le x_2\}) & = P(x_2) - P(x_1) 											\\
+\Leftrightarrow
+\mathbb{P}(X \in \,]x_1,x_2])	& = P(x_2) - P(x_1).
+\end{split}
+\end{align}
+
+```
+
+
+```{theorem, name = "Eigenschaften von kumulativen Verteilungsfunktionen"}
+Es sei $X$ eine Zufallsvariable und $P$ ihre kumulative Verteilungsfunktion. 
+Dann hat $P$ die folgenden Eigenschaften
+
+(1) $P$ ist *monoton steigend}, i.e., wenn $x_1 < x_2$, dann gilt $P(x_1)\le P(x_2)$.
+(2) $\lim_{x \to -\infty}P(x) = 0$ und $\lim_{x \to \infty}P(x) = 1$.
+(3) $P$ ist *rechtsseitig stetig}, d.h., $P(x) = P(x^+) = \lim_{y \to x, y > x} P(y)$ für alle $x \in \mathbb{R}$
+
+```
+
+Bemerkungen
+
+* Die genannten Eigenschaften können auch zur Definition einer KVF genutzt werden.
+* (3) $\Leftrightarrow$ Eine KVF hat keine Sprünge, wenn man sich Grenzpunkten von rechts nähert.
+
+```{proof}
+
+(1) Wir halten zunächst fest, dass für Ereignisse $A \subset B$ gilt, dass
+$\mathbb{P}(A)\le \mathbb{P}(B)$. Wie halten dann fest, dass für $x_1 < x_2$,
+\begin{equation}
+\{X \le x_1\} =
+\{\omega \in \Omega|X(\omega)\le x_1\} \subset
+\{\omega \in \Omega|X(\omega)\le x_2\} =
+\{X \le x_2\}
+\end{equation}
+Also gilt
+\begin{equation}
+\mathbb{P}(\{X \le x_1\})
+\le
+\mathbb{P}\{X \le x_2\}
+\Rightarrow P(x_1) \le P(x_2).
+\end{equation}
+
+
+(2) Wir verzichten auf einen  Beweis
+
+(3) Wir definieren
+\begin{equation}
+P(x^+) = \lim_{y \to x, y > x} P(y).
+\end{equation}
+Seien nun  $y_1 > y_2 > \cdots$ so, dass $\lim_{n \to \infty}y_n = x$. Dann gilt
+\begin{equation}
+\{X \le x\} = \cap_{n = 1}^\infty \{X \le y_n\}.
+\end{equation}
+Es gilt also
+\begin{equation}
+P(x)
+= \mathbb{P}(\{X \le x\})
+= \mathbb{P}(\cap_{n = 1}^\infty \{X \le y_n\})
+= \lim_{n\to \infty}\mathbb{P}(\{X \le y_n\})
+= P(x^+),
+\end{equation}
+wobei wir die dritte Gleichung unbegründet stehen lassen.
+
+```
+
+Bemerkungen und Abbildung
+
+* Wenn $a < b$ und $\mathbb{P}(a < X < b) = 0$, dann ist $P$ konstant horizontal auf $]a,b[$.
+* An jedem Punkt $x$ mit $\mathbb{P}(X=x)>0$ springt die KVF um den Betrag $\mathbb{P}(X=x)$.
+* $\Leftrightarrow$ An jedem Punkt $x$ mit $p(x)>0$ springt die KVF um den Betrag $p(x)>0$.
+* Generell ist die KVF einer diskreten Zufallsvariable mit Ergebnisraum $\mathbb{N}_0$ durch
+\begin{equation}
+P : \mathbb{R} \to [0,1], x \mapsto P(x) := \sum_{k=0}^{\lfloor x  \rfloor} \mathbb{P}(X = k)
+\end{equation}
+gegeben, wobei $\lfloor x \rfloor$ die Abrundungsfunktion bezeichnet.
+
+
+```{theorem, name = "Kumulative Verteilungsfunktionen von kontinuierlichen ZVen"}
+
+$X$ sei eine kontinuierliche Zufallsvariable mit WDF $p$ und KVF $P$. Dann gilt
+\begin{equation}
+P(x) = \int_{-\infty}^x p(t)\,dt
+\mbox{ und }
+p(x) = \frac{d}{dx}P(x).
+\end{equation}
+
+```
+
+```{proof}
+Wir halten zunächst fest, dass weil $\mathbb{P}(X = x) = 0$ für alle $x \in \mathbb{R}$ 
+gilt, die KVF von $X$ keine Sprünge hat, d.h. $P$ ist stetig. Mit den 
+Definitionen von WDF und KVF, folgt, dass $P$ die Form einer Stammfunktion von 
+$p$ hat. Dass $p$ die Ableitung von $P$ ist, folgt dann unmittelbar aus dem 
+Fundamentalsatz der Analysis. 
+```
+
+Bemerkungen
+
+* Die KVF ist eine Stammfunktion der WDF, die WDF ist die Ableitung der KVF.
+* Das *Theorem von Radon-Nikodym* ist eine generalisierte Variante dieser Einsicht.
+* KVFen von kontinuierlichen ZV heißen auch kumulative Dichtefunktionen (KDFen).
+
+
+
+
+
+```{definition, name = "Inverse Kumulative Verteilungsfunktion"}
+
+$X$ sei eine kontinuierliche Zufallsvariable mit KVF $P$. Dann heißt die Funktion
+\begin{equation}
+P^{-1} : ]0,1[ \to \mathbb{R}, q \mapsto P^{-1}(q) := \{x \in \mathbb{R}|P(x) = q\}
+\end{equation}
+die *inverse kumulative Verteilungsfunktion von $X$*.
+
+```
+
+Bemerkungen
+
+* $P^{-1}$ ist die Inverse von $P$, d.h. $P^{-1}(P(x)) = x$.
+* Offenbar gilt $P(x) = q \Leftrightarrow \mathbb{P}(X \le x) = q$.
+* Für $q \in ]0,1[$ ist also $P^{-1}(q)$ der Wert $x$ von $X$, so dass $\mathbb{P}(X \le x) = q$ gilt.
+* Wenn $Z \sim N(0,1)$ mit KVF $\Phi$ ist, dann gilt zum Beispiel $\Phi^{-1}(0.975) = 1.960$.
+
+
+
+
+
+### Beispiel (Normalverteilung) {-}
+
+Es sei $X  \sim N(\mu,\sigma^2)$.
+
+* Die WDF von $X$ ist
+\begin{equation}
+p : \mathbb{R} \to \mathbb{R}_{>0}, x \mapsto p(x)
+:= \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(x-\mu)^2\right).
+\end{equation}
+* Die KVF von $X$ ist
+\begin{align}
+\begin{split}
+P : \mathbb{R} \to ]0,1[, x \mapsto P(x)
+ = \frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^x\exp\left(-\frac{1}{2\sigma^2}(\xi-\mu)^2\right) \,d\xi
+\end{split}.
+\end{align}
+* Die KVF von $X \sim N(\mu,\sigma^2)$ kann nur numerisch, nicht analytisch, berechnet werden.
+* Für $\mu = 1, \sigma^2 = 1$, gilt zum Beispiel $p(2) = 0.24$ und $P(2) = 0.84$.
+* Die WDF und KVF von $Z \sim N(0,1)$ werden oft mit  $\phi$ und $\Phi$, respektive, bezeichnet.
+* Die KVF von $X$ ist
+\begin{equation}
+P : \mathbb{R} \to ]0,1[, x \mapsto \mathbb{P}(X \le x)
+= \frac{1}{\sqrt{2\pi\sigma^2}}\int_{-\infty}^x\exp\left(-\frac{1}{2\sigma^2}(\xi-\mu)^2\right) \,d\xi
+\end{equation}
+* Die inverse KVF von $X$ ist
+\begin{equation}
+P^{-1} : ]0,1[ \to \mathbb{R}, q \mapsto P^{-1}(q) = \{x \in \mathbb{R}|P(x) = q\}.
+\end{equation}
+* Für $\mu = 1, \sigma^2 = 1$ gilt z.B., dass $P(2) = 0.84$ und $P^{-1}(0.84) = 2$.
+* Die inverse KVF von $X \sim N(0,1)$ wird oft mit $\Phi^{-1}$ bezeichnet.
+* Typische Beispielwerte für die KVF und inverse KVF  von $N(0,1)$ sind
+* $\Phi(1.645) = 0.950$, $\Phi^{-1}(0.950) = \Phi^{-1}(1 -0.050) = 1.640$.
+* $\Phi(1.960) = 0.975$, $\Phi^{-1}(0.975) = \Phi^{-1}(1 - \frac{0.050}{2})$.
+
+
+ABBILDUNG
+
+
+
+```{definition, name = "Verallgemeinerte inverse Verteilungsfuntion"}
+
+$X$ sei eine Zufallsvariable mit KVF $P$. Dann ist die *verallgemeinerte inverse Verteilungsfunktion} definiert durch
+\begin{equation}
+P^{-1}_X : ]0,1[ \to \mathbb{R}, q \mapsto P^{-1}(q) := \inf\{x \in \mathbb{R}|P(x) \ge q\},
+\end{equation}
+d.h. für $q \in ]0,1[$ ist $P^{-1}(q)$ der kleinste Wert $x$ von $X$, so dass $P(x) \ge q$ gilt.
+
+```
+Bemerkungen
+
+* Die verallgemeinerter inverse Verteilungsfunktion wird auch als Quantilefunktion oder Quantiltransformation bezeichnent.
+* Die verallgemeinerte inverse Verteilungsfunktion existiert sowohl für kontinuierliche als auch für diskrete ZVen.
+* Die rechtsseitige Stetigkeit sicher dass ein kleinstes $x$ mit $P(x)\ge q$ für alle $0<q<1$ existiert.
+* $P^{-1}(0)$ existiert, weil $\lim_{x\to -\infty} P(x) = 0$.
+* $P^{-1}(1)$ kann existieren.
+
+
+## Selbstkontrollfragen
+
+1. Definieren Sie den Begriff der $\sigma$-Algebra
+2. Definieren Sie den Begriff des Wahrscheinlichkeitsmaßes.
+3. Definieren Sie den Begriff des Wahrscheinlichkeitsraumes
+4. Skizzieren Sie das Wahrscheinlichkeitsraummodell eines fairen Würfels.
+5. Geben sie zwei Interpretationen der Wahrscheinlichkeit eines Ereignisses.
+6. Definieren Sie den Begriff der Unabhängigkeit zweier Ereignisse.
+7. Definieren Sie die bedingte Wahrscheinlichkeit eines Ereignisses.
+8. Geben Sie das Gesetz von der totalen Wahrscheinlichkeit wieder.
+9. Geben Sie das Theorem zur bedingten Wahrscheinlichkeit unter Unabhängigkeit wieder.
+10. Definieren Sie den Begriff der Zufallsvariable.
+11. Definieren Sie den Begriff der Wahrscheinlichkeitsmassefunktion.
+12. Definieren Sie die Begriffe der Wahrscheinlichkeitsdichtefunktion.
+13. Definieren Sie den Begriff der kumulativen Verteilungsfunktion.
+14. Schreiben sie die Intervallwahrscheinlichkeit einer Zufallsvariable mithilfer ihrer KVF.
+15. Definieren Sie die WDF und KVF einer normalverteilten Zufallsvariable.
+16. Schreiben Sie den Wert $P(x)$ der KVF einer Zufallsvariable mithilfe ihrer WDF.
+17. Schreiben Sie den Wert $p(x)$ der WDF einer Zufallsvariable mithilfe ihrer KVF.
+18. Nennen sie drei Eigenschaften von kumulativen Verteilungsfunktionen.
+19. Definieren Sie den Begriff der inversen Verteilungsfunktion.
+
+
+
+

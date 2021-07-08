@@ -1,0 +1,297 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Ungleichungen
+
+## Wahrscheinlichkeitsungleichungen
+
+
+```{theorem, name = "Markov Ungleichung"}
+Es sei $X$ eine Zufallsvariable mit $\mathbb{P}(X \ge 0) = 1$. Dann gilt für 
+alle  $x \in \mathbb{R}$, dass
+\begin{equation}
+\mathbb{P}(X \ge x) \le \frac{\mathbb{E}(X)}{x}.
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Weil $\mathbb{P}(X \ge 0) = 1$ gilt, sagt man auch, dass $X$ eine \textit{nicht-negative} Zufallvariable ist.
+* Die Ungleichung setzt Überschreitungswahrscheinlichkeiten und Erwartungswerte in Bezug.
+* Gilt z.B. für eine nichtnegative Zufallsvariable $X$, dass $\mathbb{E}(X) = 1$, dann ist $\mathbb{P}(X \ge 100) \le 0.01$.
+
+```{proof}
+Wir betrachten den Fall einer kontinuierlichen Zufallsvariable $X$ mit WDF $p$. 
+Wir halten zunächst fest, dass
+\begin{equation}
+\mathbb{E}(X)
+= \int_{-\infty}^\infty \xi \, p(\xi)\,d\xi
+= \int_0^\infty \xi \, p(\xi)\,d\xi
+= \int_0^x \xi \, p(\xi)\,d\xi + \int_x^\infty \xi \, p(\xi)\,d\xi,
+\end{equation}
+weil $X$ nicht-negativ ist. Es folgt dann
+\begin{equation}
+\mathbb{E}(X)
+\ge  \int_x^\infty \xi \, p(\xi)\,d\xi
+\ge  \int_x^\infty x \, p(\xi)\,d\xi
+=  x\int_x^\infty  p(\xi)\,d\xi
+=  x\, \mathbb{P}(X \ge x).
+\end{equation}
+Dabei gilt die erste Ungleichung weil
+\begin{equation}
+\int_{-\infty}^x \xi \, p(\xi)\,d\xi = 0 \mbox{ für } x \le 0
+\mbox{ und }
+\int_{-\infty}^x \xi \, p(\xi)\,d\xi > 0 \mbox{ für } x > 0.
+\end{equation}
+und die zweite Ungleichung gilt, weil $x \le \xi$ für $\xi \in [x,\infty[$. Es folgt also, dass
+\begin{equation}
+\mathbb{E}(X) \ge x\, \mathbb{P}(X \ge x)
+\Leftrightarrow
+\mathbb{P}(X \ge x) \le \frac{\mathbb{E}(X)}{x}.
+\end{equation}
+```
+
+### Beispiel ($X \sim G(\alpha,\beta)$) {-}
+
+* Wir halten ohne Beweis fest, dass für $X \sim G(\alpha,\beta)$ gilt, dass $\mathbb{E}(X) = \alpha\beta$.
+* Wir betrachten den Fall $\alpha := 5, \beta := 2$, so dass $G(x;5,2) = \chi^2(10)$
+
+ABBILDUNG MARKOV UNGLEICHUNG
+
+<!-- \begin{center} -->
+<!-- \includegraphics[scale=.5]{Abbildungen/inf_5_markov_ungleichung.pdf} -->
+<!-- \end{center} -->
+
+
+
+```{theorem, name = "Chebyshev Ungleichung"}
+Es sei $X$ eine Zufallsvariable mit Varianz $\mathbb{V}(X)$. Dann gilt für alle 
+$x \in \mathbb{R}$
+\begin{equation}
+\mathbb{P}(|X - \mathbb{E}(X)| \ge x) \le \frac{\mathbb{V}(X)}{x^2}.
+\end{equation}
+```
+
+Bemerkungen
+
+* Die Chebyshev Ungleichung setzt Abweichungen vom Erwartungswert in Bezug zur Varianz.
+* Zum Beispiel gilt
+\begin{equation*}
+\mathbb{P}\left(|X - \mathbb{E}(X)| \ge 3 \sqrt{\mathbb{V}(X)}\right)
+\le  \frac{\mathbb{V}(X)}{\left(3 \sqrt{\mathbb{V}(X)}\right)^2} =
+\frac{1}{9}.
+\end{equation*}
+
+
+
+```{proof}
+Wir halten zunächst fest, dass für $a,b \in \mathbb{R}$ gilt
+\begin{equation}
+a^2 \ge b^2 \Leftrightarrow |a| \ge b.
+\end{equation}
+Dazu betrachten wir die folgenden vier möglichen Fälle
+
+TABELLE
+
+\begin{center}
+\begin{tabular}{llllll}
+$|a| \ge b \mbox{ für } a > 0, b > 0$
+& $\Leftrightarrow$
+& $\quad a \ge b$
+& $\Leftrightarrow$
+&
+& $\quad\, a^2 \ge b^2$
+\\
+$|a| \ge b \mbox{ für } a > 0, b < 0$
+& $\Leftrightarrow$
+& $\quad a \ge b$
+& $\Leftrightarrow$
+&
+& $\quad\, a^2 \ge b^2$
+\\
+$|a| \ge b \mbox{ für } a < 0, b > 0$
+& $\Leftrightarrow$
+& $-a \ge b$
+& $\Leftrightarrow$
+& $(-a)^2 \ge b^2$
+& $ = a^2 \ge b^2$
+\\
+$|a| \ge b \mbox{ für } a < 0, b < 0$
+& $\Leftrightarrow$
+& $-a \ge b$
+& $\Leftrightarrow$
+& $(-a)^2 \ge b^2$
+& $ = a^2 \ge b^2$
+\end{tabular}
+\end{center}
+Als nächstes definieren wir $Y := (X - \mathbb{E}(X))^2$. Dann folgt aus der 
+Markov Ungleichung
+\begin{align}
+\begin{split}
+\mathbb{P}\left(Y \ge x^2\right)
+& \le \frac{\mathbb{E}(Y)}{x^2} \\
+\Leftrightarrow
+\mathbb{P}\left((X - \mathbb{E}(X))^2 \ge x^2 \right)
+& \le \frac{\mathbb{E}\left((X - \mathbb{E}(X))^2 \right)}{x^2} \\
+\Leftrightarrow
+\mathbb{P}(|X - \mathbb{E}(X)| \ge x)
+& \le \frac{\mathbb{V}(X)}{x^2}.
+\end{split}
+\end{align}
+
+```
+
+
+## Erwartungswertungleichungen
+
+```{theorem, name = "Cauchy-Schwarz-Ungleichung"}
+Es seien $X,Y$ zwei Zufallsvariablen und $\mathbb{E}(XY)$ endlich. Dann gilt
+\begin{equation}
+\mathbb{E}(XY)^2 \le \mathbb{E}\left(X^2\right)\mathbb{E}\left(Y^2 \right)
+\end{equation}
+```
+
+Bemerkungen
+
+* Analog gilt für Vektoren $x,y \in \mathbb{R}^n$, dass
+$\langle x,y \rangle^2 \le \Vert x \Vert \cdot \Vert y \Vert$.
+* Die Korrelationsungleichung ist eine direkte Konsequenz der 
+Cauchy-Schwarz-Ungleichung.
+
+```{proof}
+
+Wir betrachten den Fall, dass $0 < \mathbb{E}(X^2) < \infty$ und $0 < \mathbb{E}(Y^2) < \infty$. Für alle $a,b \in \mathbb{R}$ gilt dann
+\begin{equation}
+0 \le \mathbb{E}\left((aX + bY)^2 \right) \mbox{ und } 0 \le \mathbb{E}\left((aX - bY)^2 \right).
+\end{equation}
+Also folgt
+\begin{equation}
+0 \le a^2\mathbb{E}(X^2) +  b^2\mathbb{E}(Y^2) + 2ab\mathbb{E}(XY) \mbox{ und }
+0 \le a^2\mathbb{E}(X^2) +  b^2\mathbb{E}(Y^2) - 2ab\mathbb{E}(XY).
+\end{equation}
+Definition von $a := \sqrt{\mathbb{E}(Y^2)}$ und $b := \sqrt{\mathbb{E}(X^2)}$ ergibt dann
+\begin{align}
+\begin{split}
+0 & \le \mathbb{E}(Y^2)\mathbb{E}(X^2) +  \mathbb{E}(X^2)\mathbb{E}(Y^2) + 2\sqrt{\mathbb{E}(Y^2)}\sqrt{\mathbb{E}(X^2)}\mathbb{E}(XY) \\
+\Leftrightarrow
+-2\sqrt{\mathbb{E}(Y^2)}\sqrt{\mathbb{E}(X^2)}\mathbb{E}(XY) & \le 2\mathbb{E}(X^2)\mathbb{E}(Y^2) \\
+\Leftrightarrow
+-\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)}\mathbb{E}(XY) & \le
+\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)}\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)} \\
+\Leftrightarrow
+-\mathbb{E}(XY) & \le
+\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)}, \\
+\end{split}
+\end{align}
+und analog
+\begin{align}
+\begin{split}
+0 & \le \mathbb{E}(Y^2)\mathbb{E}(X^2) +  \mathbb{E}(X^2)\mathbb{E}(Y^2) - 2\sqrt{\mathbb{E}(Y^2)}\sqrt{\mathbb{E}(X^2)}\mathbb{E}(XY) \\
+\Leftrightarrow
+2\sqrt{\mathbb{E}(Y^2)}\sqrt{\mathbb{E}(X^2)}\mathbb{E}(XY) & \le 2\mathbb{E}(X^2)\mathbb{E}(Y^2) \\
+\Leftrightarrow
+\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)}\mathbb{E}(XY) & \le
+\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)}\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)} \\
+\Leftrightarrow
+\mathbb{E}(XY) & \le
+\sqrt{\mathbb{E}(Y^2)\mathbb{E}(X^2)}.
+\end{split}
+\end{align}
+Zusammengenommen ergibt sich für den betrachteten Fall also die Cauchy-Schwarz-Ungleichung. 
+Ein vollständiger Beweis findet sich bei @degroot_probability_2012 .
+```
+
+
+```{theorem, name = "Korrelationsungleichung"}
+
+$X$ und $Y$ seien Zufallsvariablen mit $\mathbb{V}(X), \mathbb{V}(Y) > 0$. Dann gilt
+\begin{equation}
+\rho(X,Y)^2
+= \frac{\mathbb{C}(X,Y)^2}{\mathbb{V}(X)\mathbb{V}(Y)}
+\le 1.
+\end{equation}
+```
+
+Bemerkung
+
+* Es gilt also $\rho(X,Y)^2 \le 1
+  \Leftrightarrow |\rho(X,Y)| \le 1
+	\Leftrightarrow \rho(X,Y) \in [-1,1]$.
+
+
+```{proof}
+Mit der Cauchy-Schwarz-Ungleichung für zwei Zufallsvariablen $U$ und $V$ gilt, dass
+\begin{equation}
+(\mathbb{E}(UV))^2 \le \mathbb{E}(U^2)\mathbb{E}(V^2).
+\end{equation}
+Wir definieren nun $U := X -\mathbb{E}(X)$ und $V := Y - \mathbb{E}(Y)$. Dann 
+besagt die Cauchy-Schwarz Ungleichung, dass
+\begin{equation}
+\mathbb{E}\left((X -\mathbb{E}(X))(Y -\mathbb{E}(Y)\right)^2
+\le  \mathbb{E}\left((X -\mathbb{E}(X))^2 \right) \mathbb{E}\left((Y -\mathbb{E}(Y))^2 \right).
+\end{equation}
+Also gilt
+\begin{align}
+\begin{split}
+\mathbb{C}(X,Y)^2
+\le  \mathbb{V}(X)\mathbb{V}(Y)
+\Leftrightarrow \frac{\mathbb{C}(X,Y)^2}{\mathbb{V}(X)\mathbb{V}(Y)}
+\le 1.
+\end{split}
+\end{align}
+```
+
+
+```{theorem, name = "Jensensche Ungleichung"}
+$X$ sei eine Zufallsvariable und $g : \mathbb{R} \to \mathbb{R}$ eine konvexe Funktion, d.h.
+\begin{equation}
+g(\lambda x_1 + (1-\lambda)x_2) \le \lambda g(x_1) + (1-\lambda)g(x_2)
+\end{equation}
+für alle $x_1,x_2 \in \mathbb{R}, \lambda \in [0,1]$. Dann gilt
+\begin{equation}
+\mathbb{E}(g(X)) \ge g(\mathbb{E}(X)).
+\end{equation}
+Analog sei $g : \mathbb{R} \to \mathbb{R}$ eine konkave Funktion, d.h.
+\begin{equation}
+g(\lambda x_1 + (1-\lambda)x_2) \ge \lambda g(x_1) + (1-\lambda)g(x_2)
+\end{equation}
+für alle $x_1,x_2 \in \mathbb{R}, \lambda \in [0,1]$. Dann gilt
+\begin{equation}
+\mathbb{E}(g(X)) \le g(\mathbb{E}(X)).
+\end{equation}
+```
+
+Bemerkungen
+
+* Bei konvexem $g$ liegt der Funktionsgraph unter der Geraden von $g(x_1)$ zu $g(x_2)$.
+* Bei konkavem $g$ liegt der Funktionsgraph über der Geraden von $g(x_1)$ zu $g(x_2)$.
+* Der Logarithmus ist eine konkave Funktion, also gilt $\mathbb{E}(\ln X) \le \ln \mathbb{E}(X)$.
+
+```{proof}
+
+Wir zeigen die Ungleichung für den Fall einer konkaven Funktion $g$.
+
+* Es sei $f$ eine Tangente am Punkt $g(\mathbb{E}(X))$.
+* $f$ sei also eine linear-affine Funktion der Form
+\begin{equation}
+f(X) := aX + b \mbox{ für } a,b\in \mathbb{R} \mbox{ mit } f(\mathbb{E}(X)) = g(\mathbb{E}(X)).
+\end{equation}
+
+* Weil $g$ konkav ist, gilt $g(x) \le ax + b$ für alle $x \in \mathbb{R}$, also  $g(X) \le aX + b$.
+
+* Also gilt
+\begin{equation}
+\mathbb{E}(g(X)) \le \mathbb{E}(aX + b) = a\mathbb{E}(X) + b = f(\mathbb{E}(X)) = g(\mathbb{E}(X)).
+\end{equation}
+
+```
+
+## Selbstkontrollfragen
+* Geben Sie die Markov Ungleichung wieder.
+* Geben Sie die Chebyshev Ungleichung wieder.
+* Geben Sie die Cauchy-Schwarz Ungleichung wieder.
+* Geben Sie die Korrelationsungleichung wieder.

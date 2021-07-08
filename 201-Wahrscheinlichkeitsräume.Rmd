@@ -1,0 +1,387 @@
+# (PART) Wahrscheinlichkeitstheorie {-}
+# Wahrscheinlichkeitsräume
+
+## Definition 
+
+*Motivierendes Beispiel für einen W-Raum*
+
+
+"Zweck des vorliegenden Heftes ist eine axiomatische Begründung der 
+Wahrscheinlichkeitsrechnung. Der leitende Gedanke des Verfassers war dabei, 
+die Grundbegriffe der-Wahrscheinlichkeitsrechnung, welche noch unlängst für 
+ganz eigenartig galten, natürlicherweise in die Reihe
+der allgemeinen Begriffsbildungen der modernen Mathematik  einzuordnen.'' 
+@kolmogoroff_grundbegriffe_1933
+
+
+```{definition, name = "Wahrscheinlichkeitsraum"}
+
+Ein *Wahrscheinlichkeitsraum (W-Raum)* ist ein Triple 
+$(\Omega,\mathcal{A},\mathbb{P})$, wobei
+
+* $\Omega$ eine Menge *Ergebnismenge} ist, d.h. eine Menge von Elementarereignissen
+  $\omega$,
+* $\mathcal{A}$ eine *$\sigma$-Algebra* ist, d.h., $\mathcal{A}$ ist eine Menge 
+  mit den Eigenschaften
+  * $\Omega \in \mathcal{A}$,
+  * $\mathcal{A}$ ist abgeschlossen unter der Bildung von Komplementärereignissen,
+    d.h., wenn $A\in \mathcal{A}$, dann ist auch $A^c := \Omega \setminus A \in mathcal{A}$ 
+    für alle $A \in \mathcal{A}$,
+  * $\mathcal{A}$ ist abgeschlossen unter der abzählbaren Vereinigung von 
+      Ereignissen, d.h., wenn $A_1,A_2,... \in \mathcal{A}$, dann folgt 
+      $\cup_{i=1}^\infty A_i \in \mathcal{A}$, und
+* $\mathbb{P}$ ein *Wahrscheinlichkeitsmaß} ist, d.h. eine Abbildung der Form    
+  $\mathbb{P}:\mathcal{A} \to [0,1]$ mit
+  * $\mathbb{P}(A) \ge 0$ für alle $A \in \mathcal{A}$ (Nicht-Negativität)
+  * $\mathbb{P}(\Omega) = 1$ (Normiertheit)
+  * $\mathbb{P}\left(\cup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty \mathbb{P}(A_i)$ 
+    für paarweise disjunkte $A_i \in \mathcal{A}$ ($\sigma$-Additivität).
+
+```
+  
+
+W-Räume sind abstrakte Modelle von Zufallsexperimenten. W-Räume sind spezielle
+*Maßräume* $(\Omega, \mathcal{A}, \mu)$. Maßräume sind mathematische Modelle zur
+Beschreibung der Volumina von Mengen. Tuple von Ereignismengen und $\sigma$-Algebren 
+heißen *Messräume*. W-Räume sind Messräume mit Wahrscheinlichkeitsmaßen.
+
+Elementarereignisse werden anhand von $\mathbb{P}(\{\omega\})$ ``gezogen''. 
+W-Räume vereinheitlichen endliche, abzählbare, und überabzählbare Ergebnismengen. 
+W-Räume vereinheitlichen diskrete und kontinuierliche Wahrscheinlichkeit.
+
+$\sigma$-Algebren sind ``vollständige Mengen von Ereignissen''. Für endliche 
+Ereignismengen ist die typische $\sigma$-Algebra die Potenzmenge $\mathcal{P}(\Omega)$.
+Für die Ereignismenge $\mathbb{R}$ erfüllt die *Borel $\sigma$-algebra* die gleiche 
+Funktion.
+
+*BEWEIS: POTENZMENGE IST EINE $\sigma$-ALGEBRA*
+
+Die W-theoretischen Charakteristiken von $(\Omega,\mathcal{A},\mathbb{P})$ werden 
+durch $\mathbb{P}$ festgelegt. W-Räume verschwinden oft hinter Zufallsvariablen 
+und Verteilungen.
+
+
+### Beispiel (Würfel) {-}
+
+
+* Es ist sinnvoll, die Ereignismenge als $\Omega := \{1,2,3,4,5,6\}$ zu definieren.
+* Auch die Definition $\Omega := \{
+\cdot,
+\cdot\cdot,
+\cdot\cdot\cdot,
+\cdot\cdot\cdot\cdot,
+\cdot\cdot\cdot\cdot\cdot,
+\cdot\cdot\cdot\cdot\cdot\cdot
+\}$ wäre möglich.
+
+* Die Potenzmege $\mathcal{P}\left(\{1,2,3,4,5,6\} \right)$ enthält alle möglichen Ereignisse $A_i$, z.B.
+  * Es fällt eine beliebige Augenzahl		 $A_1 = \Omega$ 	 
+  * Es fällt eine Augenzahl größer als 4 	 $A_2 = \{5,6\}$ 		 
+  * Es fällt eine gerade Augenzahl 			 $A_3 = \{2,4,6\}$ 	 
+  * Es fällt eine Sechs						 $A_4 = \{6\}$ 		 
+  * Eins, drei, oder sechs fällt			 $A_5 = \{1,3,6\}$ 	 
+  * Es fällt keine Augenzahl 				 $A_6 = \emptyset$ 	 
+
+* $\mathbb{P}$ kann durch Festlegung von $\mathbb{P}(\{\omega\})$ für alle 
+$\omega \in \Omega$ definiert $\rightarrow$, die Wahrscheinlichkeiten aller 
+anderen Ereignisse $A \in \mathcal{A}$ können dann mit der $\sigma$-Additivät 
+$\mathbb{P}(A) = \sum_{\omega \in A}\mathbb{P}(\{\omega\})$ errechnet werden, 
+weil die ${\omega} \in \mathcal{A}$ mit $\omega \in \Omega$ paarweise disjunkt 
+sind.
+
+* Im Modell eines unverfälschten Würfels wäre $\mathbb{P}(\{\omega\}) := 1/6$ 
+für alle $\omega \in \Omega$.
+
+* Für das Modell eines verfälschten Würfels könnte zum Beispiel definiert werden,
+dass $\mathbb{P}(\{1\}) = \mathbb{P}(\{2\}) = \mathbb{P}(\{6\}) := 1/9$, und
+$\mathbb{P}(\{3\}) = \mathbb{P}(\{4\}) = \mathbb{P}(\{5\}) := 2/9$.
+
+### Beispiel (Zwei Würfel) {-}
+
+Siehe Statistics for Data Science
+
+
+### Beispiel (Münzwurf) {-}
+
+Siehe Statistics for Data Science
+
+### Beispiel (Doppelter Münzwurf) {-}
+
+Siehe Statistics for Data Science
+
+## Elementare Wahrscheinlichkeiten
+
+```{definition, name = "Wahrscheinlichkeitsmaß"}
+
+Es seien $\Omega$ eine Ereignismenge und $\mathcal{A}$ eine $\sigma$-Algebra auf
+$\Omega$. Eine Abbildung
+\begin{equation}
+\mathbb{P} : \mathcal{A} \to [0,1], A \mapsto \mathbb{P}(A)
+\end{equation}
+mit den Eigenschaften
+
+1. $\mathbb{P}(A) \ge 0$ für alle $A \in \mathcal{A}$,
+2. $\mathbb{P}(\Omega) = 1$, und
+3. wenn $A_1,A_2,... \in \mathcal{A}$ paarweise disjunkt sind,
+dann gilt $\mathbb{P}(\cup_{i=1}^\infty) A_i = \sum_{i=1}^\infty \mathbb{P}(A_i)$.
+
+heißt ein *Wahrscheinlichkeitsmaß* oder einfach *Wahrscheinlichkeit*.
+
+```
+
+Für $A \in \mathcal{A}$ heißt $\mathbb{P}(A)$ die *(totale) Wahrscheinlichkeit
+von $A$*. Für $A,B \in \mathcal{A}$ heißt $\mathbb{P}(A \cap B)$ die *gemeinsame
+Wahrscheinlichkeit von $A$ und $B$*.
+
+Zur Interpretation des Wahrscheinlichkeitsbegriffs. Die Interpretation des
+Wahrscheinlichkeitsbegriffs $\mathbb{P}(A)$ ist nicht eindeutig.
+
+* Nach der *frequentistischen Interpretation* ist $\mathbb{P}(A)$ die
+idealisierte relative Häufigkeit, mit der das Ereignis $A$ unter den gleichen
+äußeren Bedingungen einzutreten pflegt. *BEISPIEL*
+
+* Nach der *Bayesianischen  Interpretation* ist $\mathbb{P}(A)$ ist der Grad
+der Sicherheit, den ein Beobachter aufgrund seiner subjektiven Einschätzung der
+Lage dem Eintreten des Ereignisses $A$ zumisst. *BEISPIEL*
+
+* Frequentistische und Bayesianische Interpretationen basieren mit der
+Wahrscheinlichkeitstheorie auf dem gleichen mathematischen Bezugssystem.
+*DISKUSSION*
+
+
+
+```{theorem, name = "Eigenschaften von Wahrscheinlichkeiten"}
+
+Es sei $(\Omega, \mathcal{A}, \mathbb{P})$ ein W-Raum und $A,B \in \mathcal{A}$.
+Dann gelten unter anderem (*WAS GILT NOCH?*)
+
+1. $\mathbb{P}(\emptyset) = 0$ und $0 \le \mathbb{P}(A) \le 1$.
+2. $A \subset B \Rightarrow \mathbb{P}(A) \le \mathbb{P}(B)$.
+3. $\mathbb{P}(A^c) = 1 - \mathbb{P}(A)$.
+4. $A \cap B = \emptyset \Rightarrow \mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B)$.
+5. $\mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B)$.
+
+```
+
+*BEWEISE*
+
+*ZU (5)*
+Mit der Additivität von $\mathbb{P}$ für disjunkte Ereignissce gilt
+\begin{align}
+\begin{split}
+\mathbb{P}(A \cup B)
+& = \mathbb{P}(A \cap B^c) + \mathbb{P}(A \cap B) + \mathbb{P}(A^c \cap B) \\
+& = \mathbb{P}(A \cap B^c) + \mathbb{P}(A \cap B)
++ \mathbb{P}(A^c \cap B) + \mathbb{P}(A \cap B)
+ - \mathbb{P}(A \cap B)\\
+& = \mathbb{P}\left((A \cap B^c)  \cup (A \cap B)\right)
+ + \mathbb{P}\left((A^c \cap B) \cup (A \cap B)\right)
+- \mathbb{P}(A \cap B)\\
+& = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B)
+\end{split}
+\end{align}
+
+
+```{definition, name = "Unabhängige Ereignisse"}
+
+Zwei Ereignisse $A \in \mathcal{A}$ and $B \in \mathcal{A}$ heißen 
+(stochastisch) *unabhängig*, wenn
+\begin{equation}
+\mathbb{P}(A \cap B) = \mathbb{P}(A)\mathbb{P}(B).
+\end{equation}
+Eine Menge von Ereignissen $\{A_i|i \in I\}\subset \mathcal{A}$ mit beliebiger 
+Indexmenge $I$ heißt (stochastisch) unabhängig, wenn für jede endliche Untermenge 
+$J \subseteq I$ gilt, dass
+\begin{equation}
+\mathbb{P}\left(\cap_{j \in J} A_j \right) = \prod_{j \in J}\mathbb{P}(A_j).
+\end{equation}
+
+```
+
+Bemerkungen
+
+* Stochastische Unabhängigkeit modelliert die Abwesenheit von gegenseitigen Einflüssen.
+* Die Unabhängigkeit bestimmter Ereignissen kann in der Definition eines probabilistischen 
+Modells vorausgesetzt werden, so zum Beispiel die Unabhängigkeit von Störvariablen.
+* Die Unabhängigkeit von Ereignissen kann aus der Definition eines probabilistischen Modells folgen.
+* Disjunkte Ereignisse mit von Null verschiedener Wahrscheinlichkeit sind nie unabhängig:
+*$\mathbb{P}(A)\mathbb{P}(B) > 0$, aber $\mathbb{P}(A \cap B) = \mathbb{P}(\emptyset) = 0$, also
+$\mathbb{P}(A \cap B) \neq \mathbb{P}(A)\mathbb{P}(B)$.
+* Die Bedingung der beliebigen Untermengen von $I$ sichert die paarweise unabhängig der $A_i, i \in I$.
+
+
+ ```{definition, name = "Bedingte Wahrscheinlichkeit"}
+
+Es sei $(\Omega,\mathcal{A}, \mathbb{P})$ ein W-Raum und $A,B\in \mathcal{A}$ 
+mit $\mathbb{P}(B) > 0$. Die *bedingte Wahrscheinlichkeit des Ereignisses 
+$A\in \mathcal{A}$* gegeben Ereignis $B \in \mathcal{A}$* ist definiert als
+\begin{equation}
+\mathbb{P}(A|B) = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}.
+\end{equation}
+Für jedes feste $B$, ist $\mathbb{P}(\cdot|B)$ ein Wahrscheinlichkeitsmaß, d.h.
+$\mathbb{P}(\cdot|B) \ge 0$, $\mathbb{P}(\Omega|B) =  1$, und für  paarweise 
+disjunkte $A_1,A_2,... \in \mathcal{A}$ gilt 
+\begin{equation}
+\mathbb{P}\left(\cup_{i=1}^\infty A_i|B \right) = \sum_{i=1}^\infty \mathbb{P}(A_i|B).
+\end{equation}
+
+```
+
+Bemerkungen
+
+* $\mathbb{P}(A|B)$ ist die normalisierte Version der gemeinsamen Wahrscheinlichkeit 
+$\mathbb{P}(A \cap B)$.
+* Die Festlegung der gemeinsamen Wahrscheinlichkeit $\mathbb{P}(A \cap B)$ legt
+$\mathbb{P}(A|B)$ fest.
+* Die Rechengeln der Wahrscheinlichkeit gelten für die Ereignisse links des Strichs.
+* Üblicherweise gilt $\mathbb{P}(A|B) \neq \mathbb{P}(B|A)$.
+* Eine Verallgemeinerung für $\mathbb{P}(B) = 0$ ist möglich, aber technisch 
+aufwändig.
+
+
+
+### Beispiel (Bedingte Wahrscheinlichkeit) {-}
+
+Wir betrachten das Wahrscheinlichkeitsraum Modell des fairen Würfels und wollen
+die bedingte Wahrscheinlichkeit für das Ereignis "Es fällt eine gerade Augenzahl" 
+gegeben das Ereignis "Es fällt eine Zahl größer als 3" berechnen. Wir halten 
+zunächst fest, dass das Ereignis "Es fällt eine gerade Augenzahl" der Teilmenge 
+$A := \{2,4,6\}$ von $\Omega$ entspricht, und dass das Ereignis "Es fällt eine Zahl 
+größer als 3" der Teilmenge $B := \{4,5,6\}$ von $\Omega$ entspricht. Wir halten 
+dann fest, dass unter der Annahme des Modell des fairen Würfels gilt, dass
+\begin{align}
+\mathbb{P}(\{2,4,6\})
+& = \mathbb{P}(\{2\}) + \mathbb{P}(\{4\}) + \mathbb{P}(\{6\})
+= 1/6 + 1/6 + 1/6 = 3/6   \\
+\mathbb{P}(\{4,5,6\})
+& = \mathbb{P}(\{4\}) + \mathbb{P}(\{5\}) + \mathbb{P}(\{6\})
+= 1/6 + 1/6 + 1/6 = 3/6.
+\end{align}
+Schließlich halten wir fest, dass das Ereignis $A \cap B$, also das Ereignis 
+"Es fällt eine gerade Augenzahl, die größer als 3 ist", die Wahrscheinlichkeit
+\begin{equation}
+\mathbb{P}(A \cap B) = \mathbb{P}(\{2,4,6\} \cap \{4,5,6\}) = \mathbb{P}(\{4,6\})
+= \mathbb{P}(\{4\}) + \mathbb{P}(\{6\}) = 1/6 + 1/6 = 2/6
+\end{equation}
+hat. Nach Definition der bedingten Wahrscheinlichkeit ergibt sich dann
+\begin{equation}
+\mathbb{P}(A|B)
+= \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}
+= \frac{\mathbb{P}(\{4,6\})}{\mathbb{P}(\{4,5,6\})}
+= \frac{2/6}{3/6}
+= 2/6 \cdot 6/3
+= 2/3.
+\end{equation}
+ Wenn man also weiß, dass eine Augenzahl größer als 3 gefallen ist, ist die
+ Wahrscheinlichkeit, dass es sich dabei um eine gerade Augenzahl handelt 2/3. 
+ Wenn man ersteres nicht weiß, ist die Wahrscheinlichkeit für das Fallen einer 
+ geraden Augenzahl (nur) 1/2.
+
+
+```{theorem, name = "Bedingte Wahrscheinlichkeit unter Unabhängigkeit"}
+
+ Es seien $(\Omega,\mathcal{A}, \mathbb{P})$ ein W-Raum und $A, B\in \mathcal{A}$ 
+  unabhängige Ereignisse mit $\mathbb{P}(\cdot|B) \ge 0$. Dann gilt
+ \begin{equation}
+ \mathbb{P}(A|B)
+ = \frac{\mathbb{P}(A \cap B)}{\mathbb{P}(B)}
+ = \frac{\mathbb{P}(A)\mathbb{P}(B)}{\mathbb{P}(B)}
+ = \mathbb{P}(A).
+ \end{equation}
+```
+
+ Bemerkungen
+ 
+ * Bei Unabhängigkeit ändert das Wissen um das Eintreten von $B$ die 
+ Wahrscheinlichkeit des Eintretens von $A$ nicht.
+ 
+ * Unabhängigkeit wird als $\mathbb{P}(A)\mathbb{P}(B)$ modelliert, 
+ damit $\mathbb{P}(A|B) = \mathbb{P}(A)$ gilt.
+
+```{theorem, name = "Gemeinsame und bedingte Wahrscheinlichkeiten"}
+
+Es seien $(\Omega,\mathcal{A}, \mathbb{P})$ ein W-Raum und $A,B\in \mathcal{A}$ 
+mit $\mathbb{P}(\cdot|B) \ge 0$. Dann gilt
+\begin{equation}
+\mathbb{P}(A \cap B)
+= \mathbb{P}(A|B)\mathbb{P}(B)
+= \mathbb{P}(B|A)\mathbb{P}(A).
+\end{equation}
+```
+Bemerkung
+
+* Gemeinsame Wahrscheinlichkeiten können aus bedingten und totalen 
+Wahrscheinlichkeiten berechnet werden.
+
+
+```{theorem, name = "Gesetz der totalen Wahrscheinlichkeit"}
+ 
+Es sei $A_1, ...,A_k$ eine Partition von $\Omega$, d.h. 
+$\cup_{i = 1}^k A_i = \Omega$ und $A_i \cap A_j = \emptyset$ für alle 
+$1 \le i,j \le k$ mit $i \neq j$. Dann gilt für jedes $B \in \mathcal{A}$, dass
+\begin{equation}
+\mathbb{P}(B) = \sum_{i=1}^k \mathbb{P}(B|A_i)\mathbb{P}(A_i).
+\end{equation}
+ 
+```
+
+
+```{proof}
+
+Für $i = 1,...,k$ sei $C_i := B \cap A_j$, so dass $\cup_{j=1}^k C_j = B$ und
+$C_i \cap C_j = \emptyset$ für $1 \le i,j \le k,i \neq j$. Also gilt
+\begin{equation}
+\mathbb{P}(B)
+= \sum_{i=1}^k \mathbb{P}(C_i)
+= \sum_{i=1}^k \mathbb{P}(B \cap A_i)
+= \sum_{i=1}^k \mathbb{P}(B|A_i)\mathbb{P}(A_i).
+\end{equation}
+
+```
+
+Bemerkung
+ 
+* Die totale Wahrscheinlichkeit $\mathbb{P}(B)$ entspricht der gewichteten Summe
+der bedingten Wahrscheinlichkeiten $\mathbb{P}(B|A_i)$ mit Gewichten 
+$\mathbb{P}(A_i)$.  
+
+
+ ```{theorem, name = "Theorem von Bayes"}
+ 
+Es sei $A_1, ...,A_k$ eine Partition von $\Omega$ mit $\mathbb{P}(A_i) > 0$. 
+Wenn $\mathbb{P}(B) > 0$ gilt, dann gilt für jedes $i = 1,...,k$
+\begin{equation}
+\mathbb{P}(A_i|B)
+= \frac{\mathbb{P}(B|A_i)\mathbb{P}(A_i)}{\sum_{i=1}^k \mathbb{P}(B|A_i)\mathbb{P}(A_i)}.
+\end{equation}
+
+```
+ 
+```{proof}
+
+Mit der Definition der bedingten Wahrscheinlichkeit und dem Gesetz der totalen 
+Wahrscheinlichkeit gilt
+\begin{equation}
+\mathbb{P}(A_i|B)
+= \frac{\mathbb{P}(A_i \cap B)}{\mathbb{P}(B)}
+= \frac{\mathbb{P}(B|A_i)\mathbb{P}(A_i)}{\mathbb{P}(B)}
+= \frac{\mathbb{P}(B|A_i)\mathbb{P}(A_i)}{\sum_{i=1}^k \mathbb{P}(B|A_i)\mathbb{P}(A_i)}.
+\end{equation}
+
+```
+
+ 
+Bemerkungen
+
+* Das Theorem gilt unabhängig von Frequentistischen/Bayesianischen Interpretationen.
+* Bayes Theorem ist eine Formel, um bedingte Wahrscheinlichkeiten zu berechnen.
+* $\mathbb{P}(A_i)$ wird oft *Prior} und $\mathbb{P}(A_i|B)$ oft *Posterior} genannt.
+* $\mathbb{P}(B|A_i)$ wird oft *Likelihood} und $\mathbb{P}(B)$ *Evidence} genannt.
+ 
+
+## Literaturhinweise  
+
+Die in diesem Abschnitt vorgestellten Konzepte gehören zum Standard der 
+Wahrscheinlichkeitstheorie. Zu Wahrscheinlichkeitsräumen wird die Lektüre 
+von @georgii_stochastik_2009 empfohlen. In englischer Sprache finden sich 
+entsprechende Darstellungen in @wasserman_all_2004 und @degroot_probability_2012.
